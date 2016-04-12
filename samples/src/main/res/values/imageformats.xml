@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="imageformat_recipe_tile">crop-360x240-lq</string>
+    <string name="imageformat_recipe_detail">crop-420x280-lq</string>
+
+
+</resources>
