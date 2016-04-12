@@ -18,14 +18,14 @@ import android.view.ViewGroup;
  */
 public class ViewModelLifecycleDelegate<V extends ViewModel, B extends ViewDataBinding> {
 
-    private final ViewModelManager viewModelManager;
+    private final Raclette raclette;
 
     public V viewModel;
     public B binding;
-    private final  ViewModelBindingConfig<V> viewModelBindingConfig;
+    private final ViewModelBindingConfig<V> viewModelBindingConfig;
 
-    public ViewModelLifecycleDelegate(ViewModelManager viewModelManager, ViewModelBindingConfig<V> viewModelBindingConfig) {
-        this.viewModelManager = viewModelManager;
+    public ViewModelLifecycleDelegate(Raclette raclette, ViewModelBindingConfig<V> viewModelBindingConfig) {
+        this.raclette = raclette;
         this.viewModelBindingConfig = viewModelBindingConfig;
     }
 
@@ -64,9 +64,9 @@ public class ViewModelLifecycleDelegate<V extends ViewModel, B extends ViewDataB
         if (savedInstanceState != null) {
             String viewModelId = savedInstanceState.getString(ViewModel.EXTRA_ID);
             if (viewModelId != null) {
-                V viewModel = viewModelManager.getViewModel(viewModelId);
+                V viewModel = raclette.getViewModelManager().getViewModel(viewModelId);
                 if (viewModel == null) {
-                    throw new MvvmException("ViewModel not found but should be alive.");
+                    throw new RacletteException("ViewModel not found but should be alive.");
                 } else {
                     this.viewModel = viewModel;
                     this.viewModel.setContext(context);
@@ -75,18 +75,18 @@ public class ViewModelLifecycleDelegate<V extends ViewModel, B extends ViewDataB
             }
         }
         if (viewModel == null) {
-            V viewModel = viewModelManager.createViewModel(viewModelBindingConfig.getViewModelClass());
+            V viewModel = raclette.getViewModelManager().createViewModel(viewModelBindingConfig.getViewModelClass());
             this.viewModel = viewModel;
             viewModel.setContext(context);
             viewModel.onCreate(params);
         }
-        //todo binding.setVariable(BR.viewModel, viewModel);
+        binding.setVariable(raclette.getViewModelBindingId(), viewModel);
     }
 
     protected void onDestroy(Activity activity) {
         if (activity.isFinishing()) {
             viewModel.onDestroy();
-            viewModelManager.delete(viewModel.getId());
+            raclette.getViewModelManager().delete(viewModel.getId());
         }
     }
 
@@ -103,7 +103,7 @@ public class ViewModelLifecycleDelegate<V extends ViewModel, B extends ViewDataB
     }
 
     private void checkViewBindung() {
-        if (binding == null) throw new MvvmException("call onCreateViewBinding(...) before.");
+        if (binding == null) throw new RacletteException("call onCreateViewBinding(...) before.");
     }
 
     public V getViewModel() {

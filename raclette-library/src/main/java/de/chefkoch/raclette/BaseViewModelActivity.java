@@ -16,8 +16,7 @@ public class BaseViewModelActivity<V extends ViewModel, B extends ViewDataBindin
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModelLifecycleDelegate = new ViewModelLifecycleDelegate<>(
-                null,
-                //AppComponent.Locator.get(this).provideServices().viewModelManager(),
+                getRaclette(),
                 getViewModelBindingConfig());
         viewModelLifecycleDelegate.onCreateViewBinding(this);
         viewModelLifecycleDelegate.create(this, savedInstanceState);
@@ -62,5 +61,9 @@ public class BaseViewModelActivity<V extends ViewModel, B extends ViewDataBindin
 
     protected ViewModelBindingConfig<V> getViewModelBindingConfig() {
         return ViewModelBindingConfig.of(this.getClass());
+    }
+
+    protected Raclette getRaclette() {
+        return Raclette.get();
     }
 }

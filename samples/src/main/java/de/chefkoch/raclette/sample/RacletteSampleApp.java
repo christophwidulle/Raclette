@@ -2,6 +2,7 @@ package de.chefkoch.raclette.sample;
 
 import android.app.Application;
 
+import de.chefkoch.raclette.Raclette;
 import de.chefkoch.raclette.sample.inject.AppComponent;
 
 /**
@@ -14,6 +15,9 @@ public class RacletteSampleApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        Raclette.builder(BR.viewModel).buildAsSingelton();
+
         appComponent = AppComponent.Initializer.create(this);
     }
 

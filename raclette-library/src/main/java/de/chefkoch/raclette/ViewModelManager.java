@@ -9,10 +9,9 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ViewModelManager {
 
+    private final Raclette.ViewModelInjector injector;
 
-    private final Injector injector;
-
-    public ViewModelManager(Injector injector) {
+    public ViewModelManager(Raclette.ViewModelInjector injector) {
         this.injector = injector;
     }
 
@@ -24,11 +23,13 @@ public class ViewModelManager {
         try {
             V viewModel = viewModelClass.newInstance();
             viewModel.setId(id);
-            injector.inject(viewModel);
+            if (injector != null) {
+                injector.inject(viewModel);
+            }
             registry.put(id, viewModel);
             return viewModel;
         } catch (Exception e) {
-            throw new MvvmException(e);
+            throw new RacletteException(e);
         }
     }
 
@@ -42,8 +43,6 @@ public class ViewModelManager {
         return (V) viewModel;
     }
 
-    public interface Injector {
-        void inject(ViewModel viewModel);
-    }
+
 
 }

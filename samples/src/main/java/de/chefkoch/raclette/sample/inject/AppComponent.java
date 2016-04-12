@@ -9,7 +9,7 @@ import dagger.Component;
 import de.chefkoch.raclette.sample.RacletteSampleApp;
 import de.chefkoch.raclette.ViewModel;
 
-@Component(modules = {AppModule.class, ServicesModule.class})
+@Component(modules = {AppModule.class})
 @Singleton
 public interface AppComponent {
 
@@ -25,7 +25,6 @@ public interface AppComponent {
         public static AppComponent create(RacletteSampleApp app) {
             return DaggerAppComponent.builder()
                     .appModule(new AppModule(app))
-                    .servicesModule(new ServicesModule())
                     .build();
         }
     }

@@ -24,8 +24,7 @@ public class BaseViewModelFragment<V extends ViewModel, B extends ViewDataBindin
     public void onAttach(Context context) {
         super.onAttach(context);
         viewModelLifecycleDelegate = new ViewModelLifecycleDelegate<>(
-                null,
-                //AppComponent.Locator.get(getContext()).provideServices().viewModelManager(),
+                getRaclette(),
                 getViewModelBindingConfig());
     }
 
@@ -83,5 +82,9 @@ public class BaseViewModelFragment<V extends ViewModel, B extends ViewDataBindin
 
     protected ViewModelBindingConfig<V> getViewModelBindingConfig() {
         return ViewModelBindingConfig.of(this.getClass());
+    }
+
+    protected Raclette getRaclette() {
+        return Raclette.get();
     }
 }

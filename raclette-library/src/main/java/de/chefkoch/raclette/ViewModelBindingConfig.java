@@ -32,11 +32,11 @@ public class ViewModelBindingConfig<V extends ViewModel> {
             Class<? extends ViewModel> viewModelClass = bindAnnotation.viewModel();
             final int layoutResource = bindAnnotation.layoutResource();
             if (viewModelClass == null) {
-                throw new MvvmException("No ViewModel specified.");
+                throw new RacletteException("No ViewModel specified.");
             }
             return new ViewModelBindingConfig<V>((Class<V>) viewModelClass, layoutResource);
         } else {
-            throw new MvvmException("No @Bind annotation found.");
+            throw new RacletteException("No @Bind annotation found.");
         }
     }
 
