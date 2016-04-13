@@ -1,1 +1,1 @@
-include ':raclette-library', ':samples'
+include ':raclette-library', ':sample-simple' , ':raclette-ext-rx'

@@ -26,14 +26,11 @@ public class ViewModelBindingConfig<V extends ViewModel> {
 
 
     @SuppressWarnings("unchecked")
-    public static <V extends ViewModel> ViewModelBindingConfig<V> of(Class<?> klass) {
+    public static <V extends ViewModel> ViewModelBindingConfig<V> fromBindAnnotation(Class<?> klass) {
         Bind bindAnnotation = klass.getAnnotation(Bind.class);
         if (bindAnnotation != null) {
             Class<? extends ViewModel> viewModelClass = bindAnnotation.viewModel();
             final int layoutResource = bindAnnotation.layoutResource();
-            if (viewModelClass == null) {
-                throw new RacletteException("No ViewModel specified.");
-            }
             return new ViewModelBindingConfig<V>((Class<V>) viewModelClass, layoutResource);
         } else {
             throw new RacletteException("No @Bind annotation found.");

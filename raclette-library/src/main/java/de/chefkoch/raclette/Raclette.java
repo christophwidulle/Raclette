@@ -30,11 +30,6 @@ public class Raclette {
         }
     }
 
-    private void validateInit() {
-        if (viewModelBindingId == -1) {
-            throw new RacletteException("no ViewModelBindingId found. Call init() first.");
-        }
-    }
 
     public int getViewModelBindingId() {
         return viewModelBindingId;
@@ -56,7 +51,6 @@ public class Raclette {
     public static class Builder {
         int viewModelBindingId;
         ViewModelInjector viewModelInjector;
-        ViewModelManager viewModelManager;
 
         public Builder(int viewModelBindingId) {
             this.viewModelBindingId = viewModelBindingId;
