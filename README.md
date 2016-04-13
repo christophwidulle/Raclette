@@ -1,2 +1,4 @@
 # raclette
-MVVM + Rx + DataBinding Framework for Android
+MVVM + DataBinding + Rx Framework for Android
+
+Status: In development, don't use it :-)

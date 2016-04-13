@@ -20,8 +20,8 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
 
     private final Raclette raclette;
 
-    public V viewModel;
-    public B binding;
+    private V viewModel;
+    private B binding;
     private final ViewModelBindingConfig<V> viewModelBindingConfig;
 
     public RacletteLifecycleDelegate(Raclette raclette, ViewModelBindingConfig<V> viewModelBindingConfig) {
@@ -62,7 +62,7 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
     private void create(Context context, Bundle savedInstanceState, Bundle params) {
         //check for existing
         if (savedInstanceState != null) {
-            String viewModelId = savedInstanceState.getString(ViewModel.EXTRA_ID);
+            String viewModelId = savedInstanceState.getString(ViewModel.EXTRA_VIEWMODEL_ID);
             if (viewModelId != null) {
                 V viewModel = raclette.getViewModelManager().getViewModel(viewModelId);
                 if (viewModel == null) {
@@ -70,22 +70,22 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
                 } else {
                     this.viewModel = viewModel;
                     this.viewModel.setContext(context);
-
                 }
             }
         }
         if (viewModel == null) {
-            V viewModel = raclette.getViewModelManager().createViewModel(viewModelBindingConfig.getViewModelClass());
-            this.viewModel = viewModel;
+            viewModel = raclette.getViewModelManager().createViewModel(viewModelBindingConfig.getViewModelClass());
             viewModel.setContext(context);
-            viewModel.onCreate(params);
+            viewModel.onViewModelCreated(params);
         }
+        viewModel.onCreate(params);
         binding.setVariable(raclette.getViewModelBindingId(), viewModel);
     }
 
     protected void onDestroy(Activity activity) {
+        viewModel.onDestroy();
         if (activity.isFinishing()) {
-            viewModel.onDestroy();
+            viewModel.onViewModelDestroyed();
             raclette.getViewModelManager().delete(viewModel.getId());
         }
     }
@@ -99,18 +99,18 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
     }
 
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putString(ViewModel.EXTRA_ID, viewModel.getId());
+        outState.putString(ViewModel.EXTRA_VIEWMODEL_ID, viewModel.getId());
     }
 
     private void checkViewBindung() {
         if (binding == null) throw new RacletteException("call onCreateViewBinding(...) before.");
     }
 
-    public V getViewModel() {
+    public V viewModel() {
         return viewModel;
     }
 
-    public B getBinding() {
+    public B binding() {
         return binding;
     }
 

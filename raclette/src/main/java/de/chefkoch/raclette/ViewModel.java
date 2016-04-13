@@ -1,18 +1,29 @@
 package de.chefkoch.raclette;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 
 import de.chefkoch.raclette.routing.NavigationController;
+
+import java.lang.ref.WeakReference;
 
 /**
  * Created by christophwidulle on 28.09.15.
  */
 public class ViewModel {
 
+    public static final String EXTRA_VIEWMODEL_ID = "#RACLETTE_VIEWMODEL_ID";
+
+    public static enum LifecycleState {
+        ACTIVE, INACTIVE, DESTROYED
+
+    }
+
     public static class Params {
-        public static final String EXTRA_KEY = "#VIEWMODEL_PARAMS";
+
+        public static final String EXTRA_KEY = "#RACLETTE_VIEWMODEL_PARAMS";
 
         public static Bundle from(Bundle source) {
             return source == null ? null : source.getBundle(EXTRA_KEY);
@@ -23,14 +34,10 @@ public class ViewModel {
                 target.putBundle(EXTRA_KEY, params);
             }
         }
-
     }
 
-    public static final String EXTRA_ID = "#VIEWMODEL_ID";
-
     private String id;
-    private Context context;
-
+    private WeakReference<Context> context;
     private NavigationController navigationController;
 
 
@@ -42,7 +49,7 @@ public class ViewModel {
     }
 
     void setContext(Context context) {
-        this.context = context;
+        this.context = new WeakReference<Context>(context);
     }
 
 
@@ -51,7 +58,15 @@ public class ViewModel {
     }
 
 
-    protected void onDestroy() {
+    protected void onCreate(Bundle bundle, Intent intent) {
+
+    }
+
+    protected void onViewModelCreated(Bundle viewModelParams) {
+
+    }
+
+    protected void onViewModelDestroyed() {
 
     }
 
@@ -67,5 +82,8 @@ public class ViewModel {
 
     }
 
+    protected void onDestroy() {
+
+    }
 
 }

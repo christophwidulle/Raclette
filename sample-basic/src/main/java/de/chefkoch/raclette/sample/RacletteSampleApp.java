@@ -2,6 +2,7 @@ package de.chefkoch.raclette.sample;
 
 import android.app.Application;
 
+import com.squareup.leakcanary.LeakCanary;
 import de.chefkoch.raclette.Raclette;
 
 /**
@@ -15,6 +16,8 @@ public class RacletteSampleApp extends Application {
         super.onCreate();
 
         Raclette.builder(BR.viewModel).buildAsSingelton();
+
+        LeakCanary.install(this);
 
     }
 

@@ -11,7 +11,7 @@ public interface PeopleModule {
 
     //http://swapi.co/api/
     @GET("people/{id}")
-    Observable<Person> get(@Path("id") String id);
+    Observable<Character> get(@Path("id") String id);
 
 
 }

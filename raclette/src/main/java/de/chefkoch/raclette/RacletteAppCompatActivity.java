@@ -52,11 +52,11 @@ public class RacletteAppCompatActivity<V extends ViewModel, B extends ViewDataBi
     }
 
     public V getViewModel() {
-        return racletteLifecycleDelegate.getViewModel();
+        return racletteLifecycleDelegate.viewModel();
     }
 
     public B getBinding() {
-        return racletteLifecycleDelegate.getBinding();
+        return racletteLifecycleDelegate.binding();
     }
 
     protected ViewModelBindingConfig<V> getViewModelBindingConfig() {

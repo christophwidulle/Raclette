@@ -68,11 +68,11 @@ public class RacletteFragment<V extends ViewModel, B extends ViewDataBinding> ex
     }
 
     public V getViewModel() {
-        return racletteLifecycleDelegate.getViewModel();
+        return racletteLifecycleDelegate.viewModel();
     }
 
     public B getBinding() {
-        return racletteLifecycleDelegate.getBinding();
+        return racletteLifecycleDelegate.binding();
     }
 
     protected ViewModelBindingConfig<V> getViewModelBindingConfig() {

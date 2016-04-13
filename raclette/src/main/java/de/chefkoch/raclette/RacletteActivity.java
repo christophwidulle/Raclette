@@ -51,12 +51,12 @@ public class RacletteActivity<V extends ViewModel, B extends ViewDataBinding> ex
         super.onSaveInstanceState(outState);
     }
 
-    public V getViewModel() {
-        return racletteLifecycleDelegate.getViewModel();
+    public V viewModel() {
+        return racletteLifecycleDelegate.viewModel();
     }
 
-    public B getBinding() {
-        return racletteLifecycleDelegate.getBinding();
+    public B binding() {
+        return racletteLifecycleDelegate.binding();
     }
 
     protected ViewModelBindingConfig<V> getViewModelBindingConfig() {
