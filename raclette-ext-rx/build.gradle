@@ -1,13 +1,9 @@
 apply plugin: 'com.android.library'
 apply plugin: 'android-apt'
+apply plugin: 'com.github.dcendents.android-maven'
 
-ext {
-    PUBLISH_GROUP_ID = 'de.chefkoch.raclette'
-    PUBLISH_ARTIFACT_ID = 'raclette-ext-rx'
-    PUBLISH_VERSION = '0.1-SNAPSHOT'
-}
-
-apply from: '../release.gradle'
+group='de.chefkoch.raclette'
+version = '1.0-SNAPSHOT'
 
 android {
     compileSdkVersion 23
@@ -17,7 +13,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 1
-        versionName PUBLISH_VERSION
+        versionName version
     }
     buildTypes {
         release {
@@ -45,7 +41,7 @@ dependencies {
     final MOCKITO_VERSION = '1.10.19'
 
 
-    compile project(':raclette-library')
+    compile project(':raclette')
 
     compile "com.android.support:support-v4:$SUPPORT_LIBRARY_VERSION"
     compile "com.android.support:appcompat-v7:$SUPPORT_LIBRARY_VERSION"

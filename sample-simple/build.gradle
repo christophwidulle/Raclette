@@ -46,7 +46,7 @@ dependencies {
     final MOCKITO_VERSION = '1.10.19'
 
 
-    compile project(':raclette-library')
+    compile project(':raclette')
 
     compile "com.android.support:support-v4:$SUPPORT_LIBRARY_VERSION"
     compile "com.android.support:appcompat-v7:$SUPPORT_LIBRARY_VERSION"
