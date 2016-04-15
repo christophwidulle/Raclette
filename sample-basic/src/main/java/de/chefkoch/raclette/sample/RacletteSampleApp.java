@@ -15,7 +15,7 @@ public class RacletteSampleApp extends Application {
     public void onCreate() {
         super.onCreate();
 
-        Raclette.builder(BR.viewModel).buildAsSingelton();
+        Raclette.builder().viewModelBindingId(BR.viewModel).buildAsSingelton();
 
         LeakCanary.install(this);
 

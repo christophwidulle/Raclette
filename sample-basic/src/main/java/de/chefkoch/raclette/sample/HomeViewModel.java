@@ -8,7 +8,6 @@ import de.chefkoch.raclette.ViewModel;
 import de.chefkoch.raclette.sample.rest.Character;
 import de.chefkoch.raclette.sample.rest.SWApiClient;
 import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**

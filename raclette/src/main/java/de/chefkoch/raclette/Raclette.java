@@ -5,21 +5,23 @@ package de.chefkoch.raclette;
  */
 public class Raclette {
 
-    protected static Raclette INSTANCE;
-    protected static final Object LOCK = new Object();
+    public static final int NO_VIEWMODEL_BINDING_ID = -1;
+
+    private static Raclette INSTANCE;
+    private static final Object LOCK = new Object();
 
     int viewModelBindingId;
     ViewModelInjector viewModelInjector;
     ViewModelManager viewModelManager;
 
-    Raclette(int viewModelBindingId, ViewModelInjector viewModelInjector, ViewModelManager viewModelManager) {
+    private Raclette(int viewModelBindingId, ViewModelInjector viewModelInjector, ViewModelManager viewModelManager) {
         this.viewModelBindingId = viewModelBindingId;
         this.viewModelInjector = viewModelInjector;
         this.viewModelManager = viewModelManager;
     }
 
-    public static Builder builder(int viewModelBindingId) {
-        return new Builder(viewModelBindingId);
+    public static Builder builder() {
+        return new Builder();
     }
 
     public static Raclette get() {
@@ -43,25 +45,29 @@ public class Raclette {
         return viewModelManager;
     }
 
-    public interface ViewModelInjector {
-        void inject(ViewModel viewModel);
+    public interface ViewModelInjector<T extends ViewModel> {
+        void inject(T viewModel);
     }
 
 
     public static class Builder {
-        int viewModelBindingId;
+        int viewModelBindingId = NO_VIEWMODEL_BINDING_ID;
         ViewModelInjector viewModelInjector;
-
-        public Builder(int viewModelBindingId) {
-            this.viewModelBindingId = viewModelBindingId;
-        }
 
         public Builder viewModelInjector(ViewModelInjector injector) {
             this.viewModelInjector = injector;
             return this;
         }
 
+        public Builder viewModelBindingId(int viewModelBindingId) {
+            this.viewModelBindingId = viewModelBindingId;
+            return this;
+        }
+
         public Raclette build() {
+            if (viewModelBindingId == NO_VIEWMODEL_BINDING_ID) {
+                throw new RacletteException("ViewModelBindingId not set.");
+            }
             return new Raclette(viewModelBindingId, viewModelInjector, new ViewModelManager(viewModelInjector));
         }
 

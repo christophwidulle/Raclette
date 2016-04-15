@@ -1,6 +1,7 @@
 package de.chefkoch.raclette.rx.android.support;
 
 import android.content.Context;
+import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.CheckResult;
@@ -9,6 +10,7 @@ import android.view.View;
 import com.trello.rxlifecycle.FragmentEvent;
 import com.trello.rxlifecycle.FragmentLifecycleProvider;
 import com.trello.rxlifecycle.RxLifecycle;
+import de.chefkoch.raclette.ViewModel;
 import de.chefkoch.raclette.android.support.RacletteDialogFragment;
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
@@ -17,7 +19,7 @@ import rx.subjects.BehaviorSubject;
 /**
  * Created by Christoph on 05.10.2015.
  */
-public class RacletteRxDialogFragment extends RacletteDialogFragment implements FragmentLifecycleProvider {
+public class RacletteRxDialogFragment<V extends ViewModel, B extends ViewDataBinding> extends RacletteDialogFragment<V,B> implements FragmentLifecycleProvider {
 
     private final BehaviorSubject<FragmentEvent> lifecycleSubject = BehaviorSubject.create();
 

@@ -1,9 +1,11 @@
 package de.chefkoch.raclette.rx.android;
 
+import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
+import de.chefkoch.raclette.ViewModel;
 import de.chefkoch.raclette.android.RacletteActivity;
 import de.chefkoch.raclette.rx.lifecycle.ViewModelLivecycleProvider;
 import rx.Observable;
@@ -15,7 +17,7 @@ import com.trello.rxlifecycle.ActivityLifecycleProvider;
 /**
  * Created by christophwidulle on 28.09.15.
  */
-public class RacletteRxActivity extends RacletteActivity implements ActivityLifecycleProvider {
+public class RacletteRxActivity<V extends ViewModel, B extends ViewDataBinding> extends RacletteActivity<V,B> implements ActivityLifecycleProvider {
 
     private final BehaviorSubject<ActivityEvent> lifecycleSubject = BehaviorSubject.create();
 

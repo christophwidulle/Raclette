@@ -46,7 +46,7 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
         if (intent != null) {
             params = ViewModel.Params.from(intent.getExtras());
         }
-        create(activity, savedInstanceState, params);
+        init(activity, savedInstanceState, params);
     }
 
     public void create(Activity activity, Bundle savedInstanceState, Bundle arguments) {
@@ -55,10 +55,10 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
         if (arguments != null) {
             params = ViewModel.Params.from(arguments);
         }
-        create(activity, savedInstanceState, params);
+        init(activity, savedInstanceState, params);
     }
 
-    private void create(Context context, Bundle savedInstanceState, Bundle params) {
+    private void init(Context context, Bundle savedInstanceState, Bundle params) {
         //check for existing
         if (savedInstanceState != null) {
             String viewModelId = savedInstanceState.getString(ViewModel.EXTRA_VIEWMODEL_ID);
