@@ -1,7 +1,7 @@
 package de.chefkoch.raclette.rx;
 
 import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
+import rx.android.schedulers.*;
 import rx.schedulers.Schedulers;
 
 /**

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 
+import android.support.annotation.CallSuper;
 import de.chefkoch.raclette.routing.NavigationController;
 
 import java.lang.ref.WeakReference;
@@ -40,7 +41,6 @@ public class ViewModel {
     private WeakReference<Context> context;
     private NavigationController navigationController;
 
-
     public ViewModel() {
     }
 
@@ -58,9 +58,6 @@ public class ViewModel {
     }
 
 
-    protected void onCreate(Bundle bundle, Intent intent) {
-
-    }
 
     protected void onViewModelCreated(Bundle viewModelParams) {
 
@@ -74,11 +71,19 @@ public class ViewModel {
 
     }
 
+    protected void onStart() {
+
+    }
+
     protected void onResume() {
 
     }
 
     protected void onPause() {
+
+    }
+
+    protected void onStop() {
 
     }
 

@@ -1,4 +1,4 @@
-package de.chefkoch.raclette;
+package de.chefkoch.raclette.android.support;
 
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
@@ -7,6 +7,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import de.chefkoch.raclette.Raclette;
+import de.chefkoch.raclette.RacletteLifecycleDelegate;
+import de.chefkoch.raclette.ViewModel;
+import de.chefkoch.raclette.ViewModelBindingConfig;
 
 
 /**
@@ -33,7 +37,7 @@ public class RacletteFragment<V extends ViewModel, B extends ViewDataBinding> ex
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        racletteLifecycleDelegate.create(this, savedInstanceState);
+        racletteLifecycleDelegate.create(this.getActivity(), savedInstanceState, this.getArguments());
         onViewModelCreated();
 
     }

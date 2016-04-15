@@ -1,8 +1,12 @@
-package de.chefkoch.raclette;
+package de.chefkoch.raclette.android.support;
 
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import de.chefkoch.raclette.Raclette;
+import de.chefkoch.raclette.RacletteLifecycleDelegate;
+import de.chefkoch.raclette.ViewModel;
+import de.chefkoch.raclette.ViewModelBindingConfig;
 
 
 /**

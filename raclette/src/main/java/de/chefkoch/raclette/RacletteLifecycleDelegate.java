@@ -29,17 +29,17 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
         this.viewModelBindingConfig = viewModelBindingConfig;
     }
 
-    protected View onCreateViewBinding(Activity activity) {
+    public View onCreateViewBinding(Activity activity) {
         binding = DataBindingUtil.setContentView(activity, viewModelBindingConfig.getLayoutResource());
         return binding.getRoot();
     }
 
-    protected View onCreateViewBinding(LayoutInflater inflater, @Nullable ViewGroup parent, boolean attachToParent) {
+    public View onCreateViewBinding(LayoutInflater inflater, @Nullable ViewGroup parent, boolean attachToParent) {
         binding = DataBindingUtil.inflate(inflater, viewModelBindingConfig.getLayoutResource(), parent, attachToParent);
         return binding.getRoot();
     }
 
-    protected void create(Activity activity, Bundle savedInstanceState) {
+    public void create(Activity activity, Bundle savedInstanceState) {
         checkViewBindung();
         Bundle params = null;
         Intent intent = activity.getIntent();
@@ -49,14 +49,13 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
         create(activity, savedInstanceState, params);
     }
 
-    protected void create(Fragment fragment, Bundle savedInstanceState) {
+    public void create(Activity activity, Bundle savedInstanceState, Bundle arguments) {
         checkViewBindung();
         Bundle params = null;
-        Bundle arguments = fragment.getArguments();
         if (arguments != null) {
             params = ViewModel.Params.from(arguments);
         }
-        create(fragment.getActivity(), savedInstanceState, params);
+        create(activity, savedInstanceState, params);
     }
 
     private void create(Context context, Bundle savedInstanceState, Bundle params) {
@@ -82,7 +81,7 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
         binding.setVariable(raclette.getViewModelBindingId(), viewModel);
     }
 
-    protected void onDestroy(Activity activity) {
+    public void onDestroy(Activity activity) {
         viewModel.onDestroy();
         if (activity.isFinishing()) {
             viewModel.onViewModelDestroyed();
@@ -90,15 +89,23 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
         }
     }
 
-    protected void onPause() {
+    public void onStart() {
+        viewModel.onStart();
+    }
+
+    public void onPause() {
         viewModel.onPause();
     }
 
-    protected void onResume() {
+    public void onResume() {
         viewModel.onResume();
     }
 
-    protected void onSaveInstanceState(Bundle outState) {
+    public void onStop() {
+        viewModel.onStop();
+    }
+
+    public void onSaveInstanceState(Bundle outState) {
         outState.putString(ViewModel.EXTRA_VIEWMODEL_ID, viewModel.getId());
     }
 

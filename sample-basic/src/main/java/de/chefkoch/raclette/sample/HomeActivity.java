@@ -17,10 +17,7 @@
 package de.chefkoch.raclette.sample;
 
 import android.os.Bundle;
-import android.support.v4.view.GravityCompat;
-import android.view.Menu;
-import android.view.MenuItem;
-import de.chefkoch.raclette.RacletteAppCompatActivity;
+import de.chefkoch.raclette.android.support.RacletteAppCompatActivity;
 import de.chefkoch.raclette.Bind;
 import de.chefkoch.raclette.sample.databinding.HomeActivityBinding;
 

@@ -1,17 +1,24 @@
-package de.chefkoch.raclette;
+package de.chefkoch.raclette.android;
 
+import android.app.Activity;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
 import android.support.v7.app.AppCompatActivity;
+import de.chefkoch.raclette.Raclette;
+import de.chefkoch.raclette.RacletteLifecycleDelegate;
+import de.chefkoch.raclette.ViewModel;
+import de.chefkoch.raclette.ViewModelBindingConfig;
 
 
 /**
  * Created by christophwidulle on 28.09.15.
  */
-public class RacletteActivity<V extends ViewModel, B extends ViewDataBinding> extends AppCompatActivity {
+public class RacletteActivity<V extends ViewModel, B extends ViewDataBinding> extends Activity {
 
     private RacletteLifecycleDelegate<V, B> racletteLifecycleDelegate;
 
+    @CallSuper
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,24 +34,28 @@ public class RacletteActivity<V extends ViewModel, B extends ViewDataBinding> ex
 
     }
 
+    @CallSuper
     @Override
     protected void onDestroy() {
-        racletteLifecycleDelegate.onDestroy(this);
         super.onDestroy();
+        racletteLifecycleDelegate.onDestroy(this);
     }
 
+    @CallSuper
     @Override
     protected void onPause() {
-        racletteLifecycleDelegate.onPause();
         super.onPause();
+        racletteLifecycleDelegate.onPause();
     }
 
+    @CallSuper
     @Override
     protected void onResume() {
         super.onResume();
         racletteLifecycleDelegate.onResume();
     }
 
+    @CallSuper
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         racletteLifecycleDelegate.onSaveInstanceState(outState);

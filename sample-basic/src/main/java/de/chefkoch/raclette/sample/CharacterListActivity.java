@@ -17,7 +17,7 @@
 package de.chefkoch.raclette.sample;
 
 import de.chefkoch.raclette.Bind;
-import de.chefkoch.raclette.RacletteAppCompatActivity;
+import de.chefkoch.raclette.android.support.RacletteAppCompatActivity;
 import de.chefkoch.raclette.sample.databinding.HomeActivityBinding;
 
 
