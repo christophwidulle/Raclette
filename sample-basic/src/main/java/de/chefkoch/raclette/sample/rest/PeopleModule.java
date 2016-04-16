@@ -13,5 +13,8 @@ public interface PeopleModule {
     @GET("people/{id}")
     Observable<Character> get(@Path("id") String id);
 
+    @GET("people")
+    Observable<CharactersResponse> list();
+
 
 }

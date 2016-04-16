@@ -41,8 +41,6 @@ public class SimpleBindingAdapter<T> extends RecyclerView.Adapter<SimpleBindingA
         this.itemClickListener = itemClickListener;
     }
 
-
-
     @Override
     public BasicViewHolder<T> onCreateViewHolder(ViewGroup parent, int viewType) {
         ViewDataBinding binding = DataBindingUtil.inflate(

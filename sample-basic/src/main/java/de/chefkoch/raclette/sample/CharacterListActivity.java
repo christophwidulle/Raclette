@@ -16,13 +16,40 @@
 
 package de.chefkoch.raclette.sample;
 
+import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import de.chefkoch.raclette.Bind;
+import de.chefkoch.raclette.android.support.SimpleBindingAdapter;
+import de.chefkoch.raclette.rx.RxUtil;
 import de.chefkoch.raclette.rx.android.support.RacletteRxAppCompatActivity;
-import de.chefkoch.raclette.sample.databinding.HomeActivityBinding;
+import de.chefkoch.raclette.sample.databinding.CharacterlistActivityBinding;
+import de.chefkoch.raclette.sample.rest.Character;
+import rx.functions.Action1;
+
+import java.util.List;
 
 
-@Bind(viewModel = HomeViewModel.class, layoutResource = R.layout.character_activity)
-public class CharacterListActivity extends RacletteRxAppCompatActivity<CharacterViewModel, HomeActivityBinding> {
+@Bind(viewModel = CharacterListViewModel.class, layoutResource = R.layout.characterlist_activity)
+public class CharacterListActivity extends RacletteRxAppCompatActivity<CharacterListViewModel, CharacterlistActivityBinding> {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        final SimpleBindingAdapter<Character> simpleBindingAdapter = new SimpleBindingAdapter<>(BR.item, R.layout.list_item);
+        getBinding().list.setLayoutManager(new LinearLayoutManager(this));
+        getBinding().list.setAdapter(simpleBindingAdapter);
 
 
+        getViewModel().characters()
+                .compose(RxUtil.<List<Character>>applySchedulers())
+                .compose(this.<List<Character>>bindToLifecycle())
+                .subscribe(new Action1<List<Character>>() {
+                    @Override
+                    public void call(List<Character> characters) {
+                        simpleBindingAdapter.addAll(characters);
+                    }
+                });
+
+    }
 }

@@ -52,12 +52,10 @@ public class ViewModel {
         this.context = new WeakReference<Context>(context);
     }
 
-
     public String getId() {
         return id;
     }
-
-
+    
     protected void onViewModelCreated(Bundle viewModelParams) {
 
     }
