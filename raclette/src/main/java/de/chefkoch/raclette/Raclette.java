@@ -5,14 +5,14 @@ package de.chefkoch.raclette;
  */
 public class Raclette {
 
-    public static final int NO_VIEWMODEL_BINDING_ID = -1;
+    private static final int NO_VIEWMODEL_BINDING_ID = -1;
 
     private static Raclette INSTANCE;
     private static final Object LOCK = new Object();
 
-    int viewModelBindingId;
-    ViewModelInjector viewModelInjector;
-    ViewModelManager viewModelManager;
+    private int viewModelBindingId;
+    private ViewModelInjector viewModelInjector;
+    private ViewModelManager viewModelManager;
 
     private Raclette(int viewModelBindingId, ViewModelInjector viewModelInjector, ViewModelManager viewModelManager) {
         this.viewModelBindingId = viewModelBindingId;

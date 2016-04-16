@@ -40,22 +40,16 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
     }
 
     public void create(Activity activity, Bundle savedInstanceState) {
-        checkViewBindung();
-        Bundle params = null;
-        Intent intent = activity.getIntent();
-        if (intent != null) {
-            params = ViewModel.Params.from(intent.getExtras());
-        }
-        init(activity, savedInstanceState, params);
+        create(activity, savedInstanceState, activity.getIntent() != null ? activity.getIntent().getExtras() : null);
     }
 
-    public void create(Activity activity, Bundle savedInstanceState, Bundle arguments) {
+    public void create(Context context, Bundle savedInstanceState, Bundle extras) {
         checkViewBindung();
         Bundle params = null;
-        if (arguments != null) {
-            params = ViewModel.Params.from(arguments);
+        if (extras != null) {
+            params = ViewModel.Params.from(extras);
         }
-        init(activity, savedInstanceState, params);
+        init(context, savedInstanceState, params);
     }
 
     private void init(Context context, Bundle savedInstanceState, Bundle params) {
@@ -84,8 +78,27 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
     public void onDestroy(Activity activity) {
         viewModel.onDestroy();
         if (activity.isFinishing()) {
-            viewModel.onViewModelDestroyed();
-            raclette.getViewModelManager().delete(viewModel.getId());
+            destroy();
+        }
+    }
+
+    public void onDestroy(android.support.v4.app.Fragment fragment) {
+        viewModel.onDestroy();
+        if (fragment.getActivity().isFinishing()) {
+            destroy();
+        } else if (fragment.isRemoving()) {
+            //todo can be in backstack. check it.
+            destroy();
+        }
+    }
+
+    public void onDestroy(android.app.Fragment fragment) {
+        viewModel.onDestroy();
+        if (fragment.getActivity().isFinishing()) {
+            destroy();
+        } else if (fragment.isRemoving()) {
+            //todo can be in backstack. check it.
+            destroy();
         }
     }
 
@@ -107,6 +120,11 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
 
     public void onSaveInstanceState(Bundle outState) {
         outState.putString(ViewModel.EXTRA_VIEWMODEL_ID, viewModel.getId());
+    }
+
+    private void destroy() {
+        raclette.getViewModelManager().delete(viewModel.getId());
+        viewModel.onViewModelDestroyed();
     }
 
     private void checkViewBindung() {

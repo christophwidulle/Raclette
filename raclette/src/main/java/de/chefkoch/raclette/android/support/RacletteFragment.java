@@ -2,6 +2,7 @@ package de.chefkoch.raclette.android.support;
 
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ public class RacletteFragment<V extends ViewModel, B extends ViewDataBinding> ex
 
     private RacletteLifecycleDelegate<V, B> racletteLifecycleDelegate;
 
+    @CallSuper
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +36,7 @@ public class RacletteFragment<V extends ViewModel, B extends ViewDataBinding> ex
         return racletteLifecycleDelegate.onCreateViewBinding(inflater, null, false);
     }
 
+    @CallSuper
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -46,25 +49,42 @@ public class RacletteFragment<V extends ViewModel, B extends ViewDataBinding> ex
 
     }
 
-
+    @CallSuper
     @Override
     public void onDestroy() {
         racletteLifecycleDelegate.onDestroy(getActivity());
         super.onDestroy();
     }
 
+    @CallSuper
     @Override
     public void onPause() {
         racletteLifecycleDelegate.onPause();
         super.onPause();
     }
 
+    @CallSuper
     @Override
     public void onResume() {
         super.onResume();
         racletteLifecycleDelegate.onResume();
     }
 
+    @CallSuper
+    @Override
+    public void onStart() {
+        super.onStart();
+        racletteLifecycleDelegate.onStart();
+    }
+
+    @CallSuper
+    @Override
+    public void onStop() {
+        super.onStop();
+        racletteLifecycleDelegate.onStop();
+    }
+
+    @CallSuper
     @Override
     public void onSaveInstanceState(Bundle outState) {
         racletteLifecycleDelegate.onSaveInstanceState(outState);

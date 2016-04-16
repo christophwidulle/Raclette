@@ -20,6 +20,7 @@ import de.chefkoch.raclette.ViewModelBindingConfig;
 public class RacletteFragment<V extends ViewModel, B extends ViewDataBinding> extends Fragment {
 
     private RacletteLifecycleDelegate<V, B> racletteLifecycleDelegate;
+
     @CallSuper
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,12 +35,14 @@ public class RacletteFragment<V extends ViewModel, B extends ViewDataBinding> ex
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return racletteLifecycleDelegate.onCreateViewBinding(inflater, null, false);
     }
+
     @CallSuper
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         racletteLifecycleDelegate.create(this.getActivity(), savedInstanceState, this.getArguments());
         onViewModelCreated();
+        //todo check if this is also called when we add fragments to activity after activity is already created
 
     }
 
@@ -50,21 +53,38 @@ public class RacletteFragment<V extends ViewModel, B extends ViewDataBinding> ex
     @CallSuper
     @Override
     public void onDestroy() {
-        racletteLifecycleDelegate.onDestroy(getActivity());
+        racletteLifecycleDelegate.onDestroy(this);
         super.onDestroy();
     }
+
     @CallSuper
     @Override
     public void onPause() {
         racletteLifecycleDelegate.onPause();
         super.onPause();
     }
+
     @CallSuper
     @Override
     public void onResume() {
         super.onResume();
         racletteLifecycleDelegate.onResume();
     }
+
+    @CallSuper
+    @Override
+    public void onStart() {
+        super.onStart();
+        racletteLifecycleDelegate.onStart();
+    }
+
+    @CallSuper
+    @Override
+    public void onStop() {
+        super.onStop();
+        racletteLifecycleDelegate.onStop();
+    }
+
     @CallSuper
     @Override
     public void onSaveInstanceState(Bundle outState) {

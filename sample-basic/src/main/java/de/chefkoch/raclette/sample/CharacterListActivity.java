@@ -17,12 +17,12 @@
 package de.chefkoch.raclette.sample;
 
 import de.chefkoch.raclette.Bind;
-import de.chefkoch.raclette.android.support.RacletteAppCompatActivity;
+import de.chefkoch.raclette.rx.android.support.RacletteRxAppCompatActivity;
 import de.chefkoch.raclette.sample.databinding.HomeActivityBinding;
 
 
 @Bind(viewModel = HomeViewModel.class, layoutResource = R.layout.character_activity)
-public class CharacterListActivity extends RacletteAppCompatActivity<CharacterViewModel, HomeActivityBinding> {
+public class CharacterListActivity extends RacletteRxAppCompatActivity<CharacterViewModel, HomeActivityBinding> {
 
 
 }

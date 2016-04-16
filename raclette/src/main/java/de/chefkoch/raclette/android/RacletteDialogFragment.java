@@ -42,7 +42,6 @@ public class RacletteDialogFragment<V extends ViewModel, B extends ViewDataBindi
         super.onActivityCreated(savedInstanceState);
         racletteLifecycleDelegate.create(this.getActivity(), savedInstanceState, this.getArguments());
         onViewModelCreated();
-
     }
 
     protected void onViewModelCreated() {
@@ -68,6 +67,20 @@ public class RacletteDialogFragment<V extends ViewModel, B extends ViewDataBindi
     public void onResume() {
         super.onResume();
         racletteLifecycleDelegate.onResume();
+    }
+
+    @CallSuper
+    @Override
+    public void onStart() {
+        super.onStart();
+        racletteLifecycleDelegate.onStart();
+    }
+
+    @CallSuper
+    @Override
+    public void onStop() {
+        super.onStop();
+        racletteLifecycleDelegate.onStop();
     }
 
     @CallSuper

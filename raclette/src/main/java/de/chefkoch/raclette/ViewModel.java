@@ -58,7 +58,6 @@ public class ViewModel {
     }
 
 
-
     protected void onViewModelCreated(Bundle viewModelParams) {
 
     }

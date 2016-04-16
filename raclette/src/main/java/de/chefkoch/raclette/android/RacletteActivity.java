@@ -54,6 +54,18 @@ public class RacletteActivity<V extends ViewModel, B extends ViewDataBinding> ex
         super.onResume();
         racletteLifecycleDelegate.onResume();
     }
+    @CallSuper
+    @Override
+    protected void onStart() {
+        super.onStart();
+        racletteLifecycleDelegate.onStart();
+    }
+    @CallSuper
+    @Override
+    protected void onStop() {
+        super.onStop();
+        racletteLifecycleDelegate.onStop();
+    }
 
     @CallSuper
     @Override
