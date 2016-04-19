@@ -1,8 +1,11 @@
 package de.chefkoch.raclette.sample;
 
+import android.content.Context;
+import android.content.Intent;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import com.jakewharton.rxrelay.ReplayRelay;
+import de.chefkoch.raclette.Raclette;
 import de.chefkoch.raclette.ViewModel;
 import de.chefkoch.raclette.rx.RxUtil;
 import de.chefkoch.raclette.sample.rest.Character;
@@ -20,7 +23,7 @@ import java.util.List;
  */
 public class CharacterListViewModel extends ViewModel {
 
-    ReplayRelay<List<Character>> charactersSubject = ReplayRelay.create();
+    private ReplayRelay<List<Character>> charactersSubject = ReplayRelay.create();
 
 
     @Override
@@ -32,16 +35,25 @@ public class CharacterListViewModel extends ViewModel {
         return charactersSubject.asObservable();
     }
 
+
+    void onCharacterSelected(int index, Character character) {
+        Context currentContext = Raclette.get().getContextManager().getCurrentContext();
+        Intent intent = new Intent(currentContext, CharacterActivity.class);
+        Bundle params = new Bundle();
+        params.putInt("index", index);
+        intent.putExtra(ViewModel.Params.EXTRA_KEY, params);
+        currentContext.startActivity(intent,params);
+    }
+
     private void load() {
         new SWApiClient().people().list()
                 .subscribeOn(Schedulers.io())
-                .flatMap(new Func1<CharactersResponse, Observable<Character>>() {
+                .map(new Func1<CharactersResponse, List<Character>>() {
                     @Override
-                    public Observable<Character> call(CharactersResponse charactersResponse) {
-                        return Observable.from(charactersResponse.getResults());
+                    public List<Character> call(CharactersResponse charactersResponse) {
+                        return charactersResponse.getResults();
                     }
                 })
-                .toList()
                 .subscribe(new Action1<List<Character>>() {
                     @Override
                     public void call(List<Character> characters) {

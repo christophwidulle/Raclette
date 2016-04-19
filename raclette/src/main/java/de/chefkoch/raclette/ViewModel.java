@@ -38,29 +38,16 @@ public class ViewModel {
     }
 
     private String id;
-    private WeakReference<Context> context;
-    private NavigationController navigationController;
-
-    public ViewModel() {
-    }
 
     void setId(String id) {
         this.id = id;
     }
 
-    void setContext(Context context) {
-        this.context = new WeakReference<Context>(context);
-    }
-
     public String getId() {
         return id;
     }
-    
+
     protected void onViewModelCreated(Bundle viewModelParams) {
-
-    }
-
-    protected void onViewModelDestroyed() {
 
     }
 
@@ -85,6 +72,10 @@ public class ViewModel {
     }
 
     protected void onDestroy() {
+
+    }
+
+    protected void onViewModelDestroyed() {
 
     }
 

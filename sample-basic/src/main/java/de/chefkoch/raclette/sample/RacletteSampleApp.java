@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.squareup.leakcanary.LeakCanary;
 import de.chefkoch.raclette.Raclette;
+import de.chefkoch.raclette.ViewModel;
 
 /**
  * Created by christophwidulle on 01.11.15.
@@ -17,8 +18,12 @@ public class RacletteSampleApp extends Application {
 
         Raclette.builder().viewModelBindingId(BR.viewModel).buildAsSingelton();
 
-        LeakCanary.install(this);
 
+        Raclette.builder()
+                .viewModelBindingId(BR.viewModel)
+                .buildAsSingelton();
+
+        LeakCanary.install(this);
     }
 
 }

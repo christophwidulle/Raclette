@@ -5,9 +5,9 @@ import android.support.annotation.LayoutRes;
 
 public class ViewModelBindingConfig<V extends ViewModel> {
 
-    Class<V> viewModelClass;
+    private Class<V> viewModelClass;
     @LayoutRes
-    int layoutResource;
+    private int layoutResource;
 
 
     public ViewModelBindingConfig(Class<V> viewModelClass, @LayoutRes int layoutResource) {

@@ -7,6 +7,7 @@ import rx.functions.Func2;
 
 /**
  * thx to https://github.com/trello/RxLifecycle
+ *
  * Created by christophwidulle on 15.04.16.
  */
 public class RxViewModelLifecycle {

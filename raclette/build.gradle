@@ -3,7 +3,7 @@ apply plugin: 'android-apt'
 apply plugin: 'com.github.dcendents.android-maven'
 
 group='de.chefkoch.raclette'
-version = '0.1.4-SNAPSHOT'
+version = '0.1.6-SNAPSHOT'
 
 android {
     compileSdkVersion 23
@@ -48,4 +48,5 @@ dependencies {
     compile "com.android.support:recyclerview-v7:$SUPPORT_LIBRARY_VERSION"
     compile "com.android.support:support-annotations:$SUPPORT_LIBRARY_VERSION"
 
+    testCompile 'junit:junit:4.12'
 }

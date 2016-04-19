@@ -18,7 +18,10 @@ package de.chefkoch.raclette.sample;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.View;
 import de.chefkoch.raclette.Bind;
+import de.chefkoch.raclette.android.*;
+import de.chefkoch.raclette.android.AdapterItemClickListener;
 import de.chefkoch.raclette.android.support.SimpleBindingAdapter;
 import de.chefkoch.raclette.rx.RxUtil;
 import de.chefkoch.raclette.rx.android.support.RacletteRxAppCompatActivity;
@@ -37,9 +40,16 @@ public class CharacterListActivity extends RacletteRxAppCompatActivity<Character
         super.onCreate(savedInstanceState);
 
         final SimpleBindingAdapter<Character> simpleBindingAdapter = new SimpleBindingAdapter<>(BR.item, R.layout.list_item);
+
         getBinding().list.setLayoutManager(new LinearLayoutManager(this));
         getBinding().list.setAdapter(simpleBindingAdapter);
 
+        simpleBindingAdapter.setItemClickListener(new AdapterItemClickListener<Character>() {
+            @Override
+            public void onClick(Character item, int position, View view) {
+                getViewModel().onCharacterSelected(position, item);
+            }
+        });
 
         getViewModel().characters()
                 .compose(RxUtil.<List<Character>>applySchedulers())

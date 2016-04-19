@@ -11,13 +11,13 @@ public class ViewModelManager {
 
     private final Raclette.ViewModelInjector injector;
 
-    public ViewModelManager(Raclette.ViewModelInjector injector) {
+    ViewModelManager(Raclette.ViewModelInjector injector) {
         this.injector = injector;
     }
 
-    Map<String, ViewModel> registry = new ConcurrentHashMap<>();
+    private Map<String, ViewModel> registry = new ConcurrentHashMap<>();
 
-    public <V extends ViewModel> V createViewModel(Class<V> viewModelClass) {
+    <V extends ViewModel> V createViewModel(Class<V> viewModelClass) {
 
         String id = UUID.randomUUID().toString();
         try {
@@ -27,13 +27,14 @@ public class ViewModelManager {
                 injector.inject(viewModel);
             }
             registry.put(id, viewModel);
+
             return viewModel;
         } catch (Exception e) {
             throw new RacletteException(e);
         }
     }
 
-    public void delete(String id) {
+    void delete(String id) {
         registry.remove(id);
     }
 
@@ -42,7 +43,6 @@ public class ViewModelManager {
         ViewModel viewModel = registry.get(id);
         return (V) viewModel;
     }
-
 
 
 }

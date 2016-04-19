@@ -11,13 +11,15 @@ public class Raclette {
     private static final Object LOCK = new Object();
 
     private int viewModelBindingId;
-    private ViewModelInjector viewModelInjector;
-    private ViewModelManager viewModelManager;
+    private final ViewModelInjector viewModelInjector;
+    private final ViewModelManager viewModelManager;
+    private final ContextManager contextManager;
 
-    private Raclette(int viewModelBindingId, ViewModelInjector viewModelInjector, ViewModelManager viewModelManager) {
+    private Raclette(int viewModelBindingId, ViewModelInjector viewModelInjector, ViewModelManager viewModelManager, ContextManager contextManager) {
         this.viewModelBindingId = viewModelBindingId;
         this.viewModelInjector = viewModelInjector;
         this.viewModelManager = viewModelManager;
+        this.contextManager = contextManager;
     }
 
     public static Builder builder() {
@@ -45,10 +47,13 @@ public class Raclette {
         return viewModelManager;
     }
 
-    public interface ViewModelInjector<T extends ViewModel> {
-        void inject(T viewModel);
+    public ContextManager getContextManager() {
+        return contextManager;
     }
 
+    public interface ViewModelInjector {
+        void inject(ViewModel viewModel);
+    }
 
     public static class Builder {
         int viewModelBindingId = NO_VIEWMODEL_BINDING_ID;
@@ -68,7 +73,7 @@ public class Raclette {
             if (viewModelBindingId == NO_VIEWMODEL_BINDING_ID) {
                 throw new RacletteException("ViewModelBindingId not set.");
             }
-            return new Raclette(viewModelBindingId, viewModelInjector, new ViewModelManager(viewModelInjector));
+            return new Raclette(viewModelBindingId, viewModelInjector, new ViewModelManager(viewModelInjector), new ContextManager());
         }
 
         public Raclette buildAsSingelton() {

@@ -12,10 +12,6 @@
             android:label="@string/app_name"
             android:theme="@style/Theme.CKApp">
 
-        <activity android:name=".HomeActivity">
-
-        </activity>
-
         <activity android:name=".CharacterActivity">
 
         </activity>

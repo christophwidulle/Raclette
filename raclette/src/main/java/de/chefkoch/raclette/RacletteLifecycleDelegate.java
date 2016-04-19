@@ -23,6 +23,7 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
     private V viewModel;
     private B binding;
     private final ViewModelBindingConfig<V> viewModelBindingConfig;
+    private Context context;
 
     public RacletteLifecycleDelegate(Raclette raclette, ViewModelBindingConfig<V> viewModelBindingConfig) {
         this.raclette = raclette;
@@ -62,17 +63,17 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
                     throw new RacletteException("ViewModel not found but should be alive.");
                 } else {
                     this.viewModel = viewModel;
-                    this.viewModel.setContext(context);
                 }
             }
         }
         if (viewModel == null) {
             viewModel = raclette.getViewModelManager().createViewModel(viewModelBindingConfig.getViewModelClass());
-            viewModel.setContext(context);
             viewModel.onViewModelCreated(params);
         }
-        viewModel.onCreate(params);
+        this.context = context;
+        raclette.getContextManager().setCurrentContext(context);
         binding.setVariable(raclette.getViewModelBindingId(), viewModel);
+        viewModel.onCreate(params);
     }
 
     public void onDestroy(Activity activity) {
@@ -103,6 +104,7 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
     }
 
     public void onStart() {
+        raclette.getContextManager().setCurrentContext(context);
         viewModel.onStart();
     }
 

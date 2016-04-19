@@ -3,7 +3,7 @@ apply plugin: 'android-apt'
 apply plugin: 'com.github.dcendents.android-maven'
 
 group = 'de.chefkoch.raclette'
-version = '0.1.4-SNAPSHOT'
+version = '0.1.6-SNAPSHOT'
 
 android {
     compileSdkVersion 23
@@ -36,7 +36,6 @@ android {
 }
 
 dependencies {
-
     final SUPPORT_LIBRARY_VERSION = '23.1.1'
     final DAGGER_VERSION = '2.0.1'
     final HAMCREST_VERSION = '1.3'
@@ -46,7 +45,6 @@ dependencies {
 
     compile "com.android.support:support-v4:$SUPPORT_LIBRARY_VERSION"
     compile "com.android.support:appcompat-v7:$SUPPORT_LIBRARY_VERSION"
-
     compile 'io.reactivex:rxjava:1.1.3'
     compile 'io.reactivex:rxandroid:1.1.0'
     compile 'com.jakewharton.rxrelay:rxrelay:1.0.0'
@@ -56,4 +54,5 @@ dependencies {
     compile 'com.jakewharton.rxbinding:rxbinding-recyclerview-v7:0.4.0'
     compile 'com.jakewharton.rxbinding:rxbinding-design:0.4.0'
 
+    testCompile 'junit:junit:4.12'
 }
