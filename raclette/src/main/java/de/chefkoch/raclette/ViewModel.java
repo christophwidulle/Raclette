@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 
 import android.support.annotation.CallSuper;
+import de.chefkoch.raclette.routing.NavParams;
 import de.chefkoch.raclette.routing.NavigationController;
 
 import java.lang.ref.WeakReference;
@@ -45,6 +46,10 @@ public class ViewModel {
 
     public String getId() {
         return id;
+    }
+
+    void injectParams(Bundle params) {
+        NavParams.injectors().inject(this, params);
     }
 
     protected void onViewModelCreated(Bundle viewModelParams) {

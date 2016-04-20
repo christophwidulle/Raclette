@@ -68,7 +68,10 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
         }
         if (viewModel == null) {
             viewModel = raclette.getViewModelManager().createViewModel(viewModelBindingConfig.getViewModelClass());
+            viewModel.injectParams(params);
             viewModel.onViewModelCreated(params);
+        } else {
+            viewModel.injectParams(params);
         }
         this.context = context;
         raclette.getContextManager().setCurrentContext(context);

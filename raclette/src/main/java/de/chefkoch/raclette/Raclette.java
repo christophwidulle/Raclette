@@ -6,6 +6,7 @@ package de.chefkoch.raclette;
 public class Raclette {
 
     private static final int NO_VIEWMODEL_BINDING_ID = -1;
+    public static final String BUNDLE_PREFIX = "##RACLETTE_";
 
     private static Raclette INSTANCE;
     private static final Object LOCK = new Object();

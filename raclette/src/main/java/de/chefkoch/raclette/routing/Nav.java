@@ -1,5 +1,7 @@
 package de.chefkoch.raclette.routing;
 
+import android.os.Bundle;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -16,8 +18,7 @@ public class Nav {
 
         String value();
 
-        Param[] params() default {};
-
+        Class<? extends NavParams> navParams() default NavParams.None.class;
     }
 
 
@@ -35,26 +36,27 @@ public class Nav {
 
         String[] value() default {};
 
-        boolean handParams() default false;
-
     }
 
-    @Retention(RetentionPolicy.RUNTIME)
+    @Retention(RetentionPolicy.CLASS)
     @Target(ElementType.FIELD)
-    public static @interface Param {
+    public @interface Param {
 
-        String value();
+        String value() default "";
 
         Class type() default String.class;
 
-        @Retention(RetentionPolicy.RUNTIME)
-        @Target(ElementType.FIELD)
-        public static @interface Inject {
-
-            String value() default "";
-
-        }
     }
 
+
+    @Retention(RetentionPolicy.CLASS)
+    @Target(ElementType.TYPE)
+    public @interface InjectParams {
+    }
+
+    public interface ParamsInjector<V> {
+
+        void inject(Bundle params, V viewModel);
+    }
 
 }

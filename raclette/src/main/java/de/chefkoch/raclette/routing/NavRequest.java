@@ -2,6 +2,7 @@ package de.chefkoch.raclette.routing;
 
 import android.os.Bundle;
 
+import de.chefkoch.raclette.Raclette;
 import de.chefkoch.raclette.ViewModel;
 
 /**
@@ -9,7 +10,7 @@ import de.chefkoch.raclette.ViewModel;
  */
 public class NavRequest {
 
-    public static final String ROUTE_KEY = "#ROUTE_KEY";
+    public static final String ROUTE_KEY = Raclette.BUNDLE_PREFIX + "ROUTE_KEY";
 
     private final String route;
     private final Bundle params;

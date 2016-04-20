@@ -4,6 +4,7 @@ import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.util.Log;
 import de.chefkoch.raclette.ViewModel;
+import de.chefkoch.raclette.routing.Nav;
 import de.chefkoch.raclette.rx.RxUtil;
 import de.chefkoch.raclette.sample.rest.Character;
 import de.chefkoch.raclette.sample.rest.SWApiClient;
@@ -13,10 +14,13 @@ import rx.functions.Func1;
 /**
  * Created by christophwidulle on 18.10.15.
  */
+@Nav.InjectParams
 public class CharacterViewModel extends ViewModel {
 
     public ObservableField<Character> characterField = new ObservableField<>();
 
+    @Nav.Param()
+    String characterId;
 
     @Override
     protected void onViewModelCreated(Bundle viewModelParams) {
