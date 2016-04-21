@@ -11,6 +11,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import de.chefkoch.raclette.routing.NavRequest;
+import de.chefkoch.raclette.routing.NavRouteHandler;
 
 
 /**
@@ -51,6 +53,7 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
             params = ViewModel.Params.from(extras);
         }
         init(context, savedInstanceState, params);
+        checkNavRequest(context, extras);
     }
 
     private void init(Context context, Bundle savedInstanceState, Bundle params) {
@@ -68,6 +71,7 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
         }
         if (viewModel == null) {
             viewModel = raclette.getViewModelManager().createViewModel(viewModelBindingConfig.getViewModelClass());
+            viewModel.setNavigationController(raclette.getNavigationController());
             viewModel.injectParams(params);
             viewModel.onViewModelCreated(params);
         } else {
@@ -77,6 +81,13 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
         raclette.getContextManager().setCurrentContext(context);
         binding.setVariable(raclette.getViewModelBindingId(), viewModel);
         viewModel.onCreate(params);
+    }
+
+    private void checkNavRequest(Context context, Bundle extras) {
+        NavRequest navRequest = NavRequest.from(extras);
+        if (navRequest != null && context instanceof NavRouteHandler) {
+            ((NavRouteHandler) context).onHandle(navRequest);
+        }
     }
 
     public void onDestroy(Activity activity) {

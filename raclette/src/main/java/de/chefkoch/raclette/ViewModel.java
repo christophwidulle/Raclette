@@ -39,9 +39,14 @@ public class ViewModel {
     }
 
     private String id;
+    private NavigationController navigationController;
 
     void setId(String id) {
         this.id = id;
+    }
+
+    void setNavigationController(NavigationController navigationController) {
+        this.navigationController = navigationController;
     }
 
     public String getId() {
@@ -50,6 +55,10 @@ public class ViewModel {
 
     void injectParams(Bundle params) {
         NavParams.injectors().inject(this, params);
+    }
+
+    protected NavigationController navigate(){
+        return navigationController;
     }
 
     protected void onViewModelCreated(Bundle viewModelParams) {

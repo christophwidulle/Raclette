@@ -47,7 +47,7 @@ public class CharacterListActivity extends RacletteRxAppCompatActivity<Character
         simpleBindingAdapter.setItemClickListener(new AdapterItemClickListener<Character>() {
             @Override
             public void onClick(Character item, int position, View view) {
-                getViewModel().onCharacterSelected(position, item);
+                getViewModel().onCharacterSelected(position + 1, item);
             }
         });
 

@@ -18,14 +18,24 @@ package de.chefkoch.raclette.sample;
 
 import de.chefkoch.raclette.Bind;
 import de.chefkoch.raclette.routing.Nav;
+import de.chefkoch.raclette.routing.NavRequest;
+import de.chefkoch.raclette.routing.NavRouteHandler;
 import de.chefkoch.raclette.rx.android.support.RacletteRxAppCompatActivity;
 import de.chefkoch.raclette.sample.databinding.CharacterActivityBinding;
 
 
-@Nav.Route("/character")
-@Nav.Dispatch()
+@Nav.Route(value = "/character", navParams = CharacterParams.class)
+@Nav.Dispatch({
+        @Nav.Route(value = "/character/info", navParams = CharacterParams.class),
+        @Nav.Route(value = "/character/bla", navParams = CharacterParams.class)
+}
+)
 @Bind(viewModel = CharacterViewModel.class, layoutResource = R.layout.character_activity)
-public class CharacterActivity extends RacletteRxAppCompatActivity<CharacterViewModel, CharacterActivityBinding> {
+public class CharacterActivity extends RacletteRxAppCompatActivity<CharacterViewModel, CharacterActivityBinding> implements NavRouteHandler{
 
 
+    @Override
+    public void onHandle(NavRequest navRequest) {
+        System.out.println();
+    }
 }

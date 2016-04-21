@@ -9,10 +9,10 @@ import de.chefkoch.raclette.routing.NavParams;
 //Generated
 public class CharacterParams extends NavParams implements NavParams.Injector<CharacterViewModel> {
 
-    String characterId;
+    String characterIndex;
 
     public CharacterParams(Bundle params) {
-        this.characterId = params.getString("characterId");
+        this.characterIndex = params.getString("characterIndex");
     }
 
     public static CharacterParams from(Bundle params) {
@@ -21,10 +21,8 @@ public class CharacterParams extends NavParams implements NavParams.Injector<Cha
 
     @Override
     public void inject(CharacterViewModel viewModel) {
-        viewModel.characterId = this.characterId;
+        viewModel.characterIndex = this.characterIndex;
     }
 
-    public String characterId() {
-        return characterId;
-    }
+
 }

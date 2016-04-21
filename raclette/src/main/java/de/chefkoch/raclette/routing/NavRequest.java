@@ -12,25 +12,32 @@ public class NavRequest {
 
     public static final String ROUTE_KEY = Raclette.BUNDLE_PREFIX + "ROUTE_KEY";
 
-    private final String route;
+    private final String routePath;
     private final Bundle params;
 
-    public NavRequest(String route, Bundle params) {
-        this.route = route;
+    public NavRequest(String routePath, Bundle params) {
+        this.routePath = routePath;
         this.params = params;
+    }
+
+    public String getRoutePath() {
+        return routePath;
     }
 
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
-        bundle.putString(ROUTE_KEY, route);
+        bundle.putString(ROUTE_KEY, routePath);
         bundle.putBundle(ViewModel.Params.EXTRA_KEY, params);
         return bundle;
     }
 
     public static NavRequest from(Bundle bundle) {
-        final Bundle params = bundle.getBundle(ViewModel.Params.EXTRA_KEY);
-        final String route = bundle.getString(ROUTE_KEY);
-        return new NavRequest(route, params);
+        if (bundle == null) return null;
+        final String route = bundle.getString(ROUTE_KEY, null);
+        if (route != null) {
+            final Bundle params = bundle.getBundle(ViewModel.Params.EXTRA_KEY);
+            return new NavRequest(route, params);
+        } else
+            return null;
     }
-
 }

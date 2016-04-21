@@ -20,12 +20,11 @@ public class CharacterViewModel extends ViewModel {
     public ObservableField<Character> characterField = new ObservableField<>();
 
     @Nav.Param()
-    String characterId;
+    String characterIndex;
 
     @Override
     protected void onViewModelCreated(Bundle viewModelParams) {
-        int index = viewModelParams.getInt("id");
-        load(String.valueOf(index));
+        load(characterIndex);
     }
 
 

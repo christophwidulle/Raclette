@@ -2,12 +2,11 @@ package de.chefkoch.raclette.sample;
 
 import android.content.Context;
 import android.content.Intent;
-import android.databinding.ObservableField;
 import android.os.Bundle;
 import com.jakewharton.rxrelay.ReplayRelay;
 import de.chefkoch.raclette.Raclette;
 import de.chefkoch.raclette.ViewModel;
-import de.chefkoch.raclette.rx.RxUtil;
+import de.chefkoch.raclette.sample.gen.Routes;
 import de.chefkoch.raclette.sample.rest.Character;
 import de.chefkoch.raclette.sample.rest.CharactersResponse;
 import de.chefkoch.raclette.sample.rest.SWApiClient;
@@ -37,12 +36,11 @@ public class CharacterListViewModel extends ViewModel {
 
 
     void onCharacterSelected(int index, Character character) {
-        Context currentContext = Raclette.get().getContextManager().getCurrentContext();
-        Intent intent = new Intent(currentContext, CharacterActivity.class);
-        Bundle params = new Bundle();
-        params.putInt("index", index);
-        intent.putExtra(ViewModel.Params.EXTRA_KEY, params);
-        currentContext.startActivity(intent,params);
+
+        navigate().to(Routes.character()
+                .with()
+                .characterIndex(String.valueOf(index)));
+
     }
 
     private void load() {

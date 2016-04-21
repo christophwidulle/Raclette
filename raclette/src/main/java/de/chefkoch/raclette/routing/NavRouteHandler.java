@@ -7,6 +7,6 @@ import android.os.Bundle;
  */
 public interface NavRouteHandler {
 
-    void onHandle(String path, Bundle params);
+    void onHandle(NavRequest navRequest);
 
 }

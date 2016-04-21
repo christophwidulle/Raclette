@@ -24,12 +24,13 @@ public abstract class NavParams {
         if (INJECTOR_FACTORY_INSTANCE == null) {
             synchronized (LOCK) {
                 if (INJECTOR_FACTORY_INSTANCE == null) {
+                    INJECTOR_FACTORY_INSTANCE = new InjectorFactory();
                     try {
                         Class.forName("de.chefkoch.raclette.sample.gen.AllNavParamsDict");
                     } catch (ClassNotFoundException e) {
                         //Not Using NavParams Generator. Can be ignored.
+                        System.out.println("");
                     }
-                    INJECTOR_FACTORY_INSTANCE = new InjectorFactory();
                 }
             }
         }

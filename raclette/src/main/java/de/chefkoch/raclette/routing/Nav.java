@@ -21,20 +21,11 @@ public class Nav {
         Class<? extends NavParams> navParams() default NavParams.None.class;
     }
 
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target(ElementType.TYPE)
-    public @interface Routes {
-
-        Route[] value() default {};
-
-    }
-
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     public @interface Dispatch {
 
-        String[] value() default {};
+        Route[] value() default {};
 
     }
 
@@ -45,9 +36,7 @@ public class Nav {
         String value() default "";
 
         Class type() default String.class;
-
     }
-
 
     @Retention(RetentionPolicy.CLASS)
     @Target(ElementType.TYPE)

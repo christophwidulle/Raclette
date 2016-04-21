@@ -1,5 +1,7 @@
 package de.chefkoch.raclette;
 
+import de.chefkoch.raclette.routing.NavigationController;
+
 /**
  * Created by christophwidulle on 12.04.16.
  */
@@ -15,12 +17,18 @@ public class Raclette {
     private final ViewModelInjector viewModelInjector;
     private final ViewModelManager viewModelManager;
     private final ContextManager contextManager;
+    private final NavigationController navigationController;
 
-    private Raclette(int viewModelBindingId, ViewModelInjector viewModelInjector, ViewModelManager viewModelManager, ContextManager contextManager) {
+    Raclette(int viewModelBindingId,
+             ViewModelInjector viewModelInjector,
+             ViewModelManager viewModelManager,
+             ContextManager contextManager,
+             NavigationController navigationController) {
         this.viewModelBindingId = viewModelBindingId;
         this.viewModelInjector = viewModelInjector;
         this.viewModelManager = viewModelManager;
         this.contextManager = contextManager;
+        this.navigationController = navigationController;
     }
 
     public static Builder builder() {
@@ -52,6 +60,10 @@ public class Raclette {
         return contextManager;
     }
 
+    public NavigationController getNavigationController() {
+        return navigationController;
+    }
+
     public interface ViewModelInjector {
         void inject(ViewModel viewModel);
     }
@@ -74,7 +86,12 @@ public class Raclette {
             if (viewModelBindingId == NO_VIEWMODEL_BINDING_ID) {
                 throw new RacletteException("ViewModelBindingId not set.");
             }
-            return new Raclette(viewModelBindingId, viewModelInjector, new ViewModelManager(viewModelInjector), new ContextManager());
+            ContextManager contextManager = new ContextManager();
+            return new Raclette(viewModelBindingId,
+                    viewModelInjector,
+                    new ViewModelManager(viewModelInjector),
+                    contextManager,
+                    new NavigationController(contextManager));
         }
 
         public Raclette buildAsSingelton() {
