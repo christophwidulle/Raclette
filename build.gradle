@@ -1,29 +1,86 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.0.0'
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.7'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.3'
-
-    }
-}
-
-allprojects {
+subprojects { project ->
+    group = GROUP
+    version = VERSION_NAME
 
     repositories {
-        jcenter()
-        mavenLocal()
+        mavenCentral()
+    }
 
-        maven {
-            url "https://oss.sonatype.org/content/repositories/snapshots"
+    apply plugin: 'checkstyle'
+
+    task checkstyle(type: Checkstyle) {
+        configFile rootProject.file('checkstyle.xml')
+        source 'src/main/java'
+        ignoreFailures false
+        showViolations true
+        include '**/*.java'
+
+        classpath = files()
+    }
+
+    afterEvaluate {
+        if (project.tasks.findByName('check')) {
+            check.dependsOn('checkstyle')
         }
-        maven { url "https://jitpack.io" }
+    }
+
+    buildscript {
+        repositories {
+            jcenter()
+            mavenLocal()
+
+            maven {
+                url "https://oss.sonatype.org/content/repositories/snapshots"
+            }
+            maven { url "https://jitpack.io" }
+        }
+        dependencies {
+            classpath 'com.android.tools.build:gradle:2.0.0'
+            classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        }
     }
 }
+
+ext {
+    minSdkVersion = 14
+    targetSdkVersion = 23
+    compileSdkVersion = 23
+    buildToolsVersion = '23.0.2'
+    sourceCompatibilityVersion = JavaVersion.VERSION_1_7
+    targetCompatibilityVersion = JavaVersion.VERSION_1_7
+}
+
+ext.deps = [
+        // Android
+        android           : 'com.google.android:android:2.1.2',
+        supportv4         : 'com.android.support:support-v4:23.1.1',
+        supportAnnotations: 'com.android.support:support-annotations:23.1.1',
+        supportAppCompatv7: 'com.android.support:appcompat-v7:23.1.1',
+        supportRecycler   : 'com.android.support:recyclerview-v7:23.1.1',
+
+        androidDatabinding : 'com.android.databinding:baseLibrary:2.0.0',
+
+        // Square
+        javapoet          : 'com.squareup:javapoet:1.4.0',
+
+        // Other
+        rxjava            : 'io.reactivex:rxjava:1.1.3',
+        rxAndroid         : 'io.reactivex:rxandroid:1.1.0',
+        rxRelay           : 'com.jakewharton.rxrelay:rxrelay:1.0.0',
+        rxLifecycle       : 'com.trello:rxlifecycle:0.5.0',
+        rxBinding         : 'com.jakewharton.rxbinding:rxbinding:0.4.0',
+        rxBindingSupport  : 'com.jakewharton.rxbinding:rxbinding-support-v4:0.4.0',
+        rxBindingRecycler : 'com.jakewharton.rxbinding:rxbinding-recyclerview-v7:0.4.0',
+        rxBindingDesign   : 'com.jakewharton.rxbinding:rxbinding-design:0.4.0',
+
+        // Test dependencies
+        junit             : 'junit:junit:4.12',
+        truth             : 'com.google.truth:truth:0.27',
+        robolectric       : 'org.robolectric:robolectric:2.2',
+        compiletesting    : 'com.google.testing.compile:compile-testing:0.7',
+        autoservice       : 'com.google.auto.service:auto-service:1.0-rc2',
+        autocommon        : 'com.google.auto:auto-common:0.4'
+]
 
 
 

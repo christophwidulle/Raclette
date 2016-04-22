@@ -1,0 +1,11 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+dependencies {
+    compileOnly deps.android
+    compile deps.javapoet
+}
+
+apply from: rootProject.file('gradle/gradle-maven-push.gradle')

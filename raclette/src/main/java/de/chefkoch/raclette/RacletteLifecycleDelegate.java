@@ -22,9 +22,9 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
 
     private final Raclette raclette;
 
-    private V viewModel;
-    private B binding;
-    private final ViewModelBindingConfig<V> viewModelBindingConfig;
+    protected V viewModel;
+    protected B binding;
+    protected final ViewModelBindingConfig<V> viewModelBindingConfig;
     private Context context;
 
     public RacletteLifecycleDelegate(Raclette raclette, ViewModelBindingConfig<V> viewModelBindingConfig) {
@@ -97,16 +97,6 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
         }
     }
 
-    public void onDestroy(android.support.v4.app.Fragment fragment) {
-        viewModel.onDestroy();
-        if (fragment.getActivity().isFinishing()) {
-            destroy();
-        } else if (fragment.isRemoving()) {
-            //todo can be in backstack. check it.
-            destroy();
-        }
-    }
-
     public void onDestroy(android.app.Fragment fragment) {
         viewModel.onDestroy();
         if (fragment.getActivity().isFinishing()) {
@@ -138,7 +128,7 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
         outState.putString(ViewModel.EXTRA_VIEWMODEL_ID, viewModel.getId());
     }
 
-    private void destroy() {
+    protected void destroy() {
         raclette.getViewModelManager().delete(viewModel.getId());
         viewModel.onViewModelDestroyed();
     }

@@ -8,10 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import de.chefkoch.raclette.Raclette;
-import de.chefkoch.raclette.RacletteLifecycleDelegate;
-import de.chefkoch.raclette.ViewModel;
-import de.chefkoch.raclette.ViewModelBindingConfig;
+import de.chefkoch.raclette.*;
 
 
 /**
@@ -19,13 +16,13 @@ import de.chefkoch.raclette.ViewModelBindingConfig;
  */
 public class RacletteFragment<V extends ViewModel, B extends ViewDataBinding> extends Fragment {
 
-    private RacletteLifecycleDelegate<V, B> racletteLifecycleDelegate;
+    private SupportRacletteLifecycleDelegate<V, B> racletteLifecycleDelegate;
 
     @CallSuper
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        racletteLifecycleDelegate = new RacletteLifecycleDelegate<>(
+        racletteLifecycleDelegate = new SupportRacletteLifecycleDelegate<>(
                 getRaclette(),
                 getViewModelBindingConfig());
     }
@@ -52,7 +49,7 @@ public class RacletteFragment<V extends ViewModel, B extends ViewDataBinding> ex
     @CallSuper
     @Override
     public void onDestroy() {
-        racletteLifecycleDelegate.onDestroy(getActivity());
+        racletteLifecycleDelegate.onDestroy(this);
         super.onDestroy();
     }
 

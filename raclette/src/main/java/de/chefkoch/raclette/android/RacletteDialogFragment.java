@@ -51,7 +51,7 @@ public class RacletteDialogFragment<V extends ViewModel, B extends ViewDataBindi
     @CallSuper
     @Override
     public void onDestroy() {
-        racletteLifecycleDelegate.onDestroy(getActivity());
+        racletteLifecycleDelegate.onDestroy(this);
         super.onDestroy();
     }
 

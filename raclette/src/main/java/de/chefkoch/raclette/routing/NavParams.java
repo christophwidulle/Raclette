@@ -29,7 +29,6 @@ public abstract class NavParams {
                         Class.forName("de.chefkoch.raclette.sample.gen.AllNavParamsDict");
                     } catch (ClassNotFoundException e) {
                         //Not Using NavParams Generator. Can be ignored.
-                        System.out.println("");
                     }
                 }
             }
