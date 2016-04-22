@@ -18,6 +18,7 @@ android {
 dependencies {
 
     provided project(':raclette')
+
     compile deps.rxjava
     compile deps.rxAndroid
     compile deps.rxRelay

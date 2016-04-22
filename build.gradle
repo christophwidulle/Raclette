@@ -59,6 +59,7 @@ ext.deps = [
         supportRecycler   : 'com.android.support:recyclerview-v7:23.1.1',
 
         androidDatabinding : 'com.android.databinding:baseLibrary:2.0.0',
+        androidDatabindingC: 'com.android.databinding:compilerCommon:2.0.0',
 
         // Square
         javapoet          : 'com.squareup:javapoet:1.4.0',

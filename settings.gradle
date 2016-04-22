@@ -1,2 +1,2 @@
-include ':raclette',':raclette-base',':raclette-compiler', ':raclette-ext-rx', ':sample-basic'
+include ':raclette-base', ':raclette', ':raclette-compiler', ':raclette-ext-rx', ':sample-basic'
 

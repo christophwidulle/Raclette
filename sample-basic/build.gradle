@@ -45,6 +45,7 @@ dependencies {
 
     compile project(':raclette')
     compile project(':raclette-ext-rx')
+    apt project(':raclette-compiler')
 
     compile "com.android.support:support-v4:$SUPPORT_LIBRARY_VERSION"
     compile "com.android.support:appcompat-v7:$SUPPORT_LIBRARY_VERSION"

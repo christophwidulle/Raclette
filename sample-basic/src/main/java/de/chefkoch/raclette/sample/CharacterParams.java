@@ -9,7 +9,7 @@ import de.chefkoch.raclette.routing.NavParams;
 //Generated
 public class CharacterParams extends NavParams implements NavParams.Injector<CharacterViewModel> {
 
-    String characterIndex;
+    private final String characterIndex;
 
     public CharacterParams(Bundle params) {
         this.characterIndex = params.getString("characterIndex");

@@ -33,7 +33,7 @@ public class NavRequest {
 
     public static NavRequest from(Bundle bundle) {
         if (bundle == null) return null;
-        final String route = bundle.getString(ROUTE_KEY, null);
+        final String route = bundle.getString(ROUTE_KEY);
         if (route != null) {
             final Bundle params = bundle.getBundle(ViewModel.Params.EXTRA_KEY);
             return new NavRequest(route, params);

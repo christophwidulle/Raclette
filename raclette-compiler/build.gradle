@@ -3,8 +3,16 @@ apply plugin: 'java'
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
+def logger = new com.android.build.gradle.internal.LoggerWrapper(project.logger)
+def sdkHandler = new com.android.build.gradle.internal.SdkHandler(project, logger)
+for (File file : sdkHandler.sdkLoader.repositories) {
+    repositories.maven {
+        url = file.toURI()
+    }
+}
+
 dependencies {
-    //compileOnly project(':raclette')
+    compileOnly project(':raclette-base')
     compile deps.javapoet
 }
 
