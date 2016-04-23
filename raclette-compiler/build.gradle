@@ -13,6 +13,7 @@ for (File file : sdkHandler.sdkLoader.repositories) {
 
 dependencies {
     compileOnly project(':raclette-base')
+    compile deps.android
     compile deps.javapoet
 }
 

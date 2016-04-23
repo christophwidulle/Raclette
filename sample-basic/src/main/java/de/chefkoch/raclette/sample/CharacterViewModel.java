@@ -3,6 +3,8 @@ package de.chefkoch.raclette.sample;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.util.Log;
+import de.chefkoch.raclette.TestParameter;
+import de.chefkoch.raclette.TestParameter2;
 import de.chefkoch.raclette.ViewModel;
 import de.chefkoch.raclette.routing.Nav;
 import de.chefkoch.raclette.rx.RxUtil;
@@ -22,6 +24,21 @@ public class CharacterViewModel extends ViewModel {
     @Nav.Param()
     String characterIndex;
 
+    @Nav.Param()
+    int id;
+
+    @Nav.Param()
+    boolean gogo;
+
+
+    @Nav.Param()
+    TestParameter testParameter;
+
+
+    @Nav.Param()
+    TestParameter2 testParameter2;
+
+
     @Override
     protected void onViewModelCreated(Bundle viewModelParams) {
         load(characterIndex);
@@ -29,6 +46,7 @@ public class CharacterViewModel extends ViewModel {
 
 
     private void load(String id) {
+
         new SWApiClient().people().get(id)
                 .compose(RxUtil.<Character>applySchedulers())
                 .onErrorReturn(new Func1<Throwable, Character>() {

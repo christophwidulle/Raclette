@@ -35,7 +35,6 @@ public class Nav {
 
         String value() default "";
 
-        Class type() default Object.class;
     }
 
     @Retention(RetentionPolicy.CLASS)

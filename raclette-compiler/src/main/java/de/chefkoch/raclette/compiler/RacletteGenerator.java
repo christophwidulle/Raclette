@@ -1,18 +1,17 @@
 package de.chefkoch.raclette.compiler;
 
 import com.squareup.javapoet.JavaFile;
+import de.chefkoch.raclette.compiler.params.NavParamsCreator;
 import de.chefkoch.raclette.routing.Nav;
-import de.chefkoch.raclette.routing.Route;
 
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.Name;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
-import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -23,7 +22,7 @@ import java.util.Set;
  */
 @SupportedAnnotationTypes("de.chefkoch.raclette.routing.Nav.InjectParams")
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
-public class NavParamsGenerator extends AbstractProcessor {
+public class RacletteGenerator extends AbstractProcessor {
 
     private ProcessingEnvironment environment;
 
@@ -35,7 +34,6 @@ public class NavParamsGenerator extends AbstractProcessor {
     public synchronized void init(final ProcessingEnvironment environment) {
         super.init(environment);
         this.environment = environment;
-
     }
 
     @Override
@@ -43,31 +41,35 @@ public class NavParamsGenerator extends AbstractProcessor {
 
         final Set<? extends Element> elements = env.getElementsAnnotatedWith(Nav.InjectParams.class);
 
+        List<NavParamsCreator.Result> paramsCreated = new ArrayList<>();
         for (final Element element : elements) {
-            processElement(element);
+            NavParamsCreator.Result result = processElement(element);
+            if (result != null) {
+                paramsCreated.add(result);
+            }
         }
-
 
         return true;
     }
 
 
-    private void processElement(final Element element) {
+    private NavParamsCreator.Result processElement(final Element element) {
         if (!element.getKind().isClass()) {
             logError("Only classes annotated with @" + Nav.InjectParams.class + " are supported", element);
         }
-        NavParamsCreator.Result result = new NavParamsCreator().create(element);
-
-
+        NavParamsCreator.Result result = new NavParamsCreator().create(element, environment);
         try {
             final JavaFileObject destSourceFile = processingEnv.getFiler().createSourceFile(
                     result.fullQualifiedName,
                     element);
 
             write(destSourceFile, result.javaFile);
+
+            return result;
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
     }
 
 
