@@ -26,7 +26,7 @@ public abstract class NavParams {
                 if (INJECTOR_FACTORY_INSTANCE == null) {
                     INJECTOR_FACTORY_INSTANCE = new InjectorFactory();
                     try {
-                        Class.forName("de.chefkoch.raclette.sample.gen.AllNavParamsDict");
+                        Class.forName("de.chefkoch.raclette.routing.AllNavParamsDict");
                     } catch (ClassNotFoundException e) {
                         //Not Using NavParams Generator. Can be ignored.
                     }

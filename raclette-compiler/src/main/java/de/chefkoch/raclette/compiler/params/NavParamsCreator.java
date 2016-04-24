@@ -2,12 +2,12 @@ package de.chefkoch.raclette.compiler.params;
 
 import com.squareup.javapoet.*;
 import de.chefkoch.raclette.compiler.BundleHelper;
+import de.chefkoch.raclette.compiler.ClassNames;
 import de.chefkoch.raclette.compiler.SpecUtil;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
-import javax.lang.model.type.TypeMirror;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,16 +18,21 @@ public class NavParamsCreator {
 
 
     public static class Result {
-        public final TypeMirror sourceType;
-        public final String fullQualifiedName;
+        public final String packageName;
+        public final String className;
         public final JavaFile javaFile;
         public final ParamsContext paramsContext;
 
-        public Result(TypeMirror sourceType, String fullQualifiedName, JavaFile javaFile, ParamsContext paramsContext) {
-            this.sourceType = sourceType;
-            this.fullQualifiedName = fullQualifiedName;
+        public Result(String packageName, String className, JavaFile javaFile, ParamsContext paramsContext) {
+            this.packageName = packageName;
+            this.className = className;
             this.javaFile = javaFile;
             this.paramsContext = paramsContext;
+        }
+
+
+        public String getFullQulifiedName() {
+            return packageName + "." + className;
         }
     }
 
@@ -50,12 +55,12 @@ public class NavParamsCreator {
 
         MethodSpec constructor = createConstructor(paramsContext);
 
-        ClassName injectorName = ClassName.get("de.chefkoch.raclette.routing", "NavParams.Injector");
+        ClassName injectorName = ClassName.get(ClassNames.RoutingPackageName, "NavParams.Injector");
         TypeName injectorParameterName = ClassName.get(paramsContext.getViewModelType());
 
         TypeSpec.Builder builder = TypeSpec.classBuilder(className)
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-                .superclass(ClassName.get("de.chefkoch.raclette.routing", "NavParams"))
+                .superclass(ClassName.get(ClassNames.RoutingPackageName, "NavParams"))
                 .addSuperinterface(ParameterizedTypeName.get(injectorName, injectorParameterName));
 
         builder.addMethod(constructor);
@@ -68,7 +73,7 @@ public class NavParamsCreator {
         TypeSpec type = builder.build();
         JavaFile javaFile = JavaFile.builder(packageName, type).build();
 
-        return new Result(element.asType(), packageName + "." + className, javaFile, paramsContext);
+        return new Result(packageName, className, javaFile, paramsContext);
 
     }
 
@@ -87,23 +92,18 @@ public class NavParamsCreator {
     }
 
     private MethodSpec createConstructor(ParamsContext paramsContext) {
-        try {
-            ClassName bundle = ClassName.get("android.os", "Bundle");
+        ClassName bundle = ClassName.get("android.os", "Bundle");
 
-            MethodSpec.Builder builder = MethodSpec.constructorBuilder().
-                    addModifiers(Modifier.PRIVATE)
-                    .addParameter(bundle, "bundle");
+        MethodSpec.Builder builder = MethodSpec.constructorBuilder()
+                .addModifiers(Modifier.PRIVATE)
+                .addParameter(bundle, "bundle");
 
-            for (ParamField paramField : paramsContext.getFields()) {
-                builder = addGetterStatement(builder, paramField);
-            }
-
-            //
-            return builder.build();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+        for (ParamField paramField : paramsContext.getFields()) {
+            builder = addGetterStatement(builder, paramField);
         }
+
+        //
+        return builder.build();
     }
 
     private MethodSpec createInjectorMethod(ParamsContext paramsContext) {

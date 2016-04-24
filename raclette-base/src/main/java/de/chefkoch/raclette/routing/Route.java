@@ -15,16 +15,6 @@ public abstract class Route {
         this.targetClass = targetClass;
     }
 
-    public static class Param {
-        public final String key;
-        public final Class type;
-
-        public Param(String key, Class type) {
-            this.key = key;
-            this.type = type;
-        }
-    }
-
     public String getPath() {
         return path;
     }
@@ -33,13 +23,9 @@ public abstract class Route {
         return targetClass;
     }
 
-    public NavRequest request() {
-        return requestBuilder().build();
-    }
+    public abstract NavRequestBuilder with();
 
-    public abstract NavRequestBuilder requestBuilder();
-
-    public static abstract class NavRequestBuilder {
-        public abstract NavRequest build();
+    public interface  NavRequestBuilder {
+         NavRequest build();
     }
 }
