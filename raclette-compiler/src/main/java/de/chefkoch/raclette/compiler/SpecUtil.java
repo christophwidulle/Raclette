@@ -8,7 +8,6 @@ import com.squareup.javapoet.ClassName;
  */
 public class SpecUtil {
 
-
     public static AnnotationSpec override(){
         return AnnotationSpec.builder(ClassName.get("java.lang","Override")).build();
     }
