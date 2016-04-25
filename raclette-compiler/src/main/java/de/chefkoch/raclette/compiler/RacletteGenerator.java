@@ -57,10 +57,18 @@ public class RacletteGenerator extends AbstractProcessor {
 
         createParamsDict(paramsCreated, null);
 
-        final Set<? extends Element> routeElements = env.getElementsAnnotatedWith(Nav.Route.class);
         List<RouteCreator.Result> routesCreated = new ArrayList<>();
+
+        Set<? extends Element> routeElements = env.getElementsAnnotatedWith(Nav.Route.class);
         for (Element routeElement : routeElements) {
             List<RouteCreator.Result> route = createRoute(routeElement, asMap(paramsCreated));
+            if (route != null) {
+                routesCreated.addAll(route);
+            }
+        }
+        routeElements = env.getElementsAnnotatedWith(Nav.Dispatch.class);
+        for (Element routeElement : routeElements) {
+            List<RouteCreator.Result> route = createRoutesDispatch(routeElement, asMap(paramsCreated));
             if (route != null) {
                 routesCreated.addAll(route);
             }
@@ -76,21 +84,40 @@ public class RacletteGenerator extends AbstractProcessor {
         }
         List<RouteCreator.Result> results = new ArrayList<>();
 
-        List<RouteContext> routeContexts = new RouteExtractor().extract(element, paramsContextMap, environment);
+        RouteContext routeContext = new RouteExtractor().extractRoute(element, paramsContextMap, environment);
+        RouteCreator.Result result = new RouteCreator().create(routeContext);
+        if (write(result, element)) results.add(result);
+        return results;
+    }
+
+    private List<RouteCreator.Result> createRoutesDispatch(final Element element, Map<String, ParamsContext> paramsContextMap) {
+        if (!element.getKind().isClass()) {
+            logError("Only classes annotated with @" + Nav.Dispatch.class + " are supported", element);
+        }
+        List<RouteCreator.Result> results = new ArrayList<>();
+
+        List<RouteContext> routeContexts = new RouteExtractor().extractDistach(element, paramsContextMap, environment);
         for (RouteContext routeContext : routeContexts) {
             RouteCreator.Result result = new RouteCreator().create(routeContext);
-            try {
-                final JavaFileObject destSourceFile = processingEnv.getFiler().createSourceFile(
-                        result.getFullQulifiedName(),
-                        element);
+            if (write(result, element)) results.add(result);
 
-                write(destSourceFile, result.javaFile);
-                results.add(result);
-            } catch (Exception e) {
-                logError(e.getMessage());
-            }
+
         }
         return results;
+    }
+
+    private boolean write(RouteCreator.Result result, Element element) {
+        try {
+            final JavaFileObject destSourceFile = processingEnv.getFiler().createSourceFile(
+                    result.getFullQulifiedName(),
+                    element);
+
+            write(destSourceFile, result.javaFile);
+            return true;
+        } catch (Exception e) {
+            logError(e.getMessage());
+        }
+        return false;
     }
 
     private Map<String, ParamsContext> asMap(List<NavParamsCreator.Result> results) {

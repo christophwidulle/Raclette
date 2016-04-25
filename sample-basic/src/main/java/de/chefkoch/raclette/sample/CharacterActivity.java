@@ -40,10 +40,6 @@ public class CharacterActivity extends RacletteRxAppCompatActivity<CharacterView
     @Override
     public void onHandle(NavRequest navRequest) {
 
-        if(navRequest.getRoutePath().equals(Routes.character().getPath()))
-        System.out.println();
-        Fragment fragment = new Fragment();
-        fragment.setArguments(navRequest.toBundle());
 
 
     }

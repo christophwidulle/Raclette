@@ -41,14 +41,33 @@ public class RouteExtractor {
         }
     }
 
-    public List<RouteContext> extract(final Element element, Map<String, ParamsContext> paramsContextMap, ProcessingEnvironment processingEnvironment) {
-
-        //AnnotationMirror annotationMirror = getAnnotationMirror((TypeElement) element, "de.chefkoch.raclette.routing.Nav.Route");
-        //AnnotationValue navParams = getAnnotationValue(annotationMirror, "navParams");
-        //Object value = navParams.getValue();
-        List<RouteContext> routes = new ArrayList<>();
+    public RouteContext extractRoute(final Element element, Map<String, ParamsContext> paramsContextMap, ProcessingEnvironment processingEnvironment) {
 
         Nav.Route routeAnnotation = element.getAnnotation(Nav.Route.class);
+        if (routeAnnotation != null) {
+            return extractRoute(routeAnnotation, element, paramsContextMap, processingEnvironment);
+        }
+        return null;
+    }
+
+    public List<RouteContext> extractDistach(final Element element, Map<String, ParamsContext> paramsContextMap, ProcessingEnvironment processingEnvironment) {
+
+        List<RouteContext> routes = new ArrayList<>();
+        Nav.Dispatch dispatchAnnotation = element.getAnnotation(Nav.Dispatch.class);
+        TypeMirror targetActivity = element.asType();
+        if (dispatchAnnotation != null) {
+            Nav.Route[] routesAnnotation = dispatchAnnotation.value();
+            for (Nav.Route route : routesAnnotation) {
+                RouteContext routeContext = extractRoute(route, element, paramsContextMap, processingEnvironment);
+                if (routeContext != null) routes.add(routeContext);
+            }
+        }
+        return routes;
+    }
+
+
+    private RouteContext extractRoute(final Nav.Route routeAnnotation, final Element element, Map<String, ParamsContext> paramsContextMap, ProcessingEnvironment processingEnvironment) {
+
         TypeMirror targetActivity = element.asType();
 
         if (routeAnnotation != null && isActivity(targetActivity, processingEnvironment)) {
@@ -61,11 +80,12 @@ public class RouteExtractor {
                 String name = guessName(path);
 
                 RouteContext routeContext = new RouteContext(packageName, name, path, targetActivity, paramsContext);
-                routes.add(routeContext);
+                return routeContext;
             }
         }
-        return routes;
+        return null;
     }
+
 
     //todo find better way
     private ParamsContext find(Map<String, ParamsContext> paramsContextMap, String type) {
