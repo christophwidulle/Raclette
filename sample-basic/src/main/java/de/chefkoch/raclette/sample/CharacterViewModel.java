@@ -30,7 +30,6 @@ public class CharacterViewModel extends ViewModel {
     @Nav.Param()
     boolean gogo;
 
-
     @Nav.Param()
     TestParameter testParameter;
 
@@ -42,6 +41,9 @@ public class CharacterViewModel extends ViewModel {
     @Override
     protected void onViewModelCreated(Bundle viewModelParams) {
         load(characterIndex);
+
+
+
     }
 
 

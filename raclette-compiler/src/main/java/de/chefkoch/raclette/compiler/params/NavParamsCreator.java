@@ -112,8 +112,7 @@ public class NavParamsCreator {
                 .addAnnotation(SpecUtil.override())
                 .returns(TypeName.VOID)
                 .addParameter(ClassName.get(paramsContext.getViewModelType()),
-                        "viewModel"
-                        , Modifier.FINAL);
+                        "viewModel", Modifier.FINAL);
 
         for (ParamField paramField : paramsContext.getFields()) {
             builder = builder.addStatement("viewModel.$N = this.$N", paramField.name, paramField.name);

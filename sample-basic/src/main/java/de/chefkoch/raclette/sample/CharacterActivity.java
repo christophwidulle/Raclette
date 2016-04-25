@@ -16,15 +16,18 @@
 
 package de.chefkoch.raclette.sample;
 
+import android.support.v4.app.Fragment;
 import de.chefkoch.raclette.Bind;
 import de.chefkoch.raclette.routing.Nav;
 import de.chefkoch.raclette.routing.NavRequest;
 import de.chefkoch.raclette.routing.NavRouteHandler;
+import de.chefkoch.raclette.routing.Routes;
 import de.chefkoch.raclette.rx.android.support.RacletteRxAppCompatActivity;
 import de.chefkoch.raclette.sample.databinding.CharacterActivityBinding;
 
 
 @Nav.Route(value = "/character", navParams = CharacterParams.class)
+
 @Nav.Dispatch({
         @Nav.Route(value = "/character/info", navParams = CharacterParams.class),
         @Nav.Route(value = "/character/bla", navParams = CharacterParams.class)
@@ -36,6 +39,12 @@ public class CharacterActivity extends RacletteRxAppCompatActivity<CharacterView
 
     @Override
     public void onHandle(NavRequest navRequest) {
+
+        if(navRequest.getRoutePath().equals(Routes.character().getPath()))
         System.out.println();
+        Fragment fragment = new Fragment();
+        fragment.setArguments(navRequest.toBundle());
+
+
     }
 }

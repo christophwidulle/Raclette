@@ -1,12 +1,9 @@
 package de.chefkoch.raclette.sample;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import com.jakewharton.rxrelay.ReplayRelay;
-import de.chefkoch.raclette.Raclette;
 import de.chefkoch.raclette.ViewModel;
-import de.chefkoch.raclette.sample.gen.Routes;
+import de.chefkoch.raclette.routing.Routes;
 import de.chefkoch.raclette.sample.rest.Character;
 import de.chefkoch.raclette.sample.rest.CharactersResponse;
 import de.chefkoch.raclette.sample.rest.SWApiClient;
@@ -37,9 +34,6 @@ public class CharacterListViewModel extends ViewModel {
 
     void onCharacterSelected(int index, Character character) {
 
-        navigate().to(Routes.character()
-                .with()
-                .characterIndex(String.valueOf(index)));
 
     }
 
