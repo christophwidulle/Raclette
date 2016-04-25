@@ -76,11 +76,14 @@ public class RouteExtractor {
             TypeMirror paramsType = getClass(routeAnnotation);
             if (paramsType != null) {
                 ParamsContext paramsContext = find(paramsContextMap, paramsType.toString());
+                if (paramsContext == null) {
+                    paramsContext = ParamsContext.NONE;
+                }
+
                 String packageName = getPackage(element);
                 String name = guessName(path);
 
-                RouteContext routeContext = new RouteContext(packageName, name, path, targetActivity, paramsContext);
-                return routeContext;
+                return new RouteContext(packageName, name, path, targetActivity, paramsContext);
             }
         }
         return null;

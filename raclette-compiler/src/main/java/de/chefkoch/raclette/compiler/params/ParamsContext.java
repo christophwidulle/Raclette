@@ -1,12 +1,15 @@
 package de.chefkoch.raclette.compiler.params;
 
 import javax.lang.model.type.TypeMirror;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by christophwidulle on 22.04.16.
  */
 public class ParamsContext {
+
+    public static final ParamsContext NONE = new ParamsContext(null, null, new ArrayList<ParamField>());
 
     final String viewModelClassName;
     final TypeMirror viewModelType;

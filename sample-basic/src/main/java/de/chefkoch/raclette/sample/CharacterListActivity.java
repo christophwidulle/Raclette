@@ -23,6 +23,8 @@ import de.chefkoch.raclette.Bind;
 import de.chefkoch.raclette.android.*;
 import de.chefkoch.raclette.android.AdapterItemClickListener;
 import de.chefkoch.raclette.android.support.SimpleBindingAdapter;
+import de.chefkoch.raclette.routing.Nav;
+import de.chefkoch.raclette.routing.NavParams;
 import de.chefkoch.raclette.rx.RxUtil;
 import de.chefkoch.raclette.rx.android.support.RacletteRxAppCompatActivity;
 import de.chefkoch.raclette.sample.databinding.CharacterlistActivityBinding;
@@ -31,7 +33,7 @@ import rx.functions.Action1;
 
 import java.util.List;
 
-
+@Nav.Route(value = "/character", navParams = NavParams.None.class)
 @Bind(viewModel = CharacterListViewModel.class, layoutResource = R.layout.characterlist_activity)
 public class CharacterListActivity extends RacletteRxAppCompatActivity<CharacterListViewModel, CharacterlistActivityBinding> {
 
