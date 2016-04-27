@@ -15,6 +15,9 @@ public abstract class NavParams {
 
     public static class None extends NavParams {
 
+        public None(Bundle bundle) {
+            super(bundle);
+        }
     }
 
     private static InjectorFactory INJECTOR_FACTORY_INSTANCE;
@@ -55,7 +58,7 @@ public abstract class NavParams {
                     Constructor<? extends Injector> constructor = injectorClass.getConstructor(Bundle.class);
                     return constructor.newInstance(params);
                 } catch (Exception e) {
-                    throw new RacletteException("some code generation went terrible wrong :(");
+                    throw new RacletteException("some code generation went terrible wrong :(", e);
                 }
             }
             return null;
@@ -68,6 +71,9 @@ public abstract class NavParams {
                 injector.inject(viewModel);
             }
         }
+    }
+
+    public NavParams(Bundle bundle) {
     }
 
     public interface Injector<V> {

@@ -21,8 +21,6 @@
                   android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                   android:text="@{viewModel.characterField.name}"
                   tools:text="test"/>
-
-
     </LinearLayout>
 </layout>
 

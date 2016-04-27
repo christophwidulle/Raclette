@@ -19,4 +19,14 @@ public class RxViewCommandBindings {
             }
         });
     }
+
+    @BindingAdapter({"bind:clickCommand", "bind:commandParameter"})
+    public static void bindClickCommandWithParameter(final View view, final Relay relay, final Object parameter) {
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                relay.call(parameter);
+            }
+        });
+    }
 }
