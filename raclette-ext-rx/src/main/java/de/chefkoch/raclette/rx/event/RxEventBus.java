@@ -29,11 +29,11 @@ public class RxEventBus<T> {
 
     }
 
-    static <T> RxEventBus<T> createPublish() {
+    public static <T> RxEventBus<T> createPublish() {
         return new RxEventBus<>(PublishRelay.<T>create());
     }
 
-    static <T> RxEventBus<T> createBehavior() {
+    public static <T> RxEventBus<T> createBehavior() {
         return new RxEventBus<>(BehaviorRelay.<T>create());
     }
 }
