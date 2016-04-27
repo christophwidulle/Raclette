@@ -45,37 +45,43 @@ public class RacletteGenerator extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment env) {
 
-        final Set<? extends Element> parameterElements = env.getElementsAnnotatedWith(Nav.InjectParams.class);
+        try {
+            final Set<? extends Element> parameterElements = env.getElementsAnnotatedWith(Nav.InjectParams.class);
 
-        List<NavParamsCreator.Result> paramsCreated = new ArrayList<>();
-        for (final Element element : parameterElements) {
-            NavParamsCreator.Result result = createParam(element);
-            if (result != null) {
-                paramsCreated.add(result);
+            List<NavParamsCreator.Result> paramsCreated = new ArrayList<>();
+            for (final Element element : parameterElements) {
+                NavParamsCreator.Result result = createParam(element);
+                if (result != null) {
+                    paramsCreated.add(result);
+                }
             }
-        }
 
-        createParamsDict(paramsCreated, null);
+            createParamsDict(paramsCreated, null);
 
-        List<RouteCreator.Result> routesCreated = new ArrayList<>();
+            List<RouteCreator.Result> routesCreated = new ArrayList<>();
 
-        Set<? extends Element> routeElements = env.getElementsAnnotatedWith(Nav.Route.class);
-        for (Element routeElement : routeElements) {
-            List<RouteCreator.Result> route = createRoute(routeElement, asMap(paramsCreated));
-            if (route != null) {
-                routesCreated.addAll(route);
+            Set<? extends Element> routeElements = env.getElementsAnnotatedWith(Nav.Route.class);
+            for (Element routeElement : routeElements) {
+                List<RouteCreator.Result> route = createRoute(routeElement, asMap(paramsCreated));
+                if (route != null) {
+                    routesCreated.addAll(route);
+                }
             }
-        }
-        routeElements = env.getElementsAnnotatedWith(Nav.Dispatch.class);
-        for (Element routeElement : routeElements) {
-            List<RouteCreator.Result> route = createRoutesDispatch(routeElement, asMap(paramsCreated));
-            if (route != null) {
-                routesCreated.addAll(route);
+            routeElements = env.getElementsAnnotatedWith(Nav.Dispatch.class);
+            for (Element routeElement : routeElements) {
+                List<RouteCreator.Result> route = createRoutesDispatch(routeElement, asMap(paramsCreated));
+                if (route != null) {
+                    routesCreated.addAll(route);
+                }
             }
-        }
 
-        createRoutes(routesCreated, null);
-        return true;
+            createRoutes(routesCreated, null);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            logError(e.getMessage());
+        }
+        return false;
     }
 
     private List<RouteCreator.Result> createRoute(final Element element, Map<String, ParamsContext> paramsContextMap) {

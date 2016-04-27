@@ -22,8 +22,8 @@ public class SimpleBindingAdapter<T> extends RecyclerView.Adapter<SimpleBindingA
 
     final private List<T> items = new ArrayList<>();
 
-    public SimpleBindingAdapter(int bindingId, int layoutResource) {
-        this.bindingId = bindingId;
+    public SimpleBindingAdapter(int itemBindingId, int layoutResource) {
+        this.bindingId = itemBindingId;
         this.layoutResource = layoutResource;
     }
 

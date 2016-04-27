@@ -16,15 +16,15 @@ public class RxEventBus<T> {
         this.bus = bus.toSerialized();
     }
 
-    void fire(T event) {
+    public void fire(T event) {
         bus.call(event);
     }
 
-    Observable<T> subscripe(Class<T> eventType) {
+    public Observable<? extends T> subscripe(Class<? extends T> eventType) {
         return bus.asObservable().ofType(eventType);
     }
 
-    Observable<T> subscripe() {
+    public Observable<? extends T> subscripe() {
         return bus.asObservable();
 
     }

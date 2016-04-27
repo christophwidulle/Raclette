@@ -42,7 +42,6 @@ public class RouteExtractor {
     }
 
     public RouteContext extractRoute(final Element element, Map<String, ParamsContext> paramsContextMap, ProcessingEnvironment processingEnvironment) {
-
         Nav.Route routeAnnotation = element.getAnnotation(Nav.Route.class);
         if (routeAnnotation != null) {
             return extractRoute(routeAnnotation, element, paramsContextMap, processingEnvironment);
@@ -123,7 +122,7 @@ public class RouteExtractor {
 
     private TypeMirror getClass(Nav.Route routeAnnotation) {
         try {
-            routeAnnotation.navParams();
+            Class<? extends NavParams> aClass = routeAnnotation.navParams();
         } catch (MirroredTypeException mte) {
             return mte.getTypeMirror();
         }

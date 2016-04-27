@@ -3,7 +3,6 @@ package de.chefkoch.raclette.sample;
 import android.os.Bundle;
 import com.jakewharton.rxrelay.ReplayRelay;
 import de.chefkoch.raclette.ViewModel;
-import de.chefkoch.raclette.routing.Routes;
 import de.chefkoch.raclette.sample.rest.Character;
 import de.chefkoch.raclette.sample.rest.CharactersResponse;
 import de.chefkoch.raclette.sample.rest.SWApiClient;

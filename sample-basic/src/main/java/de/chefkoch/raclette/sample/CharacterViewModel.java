@@ -3,6 +3,7 @@ package de.chefkoch.raclette.sample;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.util.Log;
+import com.jakewharton.rxrelay.PublishRelay;
 import de.chefkoch.raclette.TestParameter;
 import de.chefkoch.raclette.TestParameter2;
 import de.chefkoch.raclette.ViewModel;
@@ -19,22 +20,25 @@ import rx.functions.Func1;
 @Nav.InjectParams
 public class CharacterViewModel extends ViewModel {
 
-    public ObservableField<Character> characterField = new ObservableField<>();
+    public final ObservableField<Character> characterField = new ObservableField<>();
 
-    @Nav.Param()
+    public final PublishRelay<Void> testCommand = PublishRelay.create();
+
+
+    @Nav.Param
     String characterIndex;
 
-    @Nav.Param()
+    @Nav.Param
     int id;
 
-    @Nav.Param()
+    @Nav.Param
     boolean gogo;
 
-    @Nav.Param()
+    @Nav.Param
     TestParameter testParameter;
 
 
-    @Nav.Param()
+    @Nav.Param
     TestParameter2 testParameter2;
 
 
@@ -42,7 +46,12 @@ public class CharacterViewModel extends ViewModel {
     protected void onViewModelCreated(Bundle viewModelParams) {
         load(characterIndex);
 
-
+        testCommand.subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                System.out.println();
+            }
+        });
 
     }
 
