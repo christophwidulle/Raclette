@@ -95,7 +95,7 @@ public class NavParamsCreator {
         ClassName bundle = ClassName.get("android.os", "Bundle");
 
         MethodSpec.Builder builder = MethodSpec.constructorBuilder()
-                .addModifiers(Modifier.PRIVATE)
+                .addModifiers(Modifier.PUBLIC)
                 .addParameter(bundle, "bundle");
 
         for (ParamField paramField : paramsContext.getFields()) {

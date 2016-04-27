@@ -33,7 +33,7 @@ import rx.functions.Action1;
 
 import java.util.List;
 
-@Nav.Route(value = "/character", navParams = NavParams.None.class)
+@Nav.Route(value = "/characterList", navParams = NavParams.None.class)
 @Bind(viewModel = CharacterListViewModel.class, layoutResource = R.layout.characterlist_activity)
 public class CharacterListActivity extends RacletteRxAppCompatActivity<CharacterListViewModel, CharacterlistActivityBinding> {
 
@@ -62,6 +62,5 @@ public class CharacterListActivity extends RacletteRxAppCompatActivity<Character
                         simpleBindingAdapter.addAll(characters);
                     }
                 });
-
     }
 }
