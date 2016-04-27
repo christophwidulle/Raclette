@@ -15,9 +15,6 @@ public abstract class NavParams {
 
     public static class None extends NavParams {
 
-        public None(Bundle bundle) {
-            super(bundle);
-        }
     }
 
     private static InjectorFactory INJECTOR_FACTORY_INSTANCE;
@@ -73,8 +70,6 @@ public abstract class NavParams {
         }
     }
 
-    public NavParams(Bundle bundle) {
-    }
 
     public interface Injector<V> {
         void inject(V viewModel);
