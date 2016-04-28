@@ -7,11 +7,11 @@ import rx.Observable;
  *
  * Created by christophwidulle on 14.04.16.
  */
-public interface ViewModelLivecycleProvider {
+public interface ViewModelLifecycleProvider {
 
-    Observable<ViewModelLivecycleEvent> lifecycle();
+    Observable<ViewModelLifecycleEvent> lifecycle();
 
-    <T> Observable.Transformer<T, T> bindUntilEvent(ViewModelLivecycleEvent event);
+    <T> Observable.Transformer<T, T> bindUntilEvent(ViewModelLifecycleEvent event);
 
     <T> Observable.Transformer<T, T> bindToLifecycle();
 }

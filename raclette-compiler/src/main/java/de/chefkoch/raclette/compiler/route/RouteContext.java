@@ -1,6 +1,7 @@
 package de.chefkoch.raclette.compiler.route;
 
 import de.chefkoch.raclette.compiler.params.ParamsContext;
+import de.chefkoch.raclette.routing.Route;
 
 import javax.lang.model.type.TypeMirror;
 
@@ -12,14 +13,16 @@ public class RouteContext {
     private final String packageName;
     private final String name;
     private final String path;
-    private final TypeMirror targetActivity;
+    private final TypeMirror targetClass;
     private final ParamsContext paramsContext;
+    private final Route.TargetType targetType;
 
-    RouteContext(String packageName, String name, String path, TypeMirror targetActivity, ParamsContext paramsContext) {
+    RouteContext(String packageName, String name, String path, TypeMirror targetClass, Route.TargetType targetType, ParamsContext paramsContext) {
         this.packageName = packageName;
         this.name = name;
         this.path = path;
-        this.targetActivity = targetActivity;
+        this.targetClass = targetClass;
+        this.targetType = targetType;
         this.paramsContext = paramsContext;
     }
 
@@ -39,11 +42,15 @@ public class RouteContext {
         return path;
     }
 
-    public TypeMirror getTargetActivity() {
-        return targetActivity;
+    public TypeMirror getTargetClass() {
+        return targetClass;
     }
 
     public ParamsContext getParamsContext() {
         return paramsContext;
+    }
+
+    public Route.TargetType getTargetType() {
+        return targetType;
     }
 }

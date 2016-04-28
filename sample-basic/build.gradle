@@ -18,11 +18,11 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName '1.0.0'
+
+        multiDexEnabled true
     }
 
     lintOptions {
-        textReport true
-        textOutput 'stdout'
         abortOnError false
     }
 
@@ -32,7 +32,7 @@ android {
 
     buildTypes {
         debug {
-            minifyEnabled true
+            minifyEnabled false
         }
     }
 }

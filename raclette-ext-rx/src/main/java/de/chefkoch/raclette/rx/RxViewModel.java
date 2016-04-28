@@ -4,25 +4,25 @@ import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import de.chefkoch.raclette.ViewModel;
 import de.chefkoch.raclette.rx.lifecycle.RxViewModelLifecycle;
-import de.chefkoch.raclette.rx.lifecycle.ViewModelLivecycleEvent;
-import de.chefkoch.raclette.rx.lifecycle.ViewModelLivecycleProvider;
+import de.chefkoch.raclette.rx.lifecycle.ViewModelLifecycleEvent;
+import de.chefkoch.raclette.rx.lifecycle.ViewModelLifecycleProvider;
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
 
 /**
  * Created by christophwidulle on 14.04.16.
  */
-public class RxViewModel extends ViewModel implements ViewModelLivecycleProvider {
+public class RxViewModel extends ViewModel implements ViewModelLifecycleProvider {
 
-    private final BehaviorSubject<ViewModelLivecycleEvent> lifecycleSubject = BehaviorSubject.create();
+    private final BehaviorSubject<ViewModelLifecycleEvent> lifecycleSubject = BehaviorSubject.create();
 
     @Override
-    public final Observable<ViewModelLivecycleEvent> lifecycle() {
+    public final Observable<ViewModelLifecycleEvent> lifecycle() {
         return lifecycleSubject.asObservable();
     }
 
     @Override
-    public final <T> Observable.Transformer<T, T> bindUntilEvent(ViewModelLivecycleEvent event) {
+    public final <T> Observable.Transformer<T, T> bindUntilEvent(ViewModelLifecycleEvent event) {
         return RxViewModelLifecycle.bindUntilEvent(lifecycleSubject, event);
     }
 
@@ -35,55 +35,55 @@ public class RxViewModel extends ViewModel implements ViewModelLivecycleProvider
     @Override
     protected void onViewModelCreated(Bundle viewModelParams) {
         super.onViewModelCreated(viewModelParams);
-        lifecycleSubject.onNext(ViewModelLivecycleEvent.VIEWMODEL_CREATE);
+        lifecycleSubject.onNext(ViewModelLifecycleEvent.VIEWMODEL_CREATE);
     }
 
     @CallSuper
     @Override
     protected void onViewModelDestroyed() {
         super.onViewModelDestroyed();
-        lifecycleSubject.onNext(ViewModelLivecycleEvent.VIEWMODEL_DESTROY);
+        lifecycleSubject.onNext(ViewModelLifecycleEvent.VIEWMODEL_DESTROY);
     }
 
     @CallSuper
     @Override
     protected void onCreate(Bundle params) {
         super.onCreate(params);
-        lifecycleSubject.onNext(ViewModelLivecycleEvent.CREATE);
+        lifecycleSubject.onNext(ViewModelLifecycleEvent.CREATE);
     }
 
     @CallSuper
     @Override
     protected void onStart() {
         super.onStart();
-        lifecycleSubject.onNext(ViewModelLivecycleEvent.START);
+        lifecycleSubject.onNext(ViewModelLifecycleEvent.START);
     }
 
     @CallSuper
     @Override
     protected void onResume() {
         super.onResume();
-        lifecycleSubject.onNext(ViewModelLivecycleEvent.RESUME);
+        lifecycleSubject.onNext(ViewModelLifecycleEvent.RESUME);
     }
 
     @CallSuper
     @Override
     protected void onPause() {
         super.onPause();
-        lifecycleSubject.onNext(ViewModelLivecycleEvent.PAUSE);
+        lifecycleSubject.onNext(ViewModelLifecycleEvent.PAUSE);
     }
 
     @CallSuper
     @Override
     protected void onStop() {
         super.onStop();
-        lifecycleSubject.onNext(ViewModelLivecycleEvent.STOP);
+        lifecycleSubject.onNext(ViewModelLifecycleEvent.STOP);
     }
 
     @CallSuper
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        lifecycleSubject.onNext(ViewModelLivecycleEvent.DESTROY);
+        lifecycleSubject.onNext(ViewModelLifecycleEvent.DESTROY);
     }
 }

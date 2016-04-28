@@ -4,11 +4,10 @@ import com.squareup.javapoet.*;
 import de.chefkoch.raclette.compiler.BundleHelper;
 import de.chefkoch.raclette.compiler.ClassNames;
 import de.chefkoch.raclette.compiler.params.ParamField;
-import de.chefkoch.raclette.compiler.params.ParamsContext;
+import de.chefkoch.raclette.routing.Route;
 
 import javax.lang.model.element.Modifier;
-import java.util.ArrayList;
-import java.util.List;
+import javax.lang.model.type.TypeMirror;
 
 /**
  * Created by christophwidulle on 22.04.16.
@@ -55,14 +54,17 @@ public class RouteCreator {
                 .addType(navRequestBuilder);
 
         TypeSpec type = builder.build();
-        JavaFile javaFile = JavaFile.builder(routeContext.getPackageName(), type).build();
+        JavaFile javaFile = JavaFile.builder(routeContext.getPackageName(), type)
+                .addStaticImport(Route.TargetType.class, "*")
+                .build();
         return new Result(javaFile, routeContext);
     }
 
     private MethodSpec createConstructor(RouteContext routeContext) {
+
         MethodSpec.Builder builder = MethodSpec.constructorBuilder()
                 .addModifiers(Modifier.PUBLIC)
-                .addStatement("super(Path,$T.class)", routeContext.getTargetActivity());
+                .addStatement("super(Path, $T.class, $N)", routeContext.getTargetClass(), routeContext.getTargetType().toString());
         return builder.build();
     }
 

@@ -3,7 +3,7 @@ package de.chefkoch.raclette.rx.lifecycle;
 /**
  * Created by christophwidulle on 14.04.16.
  */
-public enum ViewModelLivecycleEvent {
+public enum ViewModelLifecycleEvent {
 
     VIEWMODEL_CREATE,
     CREATE,

@@ -7,7 +7,6 @@ import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import de.chefkoch.raclette.ViewModel;
 import de.chefkoch.raclette.android.RacletteActivity;
-import de.chefkoch.raclette.rx.lifecycle.ViewModelLivecycleProvider;
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
 import com.trello.rxlifecycle.ActivityEvent;

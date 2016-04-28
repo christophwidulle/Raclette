@@ -2,12 +2,10 @@ package de.chefkoch.raclette.compiler.route;
 
 import android.app.Activity;
 import com.squareup.javapoet.*;
-import de.chefkoch.raclette.compiler.BundleHelper;
-import de.chefkoch.raclette.compiler.SpecUtil;
-import de.chefkoch.raclette.compiler.params.ParamField;
 import de.chefkoch.raclette.compiler.params.ParamsContext;
 import de.chefkoch.raclette.routing.Nav;
 import de.chefkoch.raclette.routing.NavParams;
+import de.chefkoch.raclette.routing.Route;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.*;
@@ -53,7 +51,6 @@ public class RouteExtractor {
 
         List<RouteContext> routes = new ArrayList<>();
         Nav.Dispatch dispatchAnnotation = element.getAnnotation(Nav.Dispatch.class);
-        TypeMirror targetActivity = element.asType();
         if (dispatchAnnotation != null) {
             Nav.Route[] routesAnnotation = dispatchAnnotation.value();
             for (Nav.Route route : routesAnnotation) {
@@ -67,9 +64,10 @@ public class RouteExtractor {
 
     private RouteContext extractRoute(final Nav.Route routeAnnotation, final Element element, Map<String, ParamsContext> paramsContextMap, ProcessingEnvironment processingEnvironment) {
 
-        TypeMirror targetActivity = element.asType();
+        TypeMirror targetClass = element.asType();
 
-        if (routeAnnotation != null && isActivity(targetActivity, processingEnvironment)) {
+        Route.TargetType targetType = findTargetType(targetClass, processingEnvironment);
+        if (routeAnnotation != null && targetType != null) {
 
             String path = routeAnnotation.value();
             TypeMirror paramsType = getClass(routeAnnotation);
@@ -82,7 +80,7 @@ public class RouteExtractor {
                 String packageName = getPackage(element);
                 String name = guessName(path);
 
-                return new RouteContext(packageName, name, path, targetActivity, paramsContext);
+                return new RouteContext(packageName, name, path, targetClass, targetType, paramsContext);
             }
         }
         return null;
@@ -129,32 +127,31 @@ public class RouteExtractor {
         return null;
     }
 
-    private TypeMirror getActivityClass() {
-        try {
-            Activity.class.getClass();
-        } catch (MirroredTypeException mte) {
-            return mte.getTypeMirror();
-        }
-        return null;
+
+    private Route.TargetType findTargetType(TypeMirror targetClass, ProcessingEnvironment processingEnvironment) {
+        if (isActivity(targetClass, processingEnvironment)) {
+            return Route.TargetType.Activity;
+        } else if (isDialogFragment(targetClass, processingEnvironment)) {
+            return Route.TargetType.DialogFragment;
+        } else if (isSupportDialogFragment(targetClass, processingEnvironment)) {
+            return Route.TargetType.SupportDialogFragment;
+        } else return null;
+        //todo log it
     }
 
-    private boolean isActivity(TypeMirror targetType, ProcessingEnvironment processingEnvironment) {
-
+    private boolean isActivity(TypeMirror targetClass, ProcessingEnvironment processingEnvironment) {
         TypeMirror activityElement = processingEnvironment.getElementUtils().getTypeElement("android.app.Activity").asType();
-        //boolean assignable = processingEnvironment.getTypeUtils().isAssignable(targetType, getActivityClass());
+        return processingEnvironment.getTypeUtils().isAssignable(targetClass, activityElement);
+    }
 
-        return processingEnvironment.getTypeUtils().isAssignable(targetType, activityElement);
-        /*
-        List<? extends TypeMirror> supertypes = processingEnvironment.getTypeUtils().directSupertypes(targetType);
-        for (TypeMirror supertype : supertypes) {
-            if ("android.app.Activity".equals(supertype.toString())) {
-                return true;
-            } else {
-                boolean isActivity = isActivity(supertype, processingEnvironment);
-                if (isActivity) return true;
-            }
-        }
-        return false;*/
+    private boolean isDialogFragment(TypeMirror targetClass, ProcessingEnvironment processingEnvironment) {
+        TypeMirror activityElement = processingEnvironment.getElementUtils().getTypeElement("android.app.Fragment").asType();
+        return processingEnvironment.getTypeUtils().isAssignable(targetClass, activityElement);
+    }
+
+    private boolean isSupportDialogFragment(TypeMirror targetClass, ProcessingEnvironment processingEnvironment) {
+        TypeMirror activityElement = processingEnvironment.getElementUtils().getTypeElement("android.support.v4.app.Fragment").asType();
+        return processingEnvironment.getTypeUtils().isAssignable(targetClass, activityElement);
     }
 
     private static String getPackage(Element element) {

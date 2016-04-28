@@ -12,7 +12,7 @@ import rx.functions.Func2;
  */
 public class RxViewModelLifecycle {
 
-    public static <T> Observable.Transformer<T, T> bindUntilEvent(final Observable<ViewModelLivecycleEvent> lifecycle, final ViewModelLivecycleEvent event) {
+    public static <T> Observable.Transformer<T, T> bindUntilEvent(final Observable<ViewModelLifecycleEvent> lifecycle, final ViewModelLifecycleEvent event) {
         return bind(lifecycle, event);
     }
 
@@ -38,7 +38,7 @@ public class RxViewModelLifecycle {
         };
     }
 
-    public static <T> Observable.Transformer<T, T> bind(Observable<ViewModelLivecycleEvent> lifecycle) {
+    public static <T> Observable.Transformer<T, T> bind(Observable<ViewModelLifecycleEvent> lifecycle) {
         return bind(lifecycle, VIEWMODEL_LIFECYCLE);
     }
 
@@ -92,25 +92,25 @@ public class RxViewModelLifecycle {
     };
 
     // Figures out which corresponding next lifecycle event in which to unsubscribe
-    private static final Func1<ViewModelLivecycleEvent, ViewModelLivecycleEvent> VIEWMODEL_LIFECYCLE =
-            new Func1<ViewModelLivecycleEvent, ViewModelLivecycleEvent>() {
+    private static final Func1<ViewModelLifecycleEvent, ViewModelLifecycleEvent> VIEWMODEL_LIFECYCLE =
+            new Func1<ViewModelLifecycleEvent, ViewModelLifecycleEvent>() {
                 @Override
-                public ViewModelLivecycleEvent call(ViewModelLivecycleEvent lastEvent) {
+                public ViewModelLifecycleEvent call(ViewModelLifecycleEvent lastEvent) {
                     switch (lastEvent) {
                         case VIEWMODEL_CREATE:
-                            return ViewModelLivecycleEvent.VIEWMODEL_DESTROY;
+                            return ViewModelLifecycleEvent.VIEWMODEL_DESTROY;
                         case CREATE:
-                            return ViewModelLivecycleEvent.DESTROY;
+                            return ViewModelLifecycleEvent.DESTROY;
                         case START:
-                            return ViewModelLivecycleEvent.STOP;
+                            return ViewModelLifecycleEvent.STOP;
                         case RESUME:
-                            return ViewModelLivecycleEvent.PAUSE;
+                            return ViewModelLifecycleEvent.PAUSE;
                         case PAUSE:
-                            return ViewModelLivecycleEvent.STOP;
+                            return ViewModelLifecycleEvent.STOP;
                         case STOP:
-                            return ViewModelLivecycleEvent.DESTROY;
+                            return ViewModelLifecycleEvent.DESTROY;
                         case DESTROY:
-                            return ViewModelLivecycleEvent.VIEWMODEL_DESTROY;
+                            return ViewModelLifecycleEvent.VIEWMODEL_DESTROY;
                         case VIEWMODEL_DESTROY:
                             throw new OutsideLifecycleException("Cannot bind to ViewModel lifecycle when outside of it.");
                         default:
