@@ -8,7 +8,6 @@ import de.chefkoch.raclette.routing.NavigationController;
 public class Raclette {
 
     private static final int NO_VIEWMODEL_BINDING_ID = -1;
-    public static final String BUNDLE_PREFIX = "##RACLETTE_";
 
     private static Raclette INSTANCE;
     private static final Object LOCK = new Object();
@@ -64,9 +63,6 @@ public class Raclette {
         return navigationController;
     }
 
-    public interface ViewModelInjector {
-        void inject(ViewModel viewModel);
-    }
 
     public static class Builder {
         int viewModelBindingId = NO_VIEWMODEL_BINDING_ID;
@@ -91,7 +87,7 @@ public class Raclette {
                     viewModelInjector,
                     new ViewModelManager(viewModelInjector),
                     contextManager,
-                    new NavigationController(contextManager));
+                    new NavigationControllerImpl(contextManager));
         }
 
         public Raclette buildAsSingelton() {

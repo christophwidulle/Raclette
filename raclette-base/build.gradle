@@ -18,8 +18,6 @@ configurations {
 
 dependencies {
     provided deps.android
-    provided deps.supportv4
-    provided deps.supportAppCompatv7
     provided deps.supportAnnotations
 }
 

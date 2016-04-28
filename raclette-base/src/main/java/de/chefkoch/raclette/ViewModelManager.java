@@ -9,9 +9,9 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ViewModelManager {
 
-    private final Raclette.ViewModelInjector injector;
+    private final ViewModelInjector injector;
 
-    ViewModelManager(Raclette.ViewModelInjector injector) {
+    ViewModelManager(ViewModelInjector injector) {
         this.injector = injector;
     }
 
