@@ -11,11 +11,16 @@ for (File file : sdkHandler.sdkLoader.repositories) {
     }
 }
 
+configurations {
+    provided
+    compile.extendsFrom provided
+}
+
 dependencies {
-    compile deps.android
-    compileOnly deps.supportv4
-    compileOnly deps.supportAppCompatv7
-    compile deps.supportAnnotations
+    provided deps.android
+    provided deps.supportv4
+    provided deps.supportAppCompatv7
+    provided deps.supportAnnotations
 }
 
 apply from: rootProject.file('gradle/gradle-maven-push.gradle')

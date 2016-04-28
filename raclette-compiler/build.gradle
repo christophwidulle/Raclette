@@ -11,9 +11,14 @@ for (File file : sdkHandler.sdkLoader.repositories) {
     }
 }
 
+configurations {
+    provided
+    compile.extendsFrom provided
+}
+
 dependencies {
-    compileOnly project(':raclette-base')
-    compile deps.android
+    provided project(':raclette-base')
+    provided deps.android
     compile deps.javapoet
 }
 
