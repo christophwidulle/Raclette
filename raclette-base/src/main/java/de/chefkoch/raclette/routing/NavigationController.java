@@ -12,6 +12,7 @@ import de.chefkoch.raclette.ViewModel;
  */
 public class NavigationController {
 
+
     private final ContextManager contextManager;
 
     public NavigationController(ContextManager contextManager) {
@@ -29,6 +30,8 @@ public class NavigationController {
         } else {
             //todo warning
         }
+
+
     }
 
     public void to(Route.NavRequestBuilder navRequestBuilder) {

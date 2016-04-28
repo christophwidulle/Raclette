@@ -36,9 +36,9 @@ public class CharacterActivity extends RacletteRxAppCompatActivity<CharacterView
 
 
     @Override
-    public void onHandle(NavRequest navRequest) {
+    public boolean onHandle(NavRequest navRequest) {
 
 
-
+        return true;
     }
 }

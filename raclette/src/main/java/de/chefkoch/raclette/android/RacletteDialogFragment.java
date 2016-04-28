@@ -1,5 +1,6 @@
 package de.chefkoch.raclette.android;
 
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
@@ -17,7 +18,7 @@ import de.chefkoch.raclette.ViewModelBindingConfig;
 /**
  * Created by Christoph on 05.10.2015.
  */
-public class RacletteDialogFragment<V extends ViewModel, B extends ViewDataBinding> extends Fragment {
+public class RacletteDialogFragment<V extends ViewModel, B extends ViewDataBinding> extends DialogFragment {
 
     private RacletteLifecycleDelegate<V, B> racletteLifecycleDelegate;
 

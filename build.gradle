@@ -4,6 +4,7 @@ subprojects { project ->
 
     repositories {
         mavenCentral()
+        mavenLocal()
     }
 
     apply plugin: 'checkstyle'

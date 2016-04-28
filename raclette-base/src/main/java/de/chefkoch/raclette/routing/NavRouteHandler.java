@@ -7,6 +7,11 @@ import android.os.Bundle;
  */
 public interface NavRouteHandler {
 
-    void onHandle(NavRequest navRequest);
+    /**
+     *
+     * @param navRequest
+     * @return shouldContinue
+     */
+    boolean onHandle(NavRequest navRequest);
 
 }

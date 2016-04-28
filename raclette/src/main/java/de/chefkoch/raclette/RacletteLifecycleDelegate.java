@@ -2,7 +2,6 @@ package de.chefkoch.raclette;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
@@ -51,8 +50,9 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
         if (extras != null) {
             params = ViewModel.Params.from(extras);
         }
-        init(context, savedInstanceState, params);
-        checkNavRequest(context, extras);
+        if (checkNavRequestAndIsContinue(context, extras)) {
+            init(context, savedInstanceState, params);
+        }
     }
 
     private void init(Context context, Bundle savedInstanceState, Bundle params) {
@@ -82,11 +82,12 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
         viewModel.onCreate(params);
     }
 
-    private void checkNavRequest(Context context, Bundle extras) {
+    private boolean checkNavRequestAndIsContinue(Context context, Bundle extras) {
         NavRequest navRequest = NavRequest.from(extras);
         if (navRequest != null && context instanceof NavRouteHandler) {
-            ((NavRouteHandler) context).onHandle(navRequest);
+            return ((NavRouteHandler) context).onHandle(navRequest);
         }
+        return true;
     }
 
     public void onDestroy(Activity activity) {
