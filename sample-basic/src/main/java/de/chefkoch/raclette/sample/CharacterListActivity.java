@@ -21,7 +21,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import de.chefkoch.raclette.Bind;
 import de.chefkoch.raclette.android.AdapterItemClickListener;
-import de.chefkoch.raclette.android.support.SimpleBindingAdapter;
+import de.chefkoch.raclette.android.support.BindingAdapter;
 import de.chefkoch.raclette.rx.RxUtil;
 import de.chefkoch.raclette.rx.android.support.RacletteRxAppCompatActivity;
 import de.chefkoch.raclette.sample.databinding.CharacterlistActivityBinding;
@@ -37,17 +37,22 @@ public class CharacterListActivity extends RacletteRxAppCompatActivity<Character
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final SimpleBindingAdapter<Character> simpleBindingAdapter = new SimpleBindingAdapter<>(BR.item, R.layout.list_item);
+
+        final BindingAdapter<Character> adapter = BindingAdapter.builder(R.layout.list_item)
+                .withItemBinding(BR.item)
+                .withViewModelBinding(getRaclette().getViewModelBindingId(), getViewModel())
+                .withItemClickListener(new AdapterItemClickListener<Character>() {
+                    @Override
+                    public void onClick(Character item, int position, View view) {
+                        getViewModel().onCharacterSelected(position + 1, item);
+                    }
+                })
+                .build();
+
 
         getBinding().list.setLayoutManager(new LinearLayoutManager(this));
-        getBinding().list.setAdapter(simpleBindingAdapter);
+        getBinding().list.setAdapter(adapter);
 
-        simpleBindingAdapter.setItemClickListener(new AdapterItemClickListener<Character>() {
-            @Override
-            public void onClick(Character item, int position, View view) {
-                getViewModel().onCharacterSelected(position + 1, item);
-            }
-        });
 
         getViewModel().characters()
                 .compose(RxUtil.<List<Character>>applySchedulers())
@@ -55,7 +60,7 @@ public class CharacterListActivity extends RacletteRxAppCompatActivity<Character
                 .subscribe(new Action1<List<Character>>() {
                     @Override
                     public void call(List<Character> characters) {
-                        simpleBindingAdapter.addAll(characters);
+                        adapter.addAll(characters);
                     }
                 });
     }

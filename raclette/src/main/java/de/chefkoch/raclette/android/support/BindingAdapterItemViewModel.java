@@ -2,12 +2,12 @@ package de.chefkoch.raclette.android.support;
 
 import android.databinding.ObservableField;
 import de.chefkoch.raclette.ViewModel;
-import de.chefkoch.raclette.android.AdapterViewModel;
+import de.chefkoch.raclette.android.AdapterItemViewModel;
 
 /**
  * Created by christophwidulle on 16.04.16.
  */
-public class SimpleAdapterViewModel<T> extends ViewModel implements AdapterViewModel<T> {
+public class BindingAdapterItemViewModel<T> extends ViewModel implements AdapterItemViewModel<T> {
 
     ObservableField<T> item;
 
