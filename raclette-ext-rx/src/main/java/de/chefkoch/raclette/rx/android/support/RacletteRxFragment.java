@@ -21,7 +21,7 @@ import android.databinding.ViewDataBinding;
  */
 public class RacletteRxFragment<V extends ViewModel, B extends ViewDataBinding> extends RacletteFragment<V, B> implements FragmentLifecycleProvider {
 
-    private final BehaviorSubject<FragmentEvent> lifecycleSubject = BehaviorSubject.create();
+    protected final BehaviorSubject<FragmentEvent> lifecycleSubject = BehaviorSubject.create();
 
     @Override
     @NonNull

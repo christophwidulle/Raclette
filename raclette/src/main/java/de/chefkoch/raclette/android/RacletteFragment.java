@@ -19,7 +19,7 @@ import de.chefkoch.raclette.ViewModelBindingConfig;
  */
 public class RacletteFragment<V extends ViewModel, B extends ViewDataBinding> extends Fragment {
 
-    private RacletteLifecycleDelegate<V, B> racletteLifecycleDelegate;
+    protected RacletteLifecycleDelegate<V, B> racletteLifecycleDelegate;
 
     @CallSuper
     @Override

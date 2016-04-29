@@ -19,7 +19,7 @@ import com.trello.rxlifecycle.ActivityLifecycleProvider;
  */
 public class RacletteRxAppCompatActivity<V extends ViewModel, B extends ViewDataBinding> extends RacletteAppCompatActivity<V,B> implements ActivityLifecycleProvider {
 
-    private final BehaviorSubject<ActivityEvent> lifecycleSubject = BehaviorSubject.create();
+    protected final BehaviorSubject<ActivityEvent> lifecycleSubject = BehaviorSubject.create();
 
     @Override
     @NonNull

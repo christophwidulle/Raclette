@@ -20,7 +20,7 @@ import de.chefkoch.raclette.ViewModelBindingConfig;
  */
 public class RacletteDialogFragment<V extends ViewModel, B extends ViewDataBinding> extends DialogFragment {
 
-    private RacletteLifecycleDelegate<V, B> racletteLifecycleDelegate;
+    protected RacletteLifecycleDelegate<V, B> racletteLifecycleDelegate;
 
     @CallSuper
     @Override
@@ -34,7 +34,7 @@ public class RacletteDialogFragment<V extends ViewModel, B extends ViewDataBindi
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return racletteLifecycleDelegate.onCreateViewBinding(inflater, null, false);
+        return racletteLifecycleDelegate.onCreateViewBinding(inflater, container, false);
     }
 
     @CallSuper

@@ -16,7 +16,7 @@ import de.chefkoch.raclette.ViewModelBindingConfig;
  */
 public class RacletteActivity<V extends ViewModel, B extends ViewDataBinding> extends Activity {
 
-    private RacletteLifecycleDelegate<V, B> racletteLifecycleDelegate;
+    protected RacletteLifecycleDelegate<V, B> racletteLifecycleDelegate;
 
     @CallSuper
     @Override
