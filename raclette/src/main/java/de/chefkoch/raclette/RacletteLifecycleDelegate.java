@@ -72,14 +72,14 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
             viewModel = raclette.getViewModelManager().createViewModel(viewModelBindingConfig.getViewModelClass());
             viewModel.setNavigationController(raclette.getNavigationController());
             viewModel.injectParams(params);
-            viewModel.onViewModelCreated(params);
+            viewModel.viewModelCreate(params);
         } else {
             viewModel.injectParams(params);
         }
         this.context = context;
         raclette.getContextManager().setCurrentContext(context);
         binding.setVariable(raclette.getViewModelBindingId(), viewModel);
-        viewModel.onCreate(params);
+        viewModel.create(params);
     }
 
     private boolean checkNavRequestAndIsContinue(Context context, Bundle extras) {
@@ -91,14 +91,14 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
     }
 
     public void onDestroy(Activity activity) {
-        viewModel.onDestroy();
+        viewModel.destroy();
         if (activity.isFinishing()) {
             destroy();
         }
     }
 
     public void onDestroy(android.app.Fragment fragment) {
-        viewModel.onDestroy();
+        viewModel.destroy();
         if (fragment.getActivity().isFinishing()) {
             destroy();
         } else if (fragment.isRemoving()) {
@@ -109,19 +109,19 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
 
     public void onStart() {
         raclette.getContextManager().setCurrentContext(context);
-        viewModel.onStart();
+        viewModel.start();
     }
 
     public void onPause() {
-        viewModel.onPause();
+        viewModel.pause();
     }
 
     public void onResume() {
-        viewModel.onResume();
+        viewModel.resume();
     }
 
     public void onStop() {
-        viewModel.onStop();
+        viewModel.stop();
     }
 
     public void onSaveInstanceState(Bundle outState) {
@@ -130,7 +130,7 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
 
     protected void destroy() {
         raclette.getViewModelManager().delete(viewModel.getId());
-        viewModel.onViewModelDestroyed();
+        viewModel.viewModelDestroy();
     }
 
     private void checkViewBindung() {

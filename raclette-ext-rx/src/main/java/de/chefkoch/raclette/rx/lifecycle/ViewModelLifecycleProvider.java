@@ -1,5 +1,6 @@
 package de.chefkoch.raclette.rx.lifecycle;
 
+import de.chefkoch.raclette.ViewModelLifecycleState;
 import rx.Observable;
 
 /**
@@ -9,9 +10,9 @@ import rx.Observable;
  */
 public interface ViewModelLifecycleProvider {
 
-    Observable<ViewModelLifecycleEvent> lifecycle();
+    Observable<ViewModelLifecycleState> lifecycle();
 
-    <T> Observable.Transformer<T, T> bindUntilEvent(ViewModelLifecycleEvent event);
+    <T> Observable.Transformer<T, T> bindUntilEvent(ViewModelLifecycleState event);
 
     <T> Observable.Transformer<T, T> bindToLifecycle();
 }

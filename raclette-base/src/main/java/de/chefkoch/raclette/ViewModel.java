@@ -1,15 +1,10 @@
 package de.chefkoch.raclette;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 
-import android.support.annotation.CallSuper;
 import de.chefkoch.raclette.routing.NavParams;
 import de.chefkoch.raclette.routing.NavigationController;
-
-import java.lang.ref.WeakReference;
 
 /**
  * Created by christophwidulle on 28.09.15.
@@ -18,10 +13,6 @@ public class ViewModel {
 
     public static final String EXTRA_VIEWMODEL_ID = "#RACLETTE_VIEWMODEL_ID";
 
-    public static enum LifecycleState {
-        ACTIVE, INACTIVE, DESTROYED
-
-    }
 
     public static class Params {
 
@@ -38,6 +29,7 @@ public class ViewModel {
         }
     }
 
+    private ViewModelLifecycleState state = ViewModelLifecycleState.NEW;
     private String id;
     private NavigationController navigationController;
 
@@ -57,39 +49,87 @@ public class ViewModel {
         NavParams.injectors().inject(this, params);
     }
 
-    protected NavigationController navigate(){
+    protected NavigationController navigate() {
         return navigationController;
     }
 
-    protected void onViewModelCreated(Bundle viewModelParams) {
+    public ViewModelLifecycleState getState() {
+        return state;
+    }
 
+    void viewModelCreated(Bundle viewModelParams) {
+        this.onViewModelCreate(viewModelParams);
+    }
+
+    void viewModelCreate(Bundle bundle) {
+        this.state = ViewModelLifecycleState.VIEWMODEL_CREATE;
+        this.onViewModelCreate(bundle);
+    }
+
+    protected void onViewModelCreate(Bundle viewModelParams) {
+
+    }
+
+    void create(Bundle bundle) {
+        this.state = ViewModelLifecycleState.CREATE;
+        this.onCreate(bundle);
     }
 
     protected void onCreate(Bundle params) {
 
     }
 
+    void start() {
+        this.state = ViewModelLifecycleState.START;
+        this.onStart();
+    }
+
     protected void onStart() {
 
+    }
+
+    void resume() {
+        this.state = ViewModelLifecycleState.RESUME;
+        this.onResume();
     }
 
     protected void onResume() {
 
     }
 
+    void pause() {
+        this.state = ViewModelLifecycleState.PAUSE;
+        this.onPause();
+    }
+
     protected void onPause() {
 
+    }
+
+    void stop() {
+        this.state = ViewModelLifecycleState.STOP;
+        this.onStop();
     }
 
     protected void onStop() {
 
     }
 
+    void destroy() {
+        this.state = ViewModelLifecycleState.DESTROY;
+        this.onDestroy();
+    }
+
     protected void onDestroy() {
 
     }
 
-    protected void onViewModelDestroyed() {
+    void viewModelDestroy() {
+        this.state = ViewModelLifecycleState.VIEWMODEL_DESTROY;
+        this.onViewModelDestroy();
+    }
+
+    protected void onViewModelDestroy() {
 
     }
 

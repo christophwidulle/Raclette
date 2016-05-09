@@ -1,0 +1,32 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+def logger = new com.android.build.gradle.internal.LoggerWrapper(project.logger)
+def sdkHandler = new com.android.build.gradle.internal.SdkHandler(project, logger)
+for (File file : sdkHandler.sdkLoader.repositories) {
+    repositories.maven {
+        url = file.toURI()
+    }
+}
+
+configurations {
+    provided
+    compile.extendsFrom provided
+}
+
+dependencies {
+
+    compile project(":raclette-base")
+
+    provided deps.android
+
+    provided deps.supportAnnotations
+    provided 'com.android.databinding:baseLibrary:2.1.0'
+
+    testCompile deps.junit
+    testCompile deps.truth
+}
+
+apply from: rootProject.file('gradle/gradle-maven-push.gradle')

@@ -1,10 +1,11 @@
-package de.chefkoch.raclette.rx.lifecycle;
+package de.chefkoch.raclette;
 
 /**
  * Created by christophwidulle on 14.04.16.
  */
-public enum ViewModelLifecycleEvent {
+public enum ViewModelLifecycleState {
 
+    NEW,
     VIEWMODEL_CREATE,
     CREATE,
     START,
