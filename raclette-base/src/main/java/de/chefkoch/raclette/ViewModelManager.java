@@ -1,5 +1,7 @@
 package de.chefkoch.raclette;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -42,6 +44,10 @@ public class ViewModelManager {
     public <V extends ViewModel> V getViewModel(String id) {
         ViewModel viewModel = registry.get(id);
         return (V) viewModel;
+    }
+
+    public List<ViewModel> getAll() {
+        return new ArrayList<>(registry.values());
     }
 
 
