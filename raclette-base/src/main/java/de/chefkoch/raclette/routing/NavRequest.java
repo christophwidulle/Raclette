@@ -38,4 +38,23 @@ public class NavRequest {
         } else
             return null;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        NavRequest that = (NavRequest) o;
+
+        if (!routePath.equals(that.routePath)) return false;
+        return params != null ? params.equals(that.params) : that.params == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = routePath.hashCode();
+        result = 31 * result + (params != null ? params.hashCode() : 0);
+        return result;
+    }
 }
