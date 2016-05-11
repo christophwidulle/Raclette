@@ -20,11 +20,11 @@ public class Events {
     }
 
     public Observable<? extends Event> subscripe(Class<? extends Event> eventType) {
-        return rxEventBus.subscripe(eventType);
+        return rxEventBus.observe(eventType);
     }
 
     public Observable<? extends Event> subscripe() {
-        return rxEventBus.subscripe();
+        return rxEventBus.observe();
 
     }
 

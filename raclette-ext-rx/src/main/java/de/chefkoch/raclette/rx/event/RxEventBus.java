@@ -20,11 +20,11 @@ public class RxEventBus<T> {
         bus.call(event);
     }
 
-    public Observable<? extends T> subscripe(Class<? extends T> eventType) {
+    public Observable<? extends T> observe(Class<? extends T> eventType) {
         return bus.asObservable().ofType(eventType);
     }
 
-    public Observable<? extends T> subscripe() {
+    public Observable<? extends T> observe() {
         return bus.asObservable();
 
     }

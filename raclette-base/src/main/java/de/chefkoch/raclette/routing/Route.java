@@ -7,19 +7,17 @@ import android.app.Activity;
  */
 public abstract class Route {
 
-
-    public static enum TargetType {
+    public enum TargetType {
         Activity, DialogFragment, SupportDialogFragment
     }
 
-    final String path;
-    Class targetClass;
-    final TargetType targetType;
+    private final String path;
+    private Class targetClass;
+    private final TargetType targetType;
 
     protected Route(String path, Class targetClass, TargetType targetType) {
         this.path = path;
         this.targetClass = targetClass;
-
         this.targetType = targetType;
     }
 
@@ -44,6 +42,10 @@ public abstract class Route {
     }
 
     public abstract NavRequestBuilder with();
+
+    public NavRequest build() {
+        return with().build();
+    }
 
     public interface NavRequestBuilder {
         NavRequest build();
