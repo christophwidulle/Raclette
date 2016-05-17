@@ -5,10 +5,9 @@ import android.os.Bundle;
 /**
  * Created by christophwidulle on 20.12.15.
  */
-public interface NavRouteHandler {
+public interface NavRequestInterceptor {
 
     /**
-     *
      * @param navRequest
      * @return shouldContinue
      */

@@ -7,10 +7,14 @@ import android.content.Intent;
  */
 public interface NavigationController {
 
-    public void to(NavRequest navRequest);
+    void to(NavRequest navRequest);
 
-    public void to(Route.NavRequestBuilder navRequestBuilder);
+    void to(Route.NavRequestBuilder navRequestBuilder);
 
-    public void to(Intent intent);
+    void to(Intent intent);
+
+    void back();
+
+
 
 }

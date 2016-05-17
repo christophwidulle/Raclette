@@ -41,7 +41,7 @@ public class RacletteDialogFragment<V extends ViewModel, B extends ViewDataBindi
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        racletteLifecycleDelegate.create(this.getActivity(), savedInstanceState, this.getArguments());
+        racletteLifecycleDelegate.create(this, savedInstanceState, this.getArguments());
         onViewModelCreated();
     }
 

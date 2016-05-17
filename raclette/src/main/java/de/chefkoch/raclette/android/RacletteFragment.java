@@ -40,7 +40,7 @@ public class RacletteFragment<V extends ViewModel, B extends ViewDataBinding> ex
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        racletteLifecycleDelegate.create(this.getActivity(), savedInstanceState, this.getArguments());
+        racletteLifecycleDelegate.create(this, savedInstanceState, this.getArguments());
         onViewModelCreated();
         //todo check if this is also called when we add fragments to activity after activity is already created
 

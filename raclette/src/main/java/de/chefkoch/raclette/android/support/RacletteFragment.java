@@ -16,13 +16,13 @@ import de.chefkoch.raclette.*;
  */
 public class RacletteFragment<V extends ViewModel, B extends ViewDataBinding> extends Fragment {
 
-    protected SupportRacletteLifecycleDelegate<V, B> racletteLifecycleDelegate;
+    protected RacletteLifecycleDelegate<V, B> racletteLifecycleDelegate;
 
     @CallSuper
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        racletteLifecycleDelegate = new SupportRacletteLifecycleDelegate<>(
+        racletteLifecycleDelegate = new RacletteLifecycleDelegate<>(
                 getRaclette(),
                 getViewModelBindingConfig());
     }
@@ -37,7 +37,7 @@ public class RacletteFragment<V extends ViewModel, B extends ViewDataBinding> ex
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        racletteLifecycleDelegate.create(this.getActivity(), savedInstanceState, this.getArguments());
+        racletteLifecycleDelegate.create(this, savedInstanceState, this.getArguments());
         onViewModelCreated();
 
     }

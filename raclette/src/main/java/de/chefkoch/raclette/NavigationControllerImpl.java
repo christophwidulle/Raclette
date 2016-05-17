@@ -4,17 +4,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import de.chefkoch.raclette.routing.NavRequest;
-import de.chefkoch.raclette.routing.NavigationController;
-import de.chefkoch.raclette.routing.Route;
-import de.chefkoch.raclette.routing.RoutesDict;
+import de.chefkoch.raclette.routing.*;
 
 /**
  * Created by christophwidulle on 06.12.15.
  */
-public class NavigationControllerImpl implements NavigationController {
+public class NavigationControllerImpl implements NavigationController, UsesNavigationSupport {
 
     private final ContextManager contextManager;
+    private NavigationSupport navigationSupport;
 
     public NavigationControllerImpl(ContextManager contextManager) {
         this.contextManager = contextManager;
@@ -23,23 +21,23 @@ public class NavigationControllerImpl implements NavigationController {
     @Override
     public void to(NavRequest navRequest) {
 
-        Route route = RoutesDict.findBy(navRequest.getRoutePath());
-        if (route != null) {
-            if (route.isActivityTargetType()) {
-                Intent intent = new Intent(contextManager.getCurrentContext(), route.getTargetClass());
-                Bundle bundle = navRequest.toBundle();
-                intent.putExtras(bundle);
-                to(intent);
-            } else if (route.getTargetType() == Route.TargetType.SupportDialogFragment) {
-                startSupportDialog(route, navRequest);
-            } else if (route.getTargetType() == Route.TargetType.DialogFragment) {
-                startDialog(route, navRequest);
+        if (!navigateToBySupport(navRequest)) {
+            Route route = RoutesDict.findBy(navRequest.getRoutePath());
+            if (route != null) {
+                if (route.isActivityTargetType()) {
+                    Intent intent = new Intent(contextManager.getCurrentContext(), route.getTargetClass());
+                    Bundle bundle = navRequest.toBundle();
+                    intent.putExtras(bundle);
+                    to(intent);
+                } else if (route.getTargetType() == Route.TargetType.SupportDialogFragment) {
+                    startSupportDialog(route, navRequest);
+                } else if (route.getTargetType() == Route.TargetType.DialogFragment) {
+                    startDialog(route, navRequest);
+                }
+            } else {
+                //todo warning
             }
-        } else {
-            //todo warning
         }
-
-
     }
 
     @Override
@@ -51,6 +49,21 @@ public class NavigationControllerImpl implements NavigationController {
     public void to(Intent intent) {
         Context currentContext = contextManager.getCurrentContext();
         currentContext.startActivity(intent);
+    }
+
+    @Override
+    public void back() {
+        if (!navigateBackBySupport()) {
+            getCurrentActivity().finish();
+        }
+    }
+
+    private boolean navigateToBySupport(NavRequest navRequest) {
+        return navigationSupport != null && (navigationSupport.onNavigateTo(navRequest));
+    }
+
+    private boolean navigateBackBySupport() {
+        return navigationSupport != null && navigationSupport.onBack();
     }
 
     private Activity getCurrentActivity() {
@@ -70,7 +83,6 @@ public class NavigationControllerImpl implements NavigationController {
             throw new RacletteException("CurrentContext is not an AppCompatActivity");
         }
     }
-
 
     private void startDialog(Route route, NavRequest navRequest) {
         try {
@@ -98,4 +110,13 @@ public class NavigationControllerImpl implements NavigationController {
         }
     }
 
+    @Override
+    public void setActiveNavigationSupport(NavigationSupport navigationSupport) {
+        this.navigationSupport = navigationSupport;
+    }
+
+    @Override
+    public void clearActiveNavigationSupport() {
+        this.navigationSupport = null;
+    }
 }
