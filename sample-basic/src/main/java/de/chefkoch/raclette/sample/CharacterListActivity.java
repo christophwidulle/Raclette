@@ -38,15 +38,12 @@ public class CharacterListActivity extends RacletteRxAppCompatActivity<Character
         super.onCreate(savedInstanceState);
 
 
+        //todo fixme
+        /*
         final BindingAdapter<Character> adapter = BindingAdapter.builder(R.layout.list_item)
                 .withItemBinding(BR.item)
                 .withViewModelBinding(getRaclette().getViewModelBindingId(), getViewModel())
-                .withItemClickListener(new AdapterItemClickListener<Character>() {
-                    @Override
-                    public void onClick(Character item, int position, View view) {
-                        getViewModel().onCharacterSelected(position + 1, item);
-                    }
-                })
+                .withItemClickListener(new AdapterItemClickListener<Cha>() {})
                 .build();
 
 
@@ -63,5 +60,6 @@ public class CharacterListActivity extends RacletteRxAppCompatActivity<Character
                         adapter.addAll(characters);
                     }
                 });
+                */
     }
 }

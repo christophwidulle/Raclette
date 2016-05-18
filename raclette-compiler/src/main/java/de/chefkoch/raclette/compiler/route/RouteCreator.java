@@ -34,6 +34,9 @@ public class RouteCreator {
         String className = routeContext.getClassName();
         String name = routeContext.getName();
 
+
+        ParameterizedTypeName superKlass = ParameterizedTypeName.get(ClassNames.Route, routeContext.getParameterClass());
+
         ClassName navRequestBuilderClassName = ClassName.get(
                 routeContext.getPackageName(),
                 routeContext.getClassName(),
@@ -43,15 +46,15 @@ public class RouteCreator {
         FieldSpec pathField = FieldSpec.builder(String.class, "Path", Modifier.STATIC, Modifier.PUBLIC, Modifier.FINAL)
                 .initializer("\"$N\"", routeContext.getPath()).build();
 
-        TypeSpec navRequestBuilder = createNavRequestBuilder(routeContext, navRequestBuilderClassName);
+        //TypeSpec navRequestBuilder = createNavRequestBuilder(routeContext, navRequestBuilderClassName);
 
         TypeSpec.Builder builder = TypeSpec.classBuilder(className)
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 .addField(pathField)
-                .superclass(ClassNames.Route)
-                .addMethod(createConstructor(routeContext))
-                .addMethod(createBuilderMethod(navRequestBuilderClassName))
-                .addType(navRequestBuilder);
+                .superclass(superKlass)
+                .addMethod(createConstructor(routeContext));
+                //.addMethod(createBuilderMethod(navRequestBuilderClassName));
+                //.addType(navRequestBuilder);
 
         TypeSpec type = builder.build();
         JavaFile javaFile = JavaFile.builder(routeContext.getPackageName(), type)
@@ -77,21 +80,7 @@ public class RouteCreator {
                 .build();
     }
 
-    /*
-   public static class NavRequestBuilder implements Route.NavRequestBuilder {
-        private Bundle params = new Bundle();
 
-        public NavRequestBuilder characterIndex(String recipeId) {
-            this.params.putString("characterIndex", recipeId);
-            return this;
-        }
-
-        @Override
-        public NavRequest build() {
-            return new NavRequest(Path, params);
-        }
-    }
-     */
     private TypeSpec createNavRequestBuilder(RouteContext routeContext, ClassName navRequestBuilderClassName) {
 
         FieldSpec bundleField = FieldSpec.builder(ClassNames.Bundle, "params")
@@ -127,8 +116,7 @@ public class RouteCreator {
                         paramField.name,
                         paramField.name);
             }
-            setterBuilderMethod
-                    .addStatement("return this");
+            setterBuilderMethod.addStatement("return this");
             typeSpecBuilder.addMethod(setterBuilderMethod.build());
         }
 

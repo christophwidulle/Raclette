@@ -1,6 +1,5 @@
 package de.chefkoch.raclette.compiler.route;
 
-import android.app.Activity;
 import com.squareup.javapoet.*;
 import de.chefkoch.raclette.compiler.params.ParamsContext;
 import de.chefkoch.raclette.routing.Nav;
@@ -80,7 +79,8 @@ public class RouteExtractor {
                 String packageName = getPackage(element);
                 String name = guessName(path);
 
-                return new RouteContext(packageName, name, path, targetClass, targetType, paramsContext);
+
+                return new RouteContext(packageName, name, path, targetClass, ClassName.get(packageName, name + "Params"), targetType, paramsContext);
             }
         }
         return null;

@@ -5,7 +5,7 @@ import android.app.Activity;
 /**
  * Created by christophwidulle on 07.12.15.
  */
-public abstract class Route {
+public abstract class Route<T extends NavParams> {
 
     public enum TargetType {
         Activity, DialogFragment, SupportDialogFragment
@@ -41,10 +41,8 @@ public abstract class Route {
         return targetClass;
     }
 
-    public abstract NavRequestBuilder with();
-
-    public NavRequest build() {
-        return with().build();
+    public NavRequest with(T params) {
+        return new NavRequest(path, params.toBundle());
     }
 
     public interface NavRequestBuilder {

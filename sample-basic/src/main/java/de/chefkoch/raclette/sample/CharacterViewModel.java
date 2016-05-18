@@ -8,6 +8,7 @@ import de.chefkoch.raclette.TestParameter;
 import de.chefkoch.raclette.TestParameter2;
 import de.chefkoch.raclette.ViewModel;
 import de.chefkoch.raclette.routing.Nav;
+import de.chefkoch.raclette.rx.Command;
 import de.chefkoch.raclette.rx.RxUtil;
 import de.chefkoch.raclette.sample.rest.Character;
 import de.chefkoch.raclette.sample.rest.SWApiClient;
@@ -22,7 +23,7 @@ public class CharacterViewModel extends ViewModel {
 
     public final ObservableField<Character> characterField = new ObservableField<>();
 
-    public final PublishRelay<Void> testCommand = PublishRelay.create();
+    public final Command<Void> testCommand = Command.create();
 
 
     @Nav.Param

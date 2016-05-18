@@ -15,6 +15,20 @@ public abstract class NavParams {
 
     public static class None extends NavParams {
 
+        @Override
+        public Bundle toBundle() {
+            return new Bundle();
+        }
+    }
+
+
+    public abstract Bundle toBundle();
+
+    public Bundle toArgumentsBundle() {
+        final Bundle params = toBundle();
+        final Bundle bundle = new Bundle();
+        ViewModel.Params.apply(params, bundle);
+        return bundle;
     }
 
     private static InjectorFactory INJECTOR_FACTORY_INSTANCE;

@@ -25,7 +25,7 @@ public class NavRequest {
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
         bundle.putString(ROUTE_KEY, routePath);
-        bundle.putBundle(ViewModel.Params.EXTRA_KEY, params);
+        ViewModel.Params.apply(params, bundle);
         return bundle;
     }
 
