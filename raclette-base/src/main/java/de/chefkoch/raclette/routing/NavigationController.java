@@ -9,8 +9,6 @@ public interface NavigationController {
 
     void to(NavRequest navRequest);
 
-    void to(Route.NavRequestBuilder navRequestBuilder);
-
     void to(Intent intent);
 
     void back();

@@ -40,10 +40,6 @@ public class NavigationControllerImpl implements NavigationController, UsesNavig
         }
     }
 
-    @Override
-    public void to(Route.NavRequestBuilder navRequestBuilder) {
-        to(navRequestBuilder.build());
-    }
 
     @Override
     public void to(Intent intent) {

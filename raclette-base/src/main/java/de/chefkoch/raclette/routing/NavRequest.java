@@ -18,6 +18,11 @@ public class NavRequest {
         this.params = params;
     }
 
+    public NavRequest(String routePath) {
+        this.routePath = routePath;
+        this.params = null;
+    }
+
     public String getRoutePath() {
         return routePath;
     }
@@ -25,7 +30,8 @@ public class NavRequest {
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
         bundle.putString(ROUTE_KEY, routePath);
-        ViewModel.Params.apply(params, bundle);
+        if (params != null)
+            ViewModel.Params.apply(params, bundle);
         return bundle;
     }
 
