@@ -84,19 +84,19 @@ public class RacletteGenerator extends AbstractProcessor {
         return false;
     }
 
-    private List<RouteCreator.Result> createRoute(final Element element, Map<String, ParamsContext> paramsContextMap) {
+    private List<RouteCreator.Result> createRoute(final Element element, Map<String, NavParamsCreator.Result> resultMap) {
         if (!element.getKind().isClass()) {
             logError("Only classes annotated with @" + Nav.Route.class + " are supported", element);
         }
         List<RouteCreator.Result> results = new ArrayList<>();
 
-        RouteContext routeContext = new RouteExtractor().extractRoute(element, paramsContextMap, environment);
+        RouteContext routeContext = new RouteExtractor().extractRoute(element, resultMap, environment);
         RouteCreator.Result result = new RouteCreator().create(routeContext);
         if (write(result, element)) results.add(result);
         return results;
     }
 
-    private List<RouteCreator.Result> createRoutesDispatch(final Element element, Map<String, ParamsContext> paramsContextMap) {
+    private List<RouteCreator.Result> createRoutesDispatch(final Element element, Map<String, NavParamsCreator.Result> paramsContextMap) {
         if (!element.getKind().isClass()) {
             logError("Only classes annotated with @" + Nav.Dispatch.class + " are supported", element);
         }
@@ -126,12 +126,11 @@ public class RacletteGenerator extends AbstractProcessor {
         return false;
     }
 
-    private Map<String, ParamsContext> asMap(List<NavParamsCreator.Result> results) {
-        Map<String, ParamsContext> map = new HashMap<>();
+    private Map<String, NavParamsCreator.Result> asMap(List<NavParamsCreator.Result> results) {
+        Map<String, NavParamsCreator.Result> map = new HashMap<>();
         for (NavParamsCreator.Result result : results) {
             String key = result.getFullQulifiedName();
-            ParamsContext val = result.paramsContext;
-            map.put(key, val);
+            map.put(key, result);
         }
         return map;
     }

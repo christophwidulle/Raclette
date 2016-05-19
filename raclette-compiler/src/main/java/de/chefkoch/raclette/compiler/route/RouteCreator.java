@@ -37,16 +37,9 @@ public class RouteCreator {
 
         ParameterizedTypeName superKlass = ParameterizedTypeName.get(ClassNames.Route, routeContext.getParameterClass());
 
-        ClassName navRequestBuilderClassName = ClassName.get(
-                routeContext.getPackageName(),
-                routeContext.getClassName(),
-                "NavRequestBuilder"
-        );
 
         FieldSpec pathField = FieldSpec.builder(String.class, "Path", Modifier.STATIC, Modifier.PUBLIC, Modifier.FINAL)
                 .initializer("\"$N\"", routeContext.getPath()).build();
-
-        //TypeSpec navRequestBuilder = createNavRequestBuilder(routeContext, navRequestBuilderClassName);
 
         TypeSpec.Builder builder = TypeSpec.classBuilder(className)
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
@@ -71,16 +64,8 @@ public class RouteCreator {
         return builder.build();
     }
 
-    private MethodSpec createBuilderMethod(ClassName navRequestBuilder) {
-        return MethodSpec.methodBuilder("with")
-                .addModifiers(Modifier.PUBLIC)
-                .addAnnotation(Override.class)
-                .returns(navRequestBuilder)
-                .addStatement("return new $T()", navRequestBuilder)
-                .build();
-    }
 
-
+    /*
     private TypeSpec createNavRequestBuilder(RouteContext routeContext, ClassName navRequestBuilderClassName) {
 
         FieldSpec bundleField = FieldSpec.builder(ClassNames.Bundle, "params")
@@ -123,26 +108,9 @@ public class RouteCreator {
         return typeSpecBuilder.build();
 
     }
+    */
 
-    /*
-     public NavRequestBuilder characterIndex(String recipeId) {
-            this.params.putString("characterIndex", recipeId);
-            return this;
-        }
-     */
-    private MethodSpec.Builder addSetterStatement(MethodSpec.Builder builder, ParamField paramField) {
-        if (paramField.isSerializable) {
-            return builder.addStatement("this.setSerializable(\"$N\",)",
-                    paramField.name,
-                    paramField.type.toString(),
-                    paramField.name);
-        } else {
-            return builder.addStatement("this.$N = bundle.$N(\"$N\")",
-                    paramField.name,
-                    BundleHelper.findBundleMethod(BundleHelper.MethodType.Getter, paramField),
-                    paramField.name);
-        }
-    }
+
 
 
 }

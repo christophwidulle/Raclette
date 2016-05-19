@@ -1,6 +1,8 @@
 package de.chefkoch.raclette.compiler.route;
 
 import com.squareup.javapoet.*;
+import de.chefkoch.raclette.compiler.ClassNames;
+import de.chefkoch.raclette.compiler.params.NavParamsCreator;
 import de.chefkoch.raclette.compiler.params.ParamsContext;
 import de.chefkoch.raclette.routing.Nav;
 import de.chefkoch.raclette.routing.NavParams;
@@ -38,7 +40,7 @@ public class RouteExtractor {
         }
     }
 
-    public RouteContext extractRoute(final Element element, Map<String, ParamsContext> paramsContextMap, ProcessingEnvironment processingEnvironment) {
+    public RouteContext extractRoute(final Element element, Map<String, NavParamsCreator.Result> paramsContextMap, ProcessingEnvironment processingEnvironment) {
         Nav.Route routeAnnotation = element.getAnnotation(Nav.Route.class);
         if (routeAnnotation != null) {
             return extractRoute(routeAnnotation, element, paramsContextMap, processingEnvironment);
@@ -46,7 +48,7 @@ public class RouteExtractor {
         return null;
     }
 
-    public List<RouteContext> extractDistach(final Element element, Map<String, ParamsContext> paramsContextMap, ProcessingEnvironment processingEnvironment) {
+    public List<RouteContext> extractDistach(final Element element, Map<String, NavParamsCreator.Result> paramsContextMap, ProcessingEnvironment processingEnvironment) {
 
         List<RouteContext> routes = new ArrayList<>();
         Nav.Dispatch dispatchAnnotation = element.getAnnotation(Nav.Dispatch.class);
@@ -61,7 +63,7 @@ public class RouteExtractor {
     }
 
 
-    private RouteContext extractRoute(final Nav.Route routeAnnotation, final Element element, Map<String, ParamsContext> paramsContextMap, ProcessingEnvironment processingEnvironment) {
+    private RouteContext extractRoute(final Nav.Route routeAnnotation, final Element element, Map<String, NavParamsCreator.Result> resultMap, ProcessingEnvironment processingEnvironment) {
 
         TypeMirror targetClass = element.asType();
 
@@ -70,17 +72,25 @@ public class RouteExtractor {
 
             String path = routeAnnotation.value();
             TypeMirror paramsType = getClass(routeAnnotation);
+
             if (paramsType != null) {
-                ParamsContext paramsContext = find(paramsContextMap, paramsType.toString());
-                if (paramsContext == null) {
-                    paramsContext = ParamsContext.NONE;
-                }
+                NavParamsCreator.Result result = find(resultMap, paramsType.toString());
+
+                ParamsContext paramsContext;
 
                 String packageName = getPackage(element);
-                String name = guessName(path);
+                String routeName = guessName(path);
 
+                ClassName paramsClassName;
+                if (result == null) {
+                    paramsContext = ParamsContext.NONE;
+                    paramsClassName = ClassName.get("de.chefkoch.raclette.routing", "NavParams", "None");
+                } else {
+                    paramsContext = result.paramsContext;
+                    paramsClassName = ClassName.get(result.packageName, result.className);
+                }
 
-                return new RouteContext(packageName, name, path, targetClass, ClassName.get(packageName, name + "Params"), targetType, paramsContext);
+                return new RouteContext(packageName, routeName, path, targetClass, paramsClassName, targetType, paramsContext);
             }
         }
         return null;
@@ -88,11 +98,11 @@ public class RouteExtractor {
 
 
     //todo find better way
-    private ParamsContext find(Map<String, ParamsContext> paramsContextMap, String type) {
+    private NavParamsCreator.Result find(Map<String, NavParamsCreator.Result> resultMap, String type) {
         if (type.contains("<any?>.")) {
             type = type.replace("<any?>.", "");
         }
-        for (Map.Entry<String, ParamsContext> entry : paramsContextMap.entrySet()) {
+        for (Map.Entry<String, NavParamsCreator.Result> entry : resultMap.entrySet()) {
             if (entry.getKey().contains(type)) {
                 return entry.getValue();
             }
@@ -159,14 +169,6 @@ public class RouteExtractor {
         return fullName.substring(0, fullName.lastIndexOf('.'));
     }
 
-    private static String getName(Element element) {
-        String simpleName = element.getSimpleName().toString();
-        int viewModelIndex = simpleName.indexOf("ViewModel");
-        if (viewModelIndex > -1) {
-            simpleName = simpleName.substring(0, viewModelIndex);
-        }
-        return simpleName + "Params";
-    }
 
     private static AnnotationMirror getAnnotationMirror(TypeElement typeElement, String className) {
         for (AnnotationMirror m : typeElement.getAnnotationMirrors()) {

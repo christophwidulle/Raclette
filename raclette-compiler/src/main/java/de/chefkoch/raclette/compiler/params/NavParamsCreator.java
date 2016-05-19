@@ -31,7 +31,6 @@ public class NavParamsCreator {
             this.paramsContext = paramsContext;
         }
 
-
         public String getFullQulifiedName() {
             return packageName + "." + className;
         }
@@ -42,9 +41,9 @@ public class NavParamsCreator {
         ParamsContext paramsContext = new ParamsExtractor().extract(element, processingEnvironment);
 
         String packageName = getPackage(element);
-        String name = getName(element);
+        String navParamsName = getName(element);
 
-        ClassName className = ClassName.get(packageName, name);
+        ClassName className = ClassName.get(packageName, navParamsName);
 
         List<FieldSpec> fieldSpecs = new ArrayList<>();
 
@@ -60,7 +59,7 @@ public class NavParamsCreator {
         ClassName injectorName = ClassName.get(ClassNames.RoutingPackageName, "NavParams.Injector");
         TypeName injectorParameterName = ClassName.get(paramsContext.getViewModelType());
 
-        TypeSpec.Builder builder = TypeSpec.classBuilder(name)
+        TypeSpec.Builder builder = TypeSpec.classBuilder(navParamsName)
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 .superclass(ClassName.get(ClassNames.RoutingPackageName, "NavParams"))
                 .addSuperinterface(ParameterizedTypeName.get(injectorName, injectorParameterName));
@@ -92,7 +91,7 @@ public class NavParamsCreator {
         TypeSpec type = builder.build();
         JavaFile javaFile = JavaFile.builder(packageName, type).build();
 
-        return new Result(packageName, name, javaFile, paramsContext);
+        return new Result(packageName, navParamsName, javaFile, paramsContext);
 
     }
 
