@@ -67,6 +67,7 @@ public abstract class NavParams {
             if (injectorClass != null) {
                 try {
                     Constructor<? extends Injector> constructor = injectorClass.getConstructor(Bundle.class);
+                    constructor.setAccessible(true);
                     return constructor.newInstance(params);
                 } catch (Exception e) {
                     throw new RacletteException("some code generation went terrible wrong :(", e);

@@ -113,7 +113,7 @@ public class NavParamsCreator {
         ClassName bundle = ClassName.get("android.os", "Bundle");
 
         MethodSpec.Builder constructorBuilder = MethodSpec.constructorBuilder()
-                .addModifiers(Modifier.PRIVATE)
+                .addModifiers(Modifier.PUBLIC)
                 .addParameter(bundle, "bundle");
 
         for (ParamField paramField : paramsContext.getFields()) {
@@ -132,7 +132,7 @@ public class NavParamsCreator {
     private List<MethodSpec> createEmptyConstructor(ClassName className) {
 
         MethodSpec.Builder builder = MethodSpec.constructorBuilder()
-                .addModifiers(Modifier.PRIVATE);
+                .addModifiers(Modifier.PUBLIC);
 
         MethodSpec.Builder factoryBuilder = MethodSpec.methodBuilder("create")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
