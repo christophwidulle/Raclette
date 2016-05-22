@@ -57,16 +57,12 @@ public class ViewModel {
         return state;
     }
 
-    void viewModelCreated(Bundle viewModelParams) {
-        this.onViewModelCreate(viewModelParams);
-    }
-
     void viewModelCreate(Bundle bundle) {
         this.state = ViewModelLifecycleState.VIEWMODEL_CREATE;
-        this.onViewModelCreate(bundle);
+        this.onViewModelCreated(bundle);
     }
 
-    protected void onViewModelCreate(Bundle viewModelParams) {
+    protected void onViewModelCreated(Bundle viewModelParams) {
 
     }
 

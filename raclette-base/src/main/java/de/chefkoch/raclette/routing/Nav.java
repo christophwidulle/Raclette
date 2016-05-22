@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  */
 public class Nav {
 
-    @Retention(RetentionPolicy.RUNTIME)
+    @Retention(RetentionPolicy.CLASS)
     @Target(ElementType.TYPE)
     public @interface Route {
 
@@ -21,7 +21,7 @@ public class Nav {
         Class<? extends NavParams> navParams() default NavParams.None.class;
     }
 
-    @Retention(RetentionPolicy.RUNTIME)
+    @Retention(RetentionPolicy.CLASS)
     @Target(ElementType.TYPE)
     public @interface Dispatch {
 

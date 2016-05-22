@@ -44,7 +44,7 @@ public class CharacterViewModel extends ViewModel {
 
 
     @Override
-    protected void onViewModelCreate(Bundle viewModelParams) {
+    protected void onViewModelCreated(Bundle viewModelParams) {
         load(characterIndex);
 
         testCommand.subscribe(new Action1<Void>() {

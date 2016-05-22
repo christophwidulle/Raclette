@@ -22,7 +22,7 @@ public class CharacterListViewModel extends ViewModel {
 
 
     @Override
-    protected void onViewModelCreate(Bundle viewModelParams) {
+    protected void onViewModelCreated(Bundle viewModelParams) {
         load();
     }
 

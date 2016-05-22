@@ -1,6 +1,7 @@
 package de.chefkoch.raclette.android;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
@@ -72,6 +73,12 @@ public class RacletteActivity<V extends ViewModel, B extends ViewDataBinding> ex
     protected void onSaveInstanceState(Bundle outState) {
         racletteLifecycleDelegate.onSaveInstanceState(outState);
         super.onSaveInstanceState(outState);
+    }
+
+    @CallSuper
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
     }
 
     public V viewModel() {
