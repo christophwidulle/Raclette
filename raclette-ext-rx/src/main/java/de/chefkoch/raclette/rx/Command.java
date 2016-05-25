@@ -35,6 +35,10 @@ public class Command<T> {
         subject.call(t);
     }
 
+    public void call() {
+        subject.call(null);
+    }
+
     public Observable<T> asObservable() {
         if (lifecycleSubject != null) {
             return subject.asObservable().compose(RxViewModelLifecycle.<T>bind(lifecycleSubject));
