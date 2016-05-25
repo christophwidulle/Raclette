@@ -49,7 +49,7 @@ public class ViewModel {
         NavParams.injectors().inject(this, params);
     }
 
-    protected NavigationController navigate() {
+    public NavigationController navigate() {
         return navigationController;
     }
 
