@@ -1,11 +1,12 @@
 package de.chefkoch.raclette.compiler.route;
 
-import com.squareup.javapoet.*;
-import de.chefkoch.raclette.compiler.ClassNames;
+import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.JavaFile;
+import de.chefkoch.raclette.Bind;
+import de.chefkoch.raclette.ViewModel;
 import de.chefkoch.raclette.compiler.params.NavParamsCreator;
 import de.chefkoch.raclette.compiler.params.ParamsContext;
 import de.chefkoch.raclette.routing.Nav;
-import de.chefkoch.raclette.routing.NavParams;
 import de.chefkoch.raclette.routing.Route;
 
 import javax.annotation.processing.ProcessingEnvironment;
@@ -48,7 +49,7 @@ public class RouteExtractor {
         return null;
     }
 
-    public List<RouteContext> extractDistach(final Element element, Map<String, NavParamsCreator.Result> paramsContextMap, ProcessingEnvironment processingEnvironment) {
+    public List<RouteContext> extractDispatch(final Element element, Map<String, NavParamsCreator.Result> paramsContextMap, ProcessingEnvironment processingEnvironment) {
 
         List<RouteContext> routes = new ArrayList<>();
         Nav.Dispatch dispatchAnnotation = element.getAnnotation(Nav.Dispatch.class);
@@ -71,7 +72,10 @@ public class RouteExtractor {
         if (routeAnnotation != null && targetType != null) {
 
             String path = routeAnnotation.value();
-            TypeMirror paramsType = getClass(routeAnnotation);
+            TypeMirror paramsType = getNavParamsFromClass(routeAnnotation);
+
+            //check for autodetect
+            paramsType = checkFindByAutodetect(paramsType, element);
 
             if (paramsType != null) {
                 NavParamsCreator.Result result = find(resultMap, paramsType.toString());
@@ -94,6 +98,15 @@ public class RouteExtractor {
             }
         }
         return null;
+    }
+
+    private TypeMirror checkFindByAutodetect(TypeMirror paramsType, Element element) {
+        if (paramsType.toString().contains("Nav.Route.AutoDetect")) {
+            Bind annotation = element.getAnnotation(Bind.class);
+            return getViewModelClass(annotation);
+        } else {
+            return paramsType;
+        }
     }
 
 
@@ -128,15 +141,23 @@ public class RouteExtractor {
         return Character.toUpperCase(line.charAt(0)) + line.substring(1);
     }
 
-    private TypeMirror getClass(Nav.Route routeAnnotation) {
+    private TypeMirror getNavParamsFromClass(Nav.Route routeAnnotation) {
         try {
-            Class<? extends NavParams> aClass = routeAnnotation.navParams();
+            Class<? extends ViewModel> aClass = routeAnnotation.navParamsFrom();
         } catch (MirroredTypeException mte) {
             return mte.getTypeMirror();
         }
         return null;
     }
 
+    private TypeMirror getViewModelClass(Bind annotation) {
+        try {
+            Class<? extends ViewModel> aClass = annotation.viewModel();
+        } catch (MirroredTypeException mte) {
+            return mte.getTypeMirror();
+        }
+        return null;
+    }
 
     private Route.TargetType findTargetType(TypeMirror targetClass, ProcessingEnvironment processingEnvironment) {
         if (isActivity(targetClass, processingEnvironment)) {

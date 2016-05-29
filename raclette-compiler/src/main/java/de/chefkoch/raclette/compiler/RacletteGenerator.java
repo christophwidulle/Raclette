@@ -3,7 +3,6 @@ package de.chefkoch.raclette.compiler;
 import com.squareup.javapoet.JavaFile;
 import de.chefkoch.raclette.compiler.params.NavParamsCreator;
 import de.chefkoch.raclette.compiler.params.NavParamsDictCreator;
-import de.chefkoch.raclette.compiler.params.ParamsContext;
 import de.chefkoch.raclette.compiler.route.RouteContext;
 import de.chefkoch.raclette.compiler.route.RouteCreator;
 import de.chefkoch.raclette.compiler.route.RouteExtractor;
@@ -102,7 +101,7 @@ public class RacletteGenerator extends AbstractProcessor {
         }
         List<RouteCreator.Result> results = new ArrayList<>();
 
-        List<RouteContext> routeContexts = new RouteExtractor().extractDistach(element, paramsContextMap, environment);
+        List<RouteContext> routeContexts = new RouteExtractor().extractDispatch(element, paramsContextMap, environment);
         for (RouteContext routeContext : routeContexts) {
             RouteCreator.Result result = new RouteCreator().create(routeContext);
             if (write(result, element)) results.add(result);
@@ -129,7 +128,7 @@ public class RacletteGenerator extends AbstractProcessor {
     private Map<String, NavParamsCreator.Result> asMap(List<NavParamsCreator.Result> results) {
         Map<String, NavParamsCreator.Result> map = new HashMap<>();
         for (NavParamsCreator.Result result : results) {
-            String key = result.getFullQulifiedName();
+            String key = result.viewModelType.toString();
             map.put(key, result);
         }
         return map;

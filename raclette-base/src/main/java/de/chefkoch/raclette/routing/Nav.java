@@ -1,6 +1,7 @@
 package de.chefkoch.raclette.routing;
 
 import android.os.Bundle;
+import de.chefkoch.raclette.ViewModel;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -18,7 +19,10 @@ public class Nav {
 
         String value();
 
-        Class<? extends NavParams> navParams() default NavParams.None.class;
+        Class<? extends ViewModel> navParamsFrom() default AutoDetect.class;
+
+        public static class AutoDetect extends ViewModel {
+        }
     }
 
     @Retention(RetentionPolicy.CLASS)

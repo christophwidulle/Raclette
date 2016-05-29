@@ -15,5 +15,8 @@ public class ClassNames {
     public static ClassName NavRequestBuilder = ClassName.get(RoutingPackageName, "Route.NavRequestBuilder");
     public static ClassName NavRequest = ClassName.get(RoutingPackageName, "NavRequest");
     public static ClassName Bundle = ClassName.get("android.os", "Bundle");
+    public static ClassName AutoDetect = ClassName.get("android.os", "Bundle");
+
+
 
 }

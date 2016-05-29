@@ -8,6 +8,7 @@ import de.chefkoch.raclette.compiler.SpecUtil;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
+import javax.lang.model.type.TypeMirror;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,12 +24,14 @@ public class NavParamsCreator {
         public final String className;
         public final JavaFile javaFile;
         public final ParamsContext paramsContext;
+        public final TypeMirror viewModelType;
 
-        public Result(String packageName, String className, JavaFile javaFile, ParamsContext paramsContext) {
+        public Result(String packageName, String className, JavaFile javaFile, ParamsContext paramsContext, TypeMirror viewModelType) {
             this.packageName = packageName;
             this.className = className;
             this.javaFile = javaFile;
             this.paramsContext = paramsContext;
+            this.viewModelType = viewModelType;
         }
 
         public String getFullQulifiedName() {
@@ -42,6 +45,8 @@ public class NavParamsCreator {
 
         String packageName = getPackage(element);
         String navParamsName = getName(element);
+
+        TypeMirror viewModelType = element.asType();
 
         ClassName className = ClassName.get(packageName, navParamsName);
 
@@ -91,7 +96,7 @@ public class NavParamsCreator {
         TypeSpec type = builder.build();
         JavaFile javaFile = JavaFile.builder(packageName, type).build();
 
-        return new Result(packageName, navParamsName, javaFile, paramsContext);
+        return new Result(packageName, navParamsName, javaFile, paramsContext, viewModelType);
 
     }
 
