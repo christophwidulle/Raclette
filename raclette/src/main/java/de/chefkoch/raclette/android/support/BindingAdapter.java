@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+
 /**
  * Created by christophwidulle on 16.04.16.
  */
@@ -25,19 +26,38 @@ public class BindingAdapter<T> extends RecyclerView.Adapter<BindingAdapter.Basic
 
     private AdapterItemClickListener<T> itemClickListener;
 
-    final private List<T> items = new ArrayList<>();
+    private List<T> items = new ArrayList<>();
 
     private BindingAdapter(int itemLayoutResource) {
         this.itemLayoutResource = itemLayoutResource;
     }
 
+
+    public void setAll(Collection<T> items) {
+        if (items != null) {
+            this.items = new ArrayList<>(items);
+            notifyDataSetChanged();
+        } else {
+            removeAll();
+        }
+    }
+
     public void addAll(Collection<T> items) {
-        this.items.addAll(items);
-        notifyDataSetChanged();
+        if (items != null) {
+            this.items.addAll(items);
+            notifyDataSetChanged();
+        }
     }
 
     public void add(T item) {
-        this.items.add(item);
+        if (item != null) {
+            this.items.add(item);
+            notifyDataSetChanged();
+        }
+    }
+
+    public void removeAll() {
+        items = new ArrayList<T>();
         notifyDataSetChanged();
     }
 
