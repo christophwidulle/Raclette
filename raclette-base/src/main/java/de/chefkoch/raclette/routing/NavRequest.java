@@ -3,6 +3,8 @@ package de.chefkoch.raclette.routing;
 import android.os.Bundle;
 import de.chefkoch.raclette.ViewModel;
 
+import java.util.Set;
+
 /**
  * Created by christophwidulle on 07.12.15.
  */
@@ -53,7 +55,7 @@ public class NavRequest {
         NavRequest that = (NavRequest) o;
 
         if (!routePath.equals(that.routePath)) return false;
-        return params != null ? params.equals(that.params) : that.params == null;
+        return equalsBundles(this.params, ((NavRequest) o).params);
 
     }
 
@@ -62,5 +64,33 @@ public class NavRequest {
         int result = routePath.hashCode();
         result = 31 * result + (params != null ? params.hashCode() : 0);
         return result;
+    }
+
+
+    public static boolean equalsBundles(Bundle a, Bundle b) {
+        if (a == b) return true;
+
+        Set<String> aks = a.keySet();
+        Set<String> bks = b.keySet();
+
+        if (!aks.containsAll(bks)) {
+            return false;
+        }
+
+        for (String key : aks) {
+            Object valueA = a.get(key);
+            Object valueB = b.get(key);
+
+            if (valueA instanceof Bundle && valueB instanceof Bundle) {
+                if (!equalsBundles((Bundle) valueA, (Bundle) valueB)) {
+                    return false;
+                }
+
+            } else if (!valueA.equals(valueB)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
