@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import de.chefkoch.raclette.ViewModel;
 import de.chefkoch.raclette.android.AdapterItemClickListener;
+import de.chefkoch.raclette.android.BindingDecorator;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,13 +18,14 @@ import java.util.List;
 /**
  * Created by christophwidulle on 16.04.16.
  */
-public class BindingAdapter<T> extends RecyclerView.Adapter<BindingAdapter.BasicViewHolder<T>> {
+public class BindingAdapter<T, B extends ViewDataBinding> extends RecyclerView.Adapter<BindingAdapter.BasicViewHolder<T>> {
 
     final private int itemLayoutResource;
     private int itemBindingId = -1;
     private int viewModelBindingId = -1;
     private ViewModel viewModel;
 
+    private BindingDecorator<B> bindingDecorator;
     private AdapterItemClickListener<T> itemClickListener;
 
     private List<T> items = new ArrayList<>();
@@ -70,18 +72,25 @@ public class BindingAdapter<T> extends RecyclerView.Adapter<BindingAdapter.Basic
         this.viewModel = viewModel;
     }
 
+    private void setBindingDecorator(BindingDecorator<B> bindingDecorator) {
+        this.bindingDecorator = bindingDecorator;
+    }
+
     private void setItemBindingId(int itemBindingId) {
         this.itemBindingId = itemBindingId;
     }
 
     @Override
     public BasicViewHolder<T> onCreateViewHolder(ViewGroup parent, int viewType) {
-        ViewDataBinding binding = DataBindingUtil.inflate(
+        B binding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.getContext()),
                 itemLayoutResource,
                 parent,
                 false);
 
+        if (bindingDecorator != null) {
+            bindingDecorator.decorate(binding);
+        }
         return new BasicViewHolder<T>(binding, itemBindingId, viewModelBindingId, viewModel, itemClickListener);
     }
 
@@ -130,40 +139,47 @@ public class BindingAdapter<T> extends RecyclerView.Adapter<BindingAdapter.Basic
         }
     }
 
-    public static <T> Builder<T> builder(int layoutResource) {
+
+    public static <T, B extends ViewDataBinding> Builder<T, B> builder(int layoutResource) {
         return new Builder<>(layoutResource);
     }
 
-    public static class Builder<T> {
+    public static class Builder<T, B extends ViewDataBinding> {
         private int itemLayoutResource;
         private int itemBindingId = -1;
         private int viewModelBindingId = -1;
         private ViewModel viewModel;
         private AdapterItemClickListener<T> itemClickListener;
+        private BindingDecorator<B> bindingDecorator;
 
 
         public Builder(int itemLayoutResource) {
             this.itemLayoutResource = itemLayoutResource;
         }
 
-        public Builder<T> withItemBinding(int itemBindingId) {
+        public Builder<T, B> withItemBinding(int itemBindingId) {
             this.itemBindingId = itemBindingId;
             return this;
         }
 
-        public Builder<T> withViewModelBinding(int viewModelBindingId, ViewModel viewModel) {
+        public Builder<T, B> withViewModelBinding(int viewModelBindingId, ViewModel viewModel) {
             this.viewModelBindingId = viewModelBindingId;
             this.viewModel = viewModel;
             return this;
         }
 
-        public Builder<T> withItemClickListener(AdapterItemClickListener<T> itemClickListener) {
+        public Builder<T, B> withItemClickListener(AdapterItemClickListener<T> itemClickListener) {
             this.itemClickListener = itemClickListener;
             return this;
         }
 
-        public BindingAdapter<T> build() {
-            BindingAdapter<T> bindingAdapter = new BindingAdapter<>(itemLayoutResource);
+        public Builder<T, B> withBindingDecorator(BindingDecorator<B> bindingDecorator) {
+            this.bindingDecorator = bindingDecorator;
+            return this;
+        }
+
+        public BindingAdapter<T, B> build() {
+            BindingAdapter<T, B> bindingAdapter = new BindingAdapter<>(itemLayoutResource);
             if (itemBindingId != -1) {
                 bindingAdapter.setItemBindingId(itemBindingId);
             }
@@ -173,6 +189,7 @@ public class BindingAdapter<T> extends RecyclerView.Adapter<BindingAdapter.Basic
             if (viewModel != null && viewModelBindingId != -1) {
                 bindingAdapter.setViewModelBinding(viewModelBindingId, viewModel);
             }
+            bindingAdapter.setBindingDecorator(bindingDecorator);
             return bindingAdapter;
         }
 
