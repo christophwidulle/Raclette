@@ -108,6 +108,8 @@ public class BindingAdapter<T, B extends ViewDataBinding> extends RecyclerView.A
     }
 
 
+
+
     static class BasicViewHolder<T> extends RecyclerView.ViewHolder {
         private final ViewDataBinding binding;
         private final int bindingId;
