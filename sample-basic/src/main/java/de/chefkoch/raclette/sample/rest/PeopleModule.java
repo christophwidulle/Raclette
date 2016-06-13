@@ -2,6 +2,7 @@ package de.chefkoch.raclette.sample.rest;
 
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import rx.Observable;
 
 /**
@@ -14,7 +15,7 @@ public interface PeopleModule {
     Observable<Character> get(@Path("id") String id);
 
     @GET("people")
-    Observable<CharactersResponse> list();
+    Observable<CharactersResponse> list(@Query("page") int page);
 
 
 }

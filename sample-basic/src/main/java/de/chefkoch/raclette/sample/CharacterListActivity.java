@@ -16,14 +16,20 @@
 
 package de.chefkoch.raclette.sample;
 
+import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import de.chefkoch.raclette.Bind;
+import de.chefkoch.raclette.CharacterTile;
+import de.chefkoch.raclette.UpdatableViewModel;
 import de.chefkoch.raclette.android.AdapterItemClickListener;
+import de.chefkoch.raclette.android.UpdatableViewComposition;
 import de.chefkoch.raclette.android.support.BindingAdapter;
+import de.chefkoch.raclette.android.support.CompositionBindingAdapter;
 import de.chefkoch.raclette.rx.RxUtil;
 import de.chefkoch.raclette.rx.android.support.RacletteRxAppCompatActivity;
+import de.chefkoch.raclette.sample.databinding.CharacterItemBinding;
 import de.chefkoch.raclette.sample.databinding.CharacterlistActivityBinding;
 import de.chefkoch.raclette.sample.rest.Character;
 import rx.functions.Action1;
@@ -39,13 +45,21 @@ public class CharacterListActivity extends RacletteRxAppCompatActivity<Character
 
 
         //todo fixme
-        /*
-        final BindingAdapter<Character> adapter = BindingAdapter.builder(R.layout.list_item)
+
+        final CompositionBindingAdapter<Character, CharacterItemBinding> adapter = new CompositionBindingAdapter<Character, CharacterItemBinding>() {
+            @Override
+            protected UpdatableViewComposition<Character, ? extends UpdatableViewModel<Character>, CharacterItemBinding> create() {
+                return new CharacterTile(getBaseContext());
+            }
+        };
+
+       /* final BindingAdapter<Character> adapter = BindingAdapter.builder(R.layout.list_item)
                 .withItemBinding(BR.item)
                 .withViewModelBinding(getRaclette().getViewModelBindingId(), getViewModel())
-                .withItemClickListener(new AdapterItemClickListener<Cha>() {})
+                .withItemClickListener(new AdapterItemClickListener<Cha>() {
+                })
                 .build();
-
+*/
 
         getBinding().list.setLayoutManager(new LinearLayoutManager(this));
         getBinding().list.setAdapter(adapter);
@@ -60,6 +74,6 @@ public class CharacterListActivity extends RacletteRxAppCompatActivity<Character
                         adapter.addAll(characters);
                     }
                 });
-                */
+
     }
 }

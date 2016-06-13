@@ -8,6 +8,8 @@ import java.util.List;
 public class CharactersResponse {
 
     int count;
+    String next;
+    String previous;
     List<Character> results;
 
     public int getCount() {
@@ -16,5 +18,13 @@ public class CharactersResponse {
 
     public List<Character> getResults() {
         return results;
+    }
+
+    public String getNext() {
+        return next;
+    }
+
+    public String getPrevious() {
+        return previous;
     }
 }

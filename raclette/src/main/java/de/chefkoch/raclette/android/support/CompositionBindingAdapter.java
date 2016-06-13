@@ -17,17 +17,19 @@ import java.util.List;
 /**
  * Created by christophwidulle on 16.04.16.
  */
-public abstract class CompositionBindingAdapter<T> extends RecyclerView.Adapter<CompositionBindingAdapter.BasicViewHolder<T>> {
+public abstract class CompositionBindingAdapter<T, B extends ViewDataBinding> extends RecyclerView.Adapter<CompositionBindingAdapter.BasicViewHolder<T>> {
 
     private AdapterItemClickListener<T> itemClickListener;
 
     final private List<T> items = new ArrayList<>();
 
-    private CompositionBindingAdapter() {
+    public CompositionBindingAdapter() {
 
     }
 
-    protected abstract UpdatableViewComposition<T, UpdatableViewModel<T>, ? extends ViewDataBinding> createView();
+    protected abstract UpdatableViewComposition<T, ? extends UpdatableViewModel<T>, B> create();
+
+    //protected abstract UpdatableViewComposition<T, ? extends UpdatableViewModel<T>, B> createView();
 
     public void addAll(Collection<T> items) {
         this.items.addAll(items);
@@ -45,10 +47,9 @@ public abstract class CompositionBindingAdapter<T> extends RecyclerView.Adapter<
 
     @Override
     public BasicViewHolder<T> onCreateViewHolder(ViewGroup parent, int viewType) {
-        UpdatableViewComposition<T, UpdatableViewModel<T>, ? extends ViewDataBinding> viewComposition = createView();
+        UpdatableViewComposition<T, ? extends UpdatableViewModel<T>, ? extends ViewDataBinding> viewComposition = create();
         return new BasicViewHolder<T>(itemClickListener, viewComposition);
     }
-
 
     @Override
     public void onBindViewHolder(BasicViewHolder<T> holder, int position) {
@@ -62,11 +63,11 @@ public abstract class CompositionBindingAdapter<T> extends RecyclerView.Adapter<
 
 
     static class BasicViewHolder<T> extends RecyclerView.ViewHolder {
-        private final UpdatableViewComposition<T, UpdatableViewModel<T>, ? extends ViewDataBinding> viewComposition;
+        private final UpdatableViewComposition<T, ? extends UpdatableViewModel<T>, ? extends ViewDataBinding> viewComposition;
         private T item;
 
         BasicViewHolder(final AdapterItemClickListener<T> itemClickListener,
-                        final UpdatableViewComposition<T, UpdatableViewModel<T>, ? extends ViewDataBinding> viewComposition) {
+                        final UpdatableViewComposition<T, ? extends UpdatableViewModel<T>, ? extends ViewDataBinding> viewComposition) {
             super(viewComposition);
             this.viewComposition = viewComposition;
 
@@ -78,6 +79,8 @@ public abstract class CompositionBindingAdapter<T> extends RecyclerView.Adapter<
                     }
                 });
             }
+
+            bind(item);
         }
 
         void bind(T item) {

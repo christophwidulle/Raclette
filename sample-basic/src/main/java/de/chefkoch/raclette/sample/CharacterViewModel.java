@@ -4,33 +4,34 @@ import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.util.Log;
 import com.jakewharton.rxrelay.PublishRelay;
-import de.chefkoch.raclette.TestParameter;
-import de.chefkoch.raclette.TestParameter2;
-import de.chefkoch.raclette.ViewModel;
+import de.chefkoch.raclette.*;
 import de.chefkoch.raclette.routing.Nav;
+import de.chefkoch.raclette.routing.Routes;
 import de.chefkoch.raclette.rx.Command;
 import de.chefkoch.raclette.rx.RxUtil;
 import de.chefkoch.raclette.sample.rest.Character;
 import de.chefkoch.raclette.sample.rest.SWApiClient;
 import rx.functions.Action1;
 import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by christophwidulle on 18.10.15.
  */
 @Nav.InjectParams
-public class CharacterViewModel extends ViewModel {
+public class CharacterViewModel extends RxViewModel {
 
     public final ObservableField<Character> characterField = new ObservableField<>();
 
     public final Command<Void> testCommand = Command.create();
 
+    @Nav.Param
+    int id;
+
 
     @Nav.Param
     String characterIndex;
 
-    @Nav.Param
-    int id;
 
     @Nav.Param
     boolean gogo;
@@ -47,6 +48,8 @@ public class CharacterViewModel extends ViewModel {
     protected void onViewModelCreated(Bundle viewModelParams) {
         load(characterIndex);
 
+        navigate().to(Routes.character().with(CharacterParams.create().characterIndex("1")));
+
         testCommand.subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
@@ -56,11 +59,16 @@ public class CharacterViewModel extends ViewModel {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 
     private void load(String id) {
 
         new SWApiClient().people().get(id)
                 .compose(RxUtil.<Character>applySchedulers())
+                .compose(this.<Character>bindToLifecycle())
                 .onErrorReturn(new Func1<Throwable, Character>() {
                     @Override
                     public Character call(Throwable throwable) {

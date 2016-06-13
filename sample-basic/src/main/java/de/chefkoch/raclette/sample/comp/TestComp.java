@@ -25,6 +25,4 @@ public class TestComp extends ViewComposition {
         super(context, attrs, defStyleAttr);
     }
 
-    @Nav.Param
-    public String id;
 }

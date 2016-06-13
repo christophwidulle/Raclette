@@ -34,7 +34,6 @@ public class BindingAdapter<T, B extends ViewDataBinding> extends RecyclerView.A
         this.itemLayoutResource = itemLayoutResource;
     }
 
-
     public void setAll(Collection<T> items) {
         if (items != null) {
             this.items = new ArrayList<>(items);
@@ -94,7 +93,6 @@ public class BindingAdapter<T, B extends ViewDataBinding> extends RecyclerView.A
         return new BasicViewHolder<T>(binding, itemBindingId, viewModelBindingId, viewModel, itemClickListener);
     }
 
-
     @Override
     public void onBindViewHolder(BasicViewHolder<T> holder, int position) {
         if (itemBindingId != -1) {
@@ -106,8 +104,6 @@ public class BindingAdapter<T, B extends ViewDataBinding> extends RecyclerView.A
     public int getItemCount() {
         return items.size();
     }
-
-
 
 
     static class BasicViewHolder<T> extends RecyclerView.ViewHolder {
@@ -153,7 +149,6 @@ public class BindingAdapter<T, B extends ViewDataBinding> extends RecyclerView.A
         private ViewModel viewModel;
         private AdapterItemClickListener<T> itemClickListener;
         private BindingDecorator<B> bindingDecorator;
-
 
         public Builder(int itemLayoutResource) {
             this.itemLayoutResource = itemLayoutResource;

@@ -20,28 +20,26 @@ public class CharacterListViewModel extends ViewModel {
 
     private ReplayRelay<List<Character>> charactersSubject = ReplayRelay.create();
 
-
-    @Override
-    protected void onViewModelCreated(Bundle viewModelParams) {
-        load();
-    }
-
     Observable<List<Character>> characters() {
         return charactersSubject.asObservable();
     }
 
+    private int page = 1;
 
-    void onCharacterSelected(int index, Character character) {
-
-
+    @Override
+    protected void onViewModelCreated(Bundle viewModelParams) {
+        loadNext();
     }
 
-    private void load() {
-        new SWApiClient().people().list()
+    private void loadNext() {
+        new SWApiClient().people().list(page++)
                 .subscribeOn(Schedulers.io())
                 .map(new Func1<CharactersResponse, List<Character>>() {
                     @Override
                     public List<Character> call(CharactersResponse charactersResponse) {
+                        if (charactersResponse.getNext() != null) {
+                            loadNext();
+                        }
                         return charactersResponse.getResults();
                     }
                 })

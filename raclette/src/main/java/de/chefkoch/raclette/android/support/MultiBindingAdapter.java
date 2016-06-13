@@ -16,12 +16,9 @@ import java.util.HashMap;
 import java.util.List;
 
 
-/**
- *
- */
 public class MultiBindingAdapter<B extends ViewDataBinding> extends RecyclerView.Adapter<MultiBindingAdapter.BasicViewHolder<Object>> {
 
-    private HashMap<Integer,MultiBindingElement> bindingElements;
+    private HashMap<Integer, MultiBindingElement> bindingElements;
 
     private BindingDecorator<B> bindingDecorator;
     private AdapterItemClickListener<Object> itemClickListener;
@@ -34,7 +31,6 @@ public class MultiBindingAdapter<B extends ViewDataBinding> extends RecyclerView
 
     public MultiBindingAdapter() {
     }
-
 
     public void setAll(Collection<Object> items) {
         if (items != null) {
@@ -84,7 +80,7 @@ public class MultiBindingAdapter<B extends ViewDataBinding> extends RecyclerView
         if (bindingDecorator != null) {
             bindingDecorator.decorate(binding);
         }
-        return new BasicViewHolder<Object>(binding,
+        return new BasicViewHolder<>(binding,
                 multiBindingElement.itemBindingId,
                 multiBindingElement.viewModelBindingId,
                 multiBindingElement.viewModel,
@@ -145,20 +141,19 @@ public class MultiBindingAdapter<B extends ViewDataBinding> extends RecyclerView
     }
 
 
-
     public static class Builder<B extends ViewDataBinding> {
         private AdapterItemClickListener<Object> itemClickListener;
         private BindingDecorator<B> bindingDecorator;
         private HashMap<Integer, MultiBindingElement> multiBindingElements = new HashMap<>();
 
-        public Builder<B> withItemBinding(Class klass, int vireModelBindingId, int itemBindingId, int itemLayoutResource, ViewModel viewModel){
+        public Builder<B> withItemBinding(Class klass, int vireModelBindingId, int itemBindingId, int itemLayoutResource, ViewModel viewModel) {
 
             MultiBindingElement multiBindingElement = new MultiBindingElement(vireModelBindingId,
                     itemBindingId,
                     itemLayoutResource,
                     viewModel);
 
-            this.multiBindingElements.put(klass.hashCode(),multiBindingElement);
+            this.multiBindingElements.put(klass.hashCode(), multiBindingElement);
             return this;
         }
 

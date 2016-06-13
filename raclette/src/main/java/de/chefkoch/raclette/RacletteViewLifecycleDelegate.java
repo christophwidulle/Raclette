@@ -27,6 +27,8 @@ public class RacletteViewLifecycleDelegate<V extends ViewModel, B extends ViewDa
     protected B binding;
     protected final ViewModelBindingConfig<V> viewModelBindingConfig;
     private Context context;
+    private Bundle params = new Bundle();
+
 
     public RacletteViewLifecycleDelegate(Raclette raclette, ViewModelBindingConfig<V> viewModelBindingConfig) {
         this.raclette = raclette;
@@ -51,20 +53,19 @@ public class RacletteViewLifecycleDelegate<V extends ViewModel, B extends ViewDa
                 //todo log when viewModel was null
             }
         }*/
-        Bundle params = new Bundle();
         if (viewModel == null) {
             viewModel = raclette.getViewModelManager().createViewModel(viewModelBindingConfig.getViewModelClass());
             viewModel.setNavigationController(raclette.getNavigationController());
             viewModel.injectParams(params);
-            viewModel.viewModelCreate(params);
         } else {
             viewModel.injectParams(params);
         }
         binding.setVariable(raclette.getViewModelBindingId(), viewModel);
-        viewModel.create(params);
     }
 
     public void onAttachedToWindow() {
+        viewModel.viewModelCreate(params);
+        viewModel.create(params);
         viewModel.start();
         viewModel.resume();
     }
@@ -79,9 +80,7 @@ public class RacletteViewLifecycleDelegate<V extends ViewModel, B extends ViewDa
     private void viewModelDestroy() {
         viewModel.viewModelDestroy();
         raclette.getViewModelManager().delete(viewModel.getId());
-
     }
-
 
     private void checkViewBindung() {
         if (binding == null) throw new RacletteException("call onCreateViewBinding(...) before.");
