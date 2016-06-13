@@ -100,6 +100,7 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
                 //todo log when viewModel was null
             }
         }
+        raclette.getContextManager().setCurrentContext(context);
         if (viewModel == null) {
             viewModel = raclette.getViewModelManager().createViewModel(viewModelBindingConfig.getViewModelClass());
             viewModel.setNavigationController(raclette.getNavigationController());
@@ -109,7 +110,6 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
             viewModel.injectParams(params);
         }
         this.context = context;
-        raclette.getContextManager().setCurrentContext(context);
         setNavigationSupportIfNeeded();
         binding.setVariable(raclette.getViewModelBindingId(), viewModel);
         viewModel.create(params);
