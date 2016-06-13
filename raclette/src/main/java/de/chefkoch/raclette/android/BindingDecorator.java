@@ -7,7 +7,6 @@ import android.databinding.ViewDataBinding;
  */
 public interface BindingDecorator<B extends ViewDataBinding> {
 
-
     void decorate(B dataBinding);
 
 }

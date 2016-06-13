@@ -2,6 +2,7 @@ package de.chefkoch.raclette.android;
 
 import android.content.Context;
 import android.databinding.ViewDataBinding;
+import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -33,8 +34,11 @@ public class ViewComposition<V extends ViewModel, B extends ViewDataBinding> ext
     protected void create() {
         delegate = new RacletteViewLifecycleDelegate<>(Raclette.get(), getViewModelBindingConfig());
         delegate.onCreateViewBinding(LayoutInflater.from(getContext()), this, true);
-        delegate.create(this);
 
+    }
+
+    public void setParams(Bundle params) {
+        delegate.setParams(params);
     }
 
     protected ViewModelBindingConfig<V> getViewModelBindingConfig() {
@@ -49,8 +53,8 @@ public class ViewComposition<V extends ViewModel, B extends ViewDataBinding> ext
 
     @Override
     protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
         delegate.onDetachedFromWindow();
+        super.onDetachedFromWindow();
     }
 
     public V viewModel() {

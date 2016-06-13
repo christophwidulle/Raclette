@@ -25,8 +25,7 @@ public class RacletteViewLifecycleDelegate<V extends ViewModel, B extends ViewDa
 
     protected V viewModel;
     protected B binding;
-    protected final ViewModelBindingConfig<V> viewModelBindingConfig;
-    private Context context;
+    private final ViewModelBindingConfig<V> viewModelBindingConfig;
     private Bundle params = new Bundle();
 
 
@@ -40,19 +39,8 @@ public class RacletteViewLifecycleDelegate<V extends ViewModel, B extends ViewDa
         return binding.getRoot();
     }
 
-    public void create(View view) {
+    public void create() {
         checkViewBindung();
-        //check for existing
-       /* if (savedInstanceState != null) {
-            String viewModelId = savedInstanceState.getString(ViewModel.EXTRA_VIEWMODEL_ID);
-            if (viewModelId != null) {
-                V viewModel = raclette.getViewModelManager().getViewModel(viewModelId);
-                if (viewModel != null) {
-                    this.viewModel = viewModel;
-                }
-                //todo log when viewModel was null
-            }
-        }*/
         if (viewModel == null) {
             viewModel = raclette.getViewModelManager().createViewModel(viewModelBindingConfig.getViewModelClass());
             viewModel.setNavigationController(raclette.getNavigationController());
@@ -63,7 +51,12 @@ public class RacletteViewLifecycleDelegate<V extends ViewModel, B extends ViewDa
         binding.setVariable(raclette.getViewModelBindingId(), viewModel);
     }
 
+    public void setParams(Bundle params) {
+        this.params = params;
+    }
+
     public void onAttachedToWindow() {
+        create();
         viewModel.viewModelCreate(params);
         viewModel.create(params);
         viewModel.start();
@@ -80,6 +73,7 @@ public class RacletteViewLifecycleDelegate<V extends ViewModel, B extends ViewDa
     private void viewModelDestroy() {
         viewModel.viewModelDestroy();
         raclette.getViewModelManager().delete(viewModel.getId());
+        viewModel = null;
     }
 
     private void checkViewBindung() {
