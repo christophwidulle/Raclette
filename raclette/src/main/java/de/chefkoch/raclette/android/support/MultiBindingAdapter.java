@@ -32,7 +32,7 @@ public class MultiBindingAdapter<B extends ViewDataBinding> extends RecyclerView
     public MultiBindingAdapter() {
     }
 
-    public void setAll(Collection<Object> items) {
+    public void setAll(Collection<?> items) {
         if (items != null) {
             this.items = new ArrayList<>(items);
             notifyDataSetChanged();
@@ -41,7 +41,7 @@ public class MultiBindingAdapter<B extends ViewDataBinding> extends RecyclerView
         }
     }
 
-    public void addAll(Collection<Object> items) {
+    public void addAll(Collection<?> items) {
         if (items != null) {
             this.items.addAll(items);
             notifyDataSetChanged();
@@ -56,7 +56,7 @@ public class MultiBindingAdapter<B extends ViewDataBinding> extends RecyclerView
     }
 
     public void removeAll() {
-        items = new ArrayList<Object>();
+        items = new ArrayList<>();
         notifyDataSetChanged();
     }
 
@@ -204,24 +204,12 @@ public class MultiBindingAdapter<B extends ViewDataBinding> extends RecyclerView
             return itemLayoutResource;
         }
 
-        public void setItemLayoutResource(int itemLayoutResource) {
-            this.itemLayoutResource = itemLayoutResource;
-        }
-
         public int getItemBindingId() {
             return itemBindingId;
         }
 
-        public void setItemBindingId(int itemBindingId) {
-            this.itemBindingId = itemBindingId;
-        }
-
         public int getViewModelBindingId() {
             return viewModelBindingId;
-        }
-
-        public void setViewModelBindingId(int viewModelBindingId) {
-            this.viewModelBindingId = viewModelBindingId;
         }
 
         public ViewModel getViewModel() {

@@ -34,6 +34,7 @@ public class ViewComposition<V extends ViewModel, B extends ViewDataBinding> ext
     protected void create() {
         delegate = new RacletteViewLifecycleDelegate<>(Raclette.get(), getViewModelBindingConfig());
         delegate.onCreateViewBinding(LayoutInflater.from(getContext()), this, true);
+        delegate.create();
 
     }
 

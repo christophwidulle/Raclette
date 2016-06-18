@@ -3,8 +3,11 @@ package de.chefkoch.raclette.android;
 import android.content.Context;
 import android.databinding.ViewDataBinding;
 import android.util.AttributeSet;
+import android.util.Log;
 import de.chefkoch.raclette.Updatable;
 import de.chefkoch.raclette.UpdatableViewModel;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by christophwidulle on 22.05.16.
@@ -12,6 +15,9 @@ import de.chefkoch.raclette.UpdatableViewModel;
 public class UpdatableViewComposition<T, V extends UpdatableViewModel<T>, B extends ViewDataBinding>
         extends ViewComposition<V, B>
         implements Updatable<T> {
+
+    T updatedItem;
+    boolean updateOnAttach = false;
 
     public UpdatableViewComposition(Context context) {
         super(context);
@@ -25,8 +31,29 @@ public class UpdatableViewComposition<T, V extends UpdatableViewModel<T>, B exte
         super(context, attrs, defStyleAttr);
     }
 
+
     @Override
     public void update(T item) {
-        viewModel().update(item);
+        updatedItem = item;
+
+        if (viewModel() != null) {
+            viewModel().update(item);
+        } else {
+            updateOnAttach = true;
+        }
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (updatedItem != null && updateOnAttach) {
+            viewModel().update(updatedItem);
+        }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        updateOnAttach = true;
     }
 }

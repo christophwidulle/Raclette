@@ -6,9 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import de.chefkoch.raclette.UpdatableViewModel;
 import de.chefkoch.raclette.android.AdapterItemClickListener;
-import de.chefkoch.raclette.Updatable;
 import de.chefkoch.raclette.android.UpdatableViewComposition;
-import de.chefkoch.raclette.android.ViewComposition;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,19 +15,16 @@ import java.util.List;
 /**
  * Created by christophwidulle on 16.04.16.
  */
-public abstract class CompositionBindingAdapter<T, B extends ViewDataBinding> extends RecyclerView.Adapter<CompositionBindingAdapter.BasicViewHolder<T>> {
+public class CompositionBindingAdapter<T> extends RecyclerView.Adapter<CompositionBindingAdapter.BasicViewHolder<T>> {
 
     private AdapterItemClickListener<T> itemClickListener;
+    private final UpdatableViewCompositionFactory<T> factory;
 
-    final private List<T> items = new ArrayList<>();
+    private final List<T> items = new ArrayList<>();
 
-    public CompositionBindingAdapter() {
-
+    private CompositionBindingAdapter(UpdatableViewCompositionFactory<T> factory) {
+        this.factory = factory;
     }
-
-    protected abstract UpdatableViewComposition<T, ? extends UpdatableViewModel<T>, B> create();
-
-    //protected abstract UpdatableViewComposition<T, ? extends UpdatableViewModel<T>, B> createView();
 
     public void addAll(Collection<T> items) {
         this.items.addAll(items);
@@ -47,7 +42,7 @@ public abstract class CompositionBindingAdapter<T, B extends ViewDataBinding> ex
 
     @Override
     public BasicViewHolder<T> onCreateViewHolder(ViewGroup parent, int viewType) {
-        UpdatableViewComposition<T, ? extends UpdatableViewModel<T>, ? extends ViewDataBinding> viewComposition = create();
+        UpdatableViewComposition<T, ? extends UpdatableViewModel<T>, ? extends ViewDataBinding> viewComposition = factory.create();
         return new BasicViewHolder<T>(itemClickListener, viewComposition);
     }
 
@@ -79,8 +74,6 @@ public abstract class CompositionBindingAdapter<T, B extends ViewDataBinding> ex
                     }
                 });
             }
-
-            bind(item);
         }
 
         void bind(T item) {
@@ -88,4 +81,14 @@ public abstract class CompositionBindingAdapter<T, B extends ViewDataBinding> ex
             viewComposition.update(item);
         }
     }
+
+    public interface UpdatableViewCompositionFactory<T> {
+        UpdatableViewComposition<T, ? extends UpdatableViewModel<T>, ?> create();
+    }
+
+    public static <T> CompositionBindingAdapter<T> create(final UpdatableViewCompositionFactory<T> factory) {
+        return new CompositionBindingAdapter<>(factory);
+    }
+
+
 }

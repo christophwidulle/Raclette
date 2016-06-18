@@ -16,20 +16,16 @@
 
 package de.chefkoch.raclette.sample;
 
-import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.view.View;
 import de.chefkoch.raclette.Bind;
 import de.chefkoch.raclette.CharacterTile;
 import de.chefkoch.raclette.UpdatableViewModel;
-import de.chefkoch.raclette.android.AdapterItemClickListener;
 import de.chefkoch.raclette.android.UpdatableViewComposition;
-import de.chefkoch.raclette.android.support.BindingAdapter;
 import de.chefkoch.raclette.android.support.CompositionBindingAdapter;
+import de.chefkoch.raclette.android.support.CompositionMultiBindingAdapter;
 import de.chefkoch.raclette.rx.RxUtil;
 import de.chefkoch.raclette.rx.android.support.RacletteRxAppCompatActivity;
-import de.chefkoch.raclette.sample.databinding.CharacterItemBinding;
 import de.chefkoch.raclette.sample.databinding.CharacterlistActivityBinding;
 import de.chefkoch.raclette.sample.rest.Character;
 import rx.functions.Action1;
@@ -46,12 +42,22 @@ public class CharacterListActivity extends RacletteRxAppCompatActivity<Character
 
         //todo fixme
 
-        final CompositionBindingAdapter<Character, CharacterItemBinding> adapter = new CompositionBindingAdapter<Character, CharacterItemBinding>() {
+       final CompositionMultiBindingAdapter multiBindingAdapter = CompositionMultiBindingAdapter.builder()
+                .withElement(Character.class, new CompositionMultiBindingAdapter.UpdatableViewCompositionFactory<Character>() {
+                    @Override
+                    public UpdatableViewComposition<Character, ? extends UpdatableViewModel<Character>, ?> create() {
+                        return new CharacterTile(getBaseContext());
+                    }
+                })
+                .build();
+
+        final CompositionBindingAdapter<Character> adapter = CompositionBindingAdapter.create(new CompositionBindingAdapter.UpdatableViewCompositionFactory<Character>() {
             @Override
-            protected UpdatableViewComposition<Character, ? extends UpdatableViewModel<Character>, CharacterItemBinding> create() {
+            public UpdatableViewComposition<Character, ? extends UpdatableViewModel<Character>, ?> create() {
                 return new CharacterTile(getBaseContext());
             }
-        };
+        });
+
 
        /* final BindingAdapter<Character> adapter = BindingAdapter.builder(R.layout.list_item)
                 .withItemBinding(BR.item)
@@ -62,7 +68,7 @@ public class CharacterListActivity extends RacletteRxAppCompatActivity<Character
 */
 
         getBinding().list.setLayoutManager(new LinearLayoutManager(this));
-        getBinding().list.setAdapter(adapter);
+        getBinding().list.setAdapter(multiBindingAdapter);
 
 
         getViewModel().characters()
@@ -71,7 +77,7 @@ public class CharacterListActivity extends RacletteRxAppCompatActivity<Character
                 .subscribe(new Action1<List<Character>>() {
                     @Override
                     public void call(List<Character> characters) {
-                        adapter.addAll(characters);
+                        multiBindingAdapter.addAll(characters);
                     }
                 });
 

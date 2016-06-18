@@ -1,7 +1,5 @@
 package de.chefkoch.raclette;
 
-import android.app.Activity;
-import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
@@ -9,11 +7,6 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import de.chefkoch.raclette.android.DefaultNavigationSupport;
-import de.chefkoch.raclette.routing.NavRequest;
-import de.chefkoch.raclette.routing.NavRequestInterceptor;
-import de.chefkoch.raclette.routing.NavigationSupport;
-import de.chefkoch.raclette.routing.UsesNavigationSupport;
 
 
 /**
@@ -26,8 +19,7 @@ public class RacletteViewLifecycleDelegate<V extends ViewModel, B extends ViewDa
     protected V viewModel;
     protected B binding;
     private final ViewModelBindingConfig<V> viewModelBindingConfig;
-    private Bundle params = new Bundle();
-
+    private Bundle params;
 
     public RacletteViewLifecycleDelegate(Raclette raclette, ViewModelBindingConfig<V> viewModelBindingConfig) {
         this.raclette = raclette;
@@ -44,20 +36,26 @@ public class RacletteViewLifecycleDelegate<V extends ViewModel, B extends ViewDa
         if (viewModel == null) {
             viewModel = raclette.getViewModelManager().createViewModel(viewModelBindingConfig.getViewModelClass());
             viewModel.setNavigationController(raclette.getNavigationController());
-            viewModel.injectParams(params);
-        } else {
+
+            injectParams();
+            binding.setVariable(raclette.getViewModelBindingId(), viewModel);
+            viewModel.viewModelCreate(params);
+        }
+    }
+
+    public void injectParams() {
+        if (params != null && viewModel != null) {
             viewModel.injectParams(params);
         }
-        binding.setVariable(raclette.getViewModelBindingId(), viewModel);
     }
 
     public void setParams(Bundle params) {
         this.params = params;
+        injectParams();
     }
 
     public void onAttachedToWindow() {
         create();
-        viewModel.viewModelCreate(params);
         viewModel.create(params);
         viewModel.start();
         viewModel.resume();
@@ -67,10 +65,10 @@ public class RacletteViewLifecycleDelegate<V extends ViewModel, B extends ViewDa
         viewModel.pause();
         viewModel.stop();
         viewModel.destroy();
-        viewModelDestroy();
+        destroyViewModel();
     }
 
-    private void viewModelDestroy() {
+    private void destroyViewModel() {
         viewModel.viewModelDestroy();
         raclette.getViewModelManager().delete(viewModel.getId());
         viewModel = null;
