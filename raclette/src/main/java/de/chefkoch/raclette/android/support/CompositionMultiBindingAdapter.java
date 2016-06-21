@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import de.chefkoch.raclette.UpdatableViewModel;
 import de.chefkoch.raclette.android.AdapterItemClickListener;
+import de.chefkoch.raclette.android.BindingDecorator;
 import de.chefkoch.raclette.android.UpdatableViewComposition;
 
 import java.util.*;

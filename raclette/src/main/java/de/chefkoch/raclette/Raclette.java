@@ -23,6 +23,7 @@ public class Raclette {
              ViewModelManager viewModelManager,
              ContextManager contextManager,
              NavigationController navigationController) {
+
         this.viewModelBindingId = viewModelBindingId;
         this.viewModelInjector = viewModelInjector;
         this.viewModelManager = viewModelManager;
@@ -38,7 +39,7 @@ public class Raclette {
         if (INSTANCE != null) {
             return INSTANCE;
         } else {
-            throw new RacletteException("Raclette not build asSingelton.");
+            throw new RacletteException("Raclette not build.");
         }
     }
 

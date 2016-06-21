@@ -32,7 +32,7 @@ public class ViewComposition<V extends ViewModel, B extends ViewDataBinding> ext
     }
 
     protected void create() {
-        delegate = new RacletteViewLifecycleDelegate<>(Raclette.get(), getViewModelBindingConfig());
+        delegate = new RacletteViewLifecycleDelegate<>(getRaclette(), getViewModelBindingConfig());
         delegate.onCreateViewBinding(LayoutInflater.from(getContext()), this, true);
         delegate.create();
 
@@ -56,6 +56,10 @@ public class ViewComposition<V extends ViewModel, B extends ViewDataBinding> ext
     protected void onDetachedFromWindow() {
         delegate.onDetachedFromWindow();
         super.onDetachedFromWindow();
+    }
+
+    protected Raclette getRaclette() {
+        return Raclette.get();
     }
 
     public V viewModel() {

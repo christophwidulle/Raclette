@@ -20,19 +20,37 @@ public class CompositionBindingAdapter<T> extends RecyclerView.Adapter<Compositi
     private AdapterItemClickListener<T> itemClickListener;
     private final UpdatableViewCompositionFactory<T> factory;
 
-    private final List<T> items = new ArrayList<>();
+    private List<T> items = new ArrayList<>();
 
     private CompositionBindingAdapter(UpdatableViewCompositionFactory<T> factory) {
         this.factory = factory;
     }
 
+    public void setAll(Collection<T> items) {
+        if (items != null) {
+            this.items = new ArrayList<>(items);
+            notifyDataSetChanged();
+        } else {
+            removeAll();
+        }
+    }
+
     public void addAll(Collection<T> items) {
-        this.items.addAll(items);
-        notifyDataSetChanged();
+        if (items != null) {
+            this.items.addAll(items);
+            notifyDataSetChanged();
+        }
     }
 
     public void add(T item) {
-        this.items.add(item);
+        if (item != null) {
+            this.items.add(item);
+            notifyDataSetChanged();
+        }
+    }
+
+    public void removeAll() {
+        items = new ArrayList<>();
         notifyDataSetChanged();
     }
 
