@@ -2,6 +2,7 @@ package de.chefkoch.raclette;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
@@ -10,10 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import de.chefkoch.raclette.android.DefaultNavigationSupport;
-import de.chefkoch.raclette.routing.NavRequest;
-import de.chefkoch.raclette.routing.NavRequestInterceptor;
-import de.chefkoch.raclette.routing.NavigationSupport;
-import de.chefkoch.raclette.routing.UsesNavigationSupport;
+import de.chefkoch.raclette.routing.*;
 
 
 /**
@@ -23,6 +21,8 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
 
     private final Raclette raclette;
     private NavigationSupport navigationSupport;
+
+    private NavRequest navRequest;
 
     protected V viewModel;
     protected B binding;
@@ -45,45 +45,45 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
     }
 
     public void create(android.support.v4.app.Fragment fragment, Bundle savedInstanceState, Bundle extras) {
-        if (!setNavigationSupport(fragment)) {
+        if (!checkAndSetNavigationSupport(fragment)) {
             navigationSupport = DefaultNavigationSupport.of(fragment.getActivity());
         }
-        create(fragment.getActivity(), savedInstanceState, extras);
+        create(fragment, fragment.getActivity(), savedInstanceState, extras);
     }
 
 
     public void create(android.app.Fragment fragment, Bundle savedInstanceState, Bundle extras) {
-        if (!setNavigationSupport(fragment)) {
+        if (!checkAndSetNavigationSupport(fragment)) {
             navigationSupport = DefaultNavigationSupport.of(fragment.getActivity());
         }
-        create(fragment.getActivity(), savedInstanceState, extras);
+        create(fragment, fragment.getActivity(), savedInstanceState, extras);
     }
 
     public void create(android.app.DialogFragment dialogFragment, Bundle savedInstanceState, Bundle extras) {
-        if (!setNavigationSupport(dialogFragment)) {
+        if (!checkAndSetNavigationSupport(dialogFragment)) {
             navigationSupport = DefaultNavigationSupport.of(dialogFragment);
         }
-        create(dialogFragment.getActivity(), savedInstanceState, extras);
+        create(dialogFragment, dialogFragment.getActivity(), savedInstanceState, extras);
     }
 
     public void create(android.support.v4.app.DialogFragment dialogFragment, Bundle savedInstanceState, Bundle extras) {
-        if (!setNavigationSupport(dialogFragment)) {
+        if (!checkAndSetNavigationSupport(dialogFragment)) {
             navigationSupport = DefaultNavigationSupport.of(dialogFragment);
         }
-        create(dialogFragment.getActivity(), savedInstanceState, extras);
+        create(dialogFragment, dialogFragment.getActivity(), savedInstanceState, extras);
     }
 
     public void create(Activity activity, Bundle savedInstanceState) {
-        create(activity, savedInstanceState, activity.getIntent() != null ? activity.getIntent().getExtras() : null);
+        create(activity, activity, savedInstanceState, activity.getIntent() != null ? activity.getIntent().getExtras() : null);
     }
 
-    private void create(Context context, Bundle savedInstanceState, Bundle extras) {
+    private void create(Object parentView, Context context, Bundle savedInstanceState, Bundle extras) {
         checkViewBindung();
         Bundle params = null;
         if (extras != null) {
             params = ViewModel.Params.from(extras);
         }
-        if (checkNavRequestAndIsContinue(context, extras)) {
+        if (checkNavRequest(parentView, extras)) {
             init(context, savedInstanceState, params);
         }
     }
@@ -97,25 +97,34 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
                 if (viewModel != null) {
                     this.viewModel = viewModel;
                 }
-                //todo log when viewModel was null
             }
         }
         raclette.getContextManager().setCurrentContext(context);
         if (viewModel == null) {
             viewModel = raclette.getViewModelManager().createViewModel(viewModelBindingConfig.getViewModelClass());
-            viewModel.setNavigationController(raclette.getNavigationController());
+            viewModel.setNavigationController(raclette.createNavigationController());
+            checkNavResultCode();
             viewModel.injectParams(params);
             viewModel.viewModelCreate(params);
         } else {
             viewModel.injectParams(params);
         }
+        getNavigationControllerImpl().setContext(context);
         this.context = context;
         setNavigationSupportIfNeeded();
         binding.setVariable(raclette.getViewModelBindingId(), viewModel);
         viewModel.create(params);
     }
 
-    private boolean setNavigationSupport(Object target) {
+    private NavigationController getNavigationController() {
+        return viewModel.navigate();
+    }
+
+    private NavigationControllerImpl getNavigationControllerImpl() {
+        return (NavigationControllerImpl) viewModel.navigate();
+    }
+
+    private boolean checkAndSetNavigationSupport(Object target) {
         if (NavigationSupport.class.isAssignableFrom(target.getClass())) {
             this.navigationSupport = (NavigationSupport) target;
             return true;
@@ -123,24 +132,34 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
         return false;
     }
 
-    private boolean checkNavRequestAndIsContinue(Context context, Bundle extras) {
-        NavRequest navRequest = NavRequest.from(extras);
-        if (navRequest != null && context instanceof NavRequestInterceptor) {
-            return ((NavRequestInterceptor) context).onHandle(navRequest);
+    private boolean checkNavRequest(Object parentView, Bundle extras) {
+        navRequest = NavRequest.from(extras);
+        if (navRequest != null) {
+            if (parentView instanceof NavRequestInterceptor) {
+                return ((NavRequestInterceptor) parentView).onHandle(navRequest);
+            }
         }
         return true;
     }
 
-    private void setNavigationSupportIfNeeded() {
-        if (UsesNavigationSupport.class.isAssignableFrom(raclette.getNavigationController().getClass())) {
-            ((UsesNavigationSupport) raclette.getNavigationController()).setActiveNavigationSupport(navigationSupport);
+
+    private void checkNavResultCode() {
+        if (navRequest != null) {
+            if (navRequest.hasRequltCode()) {
+                getNavigationControllerImpl().setCurrentResultCode(navRequest.getResultCode());
+            }
         }
     }
 
-    private void clearNavigationSupportIfNeeded() {
-        if (UsesNavigationSupport.class.isAssignableFrom(raclette.getNavigationController().getClass())) {
-            ((UsesNavigationSupport) raclette.getNavigationController()).clearActiveNavigationSupport();
+    private void setNavigationSupportIfNeeded() {
+        if (navigationSupport != null) {
+            getNavigationControllerImpl().setActiveNavigationSupport(navigationSupport);
         }
+    }
+
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        getNavigationControllerImpl().onActivityResult(requestCode, resultCode, data);
     }
 
     public void onDestroy(Activity activity) {
@@ -180,7 +199,6 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
     }
 
     public void onResume() {
-        setNavigationSupportIfNeeded();
         viewModel.resume();
     }
 
@@ -194,10 +212,10 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
 
     private void destroy() {
         viewModel.destroy();
-        clearNavigationSupportIfNeeded();
     }
 
     private void viewModelDestroy() {
+        getNavigationControllerImpl().onDestroy();
         raclette.getViewModelManager().delete(viewModel.getId());
         viewModel.viewModelDestroy();
     }

@@ -1,21 +1,25 @@
-package de.chefkoch.raclette;
+package de.chefkoch.raclette.routing;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import de.chefkoch.raclette.routing.*;
+import de.chefkoch.raclette.ContextManager;
+import de.chefkoch.raclette.RacletteException;
+
+import java.lang.ref.WeakReference;
 
 /**
  * Created by christophwidulle on 06.12.15.
  */
-public class NavigationControllerImpl implements NavigationController, UsesNavigationSupport {
+public class NavigationControllerImpl implements NavigationController {
 
-    private final ContextManager contextManager;
     private NavigationSupport navigationSupport;
+    private ForResultSupport forResultSupport = new ForResultSupport();
+    private WeakReference<Context> currentContext;
 
-    public NavigationControllerImpl(ContextManager contextManager) {
-        this.contextManager = contextManager;
+    public NavigationControllerImpl() {
+
     }
 
     @Override
@@ -25,7 +29,7 @@ public class NavigationControllerImpl implements NavigationController, UsesNavig
             Route route = RoutesDict.findBy(navRequest.getRoutePath());
             if (route != null) {
                 if (route.isActivityTargetType()) {
-                    Intent intent = new Intent(contextManager.getCurrentContext(), route.getTargetClass());
+                    Intent intent = new Intent(getCurrentContext(), route.getTargetClass());
                     Bundle bundle = navRequest.toBundle();
                     intent.putExtras(bundle);
                     to(intent);
@@ -40,11 +44,26 @@ public class NavigationControllerImpl implements NavigationController, UsesNavig
         }
     }
 
+    @Override
+    public void toForResult(NavRequest navRequest, ResultCallback resultCallback) {
+        int resultCode = forResultSupport.register(resultCallback);
+        navRequest.setResultCode(resultCode);
+        to(navRequest);
+    }
 
     @Override
     public void to(Intent intent) {
-        Context currentContext = contextManager.getCurrentContext();
+        Context currentContext = getCurrentContext();
         currentContext.startActivity(intent);
+    }
+
+    @Override
+    public void toForResult(Intent intent, ResultCallback resultCallback) {
+        int resultCode = forResultSupport.register(resultCallback);
+        Context currentContext = getCurrentContext();
+        if (currentContext instanceof Activity) {
+            ((Activity) currentContext).startActivityForResult(intent, resultCode);
+        }
     }
 
     @Override
@@ -52,6 +71,23 @@ public class NavigationControllerImpl implements NavigationController, UsesNavig
         if (!navigateBackBySupport()) {
             getCurrentActivity().finish();
         }
+    }
+
+    @Override
+    public void returnResult(Bundle values) {
+        this.forResultSupport.returnResult(values);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        this.forResultSupport.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void setCurrentResultCode(Integer currentResultCode) {
+        this.forResultSupport.setCurrentResultCode(currentResultCode);
+    }
+
+    public void onDestroy() {
+        this.forResultSupport.onDestroy();
     }
 
     private boolean navigateToBySupport(NavRequest navRequest) {
@@ -63,7 +99,7 @@ public class NavigationControllerImpl implements NavigationController, UsesNavig
     }
 
     private Activity getCurrentActivity() {
-        Context currentContext = contextManager.getCurrentContext();
+        Context currentContext = getCurrentContext();
         if (currentContext instanceof Activity) {
             return (Activity) currentContext;
         } else {
@@ -72,7 +108,7 @@ public class NavigationControllerImpl implements NavigationController, UsesNavig
     }
 
     private android.support.v7.app.AppCompatActivity getCurrentSupportActivity() {
-        Context currentContext = contextManager.getCurrentContext();
+        Context currentContext = getCurrentContext();
         if (currentContext instanceof android.support.v7.app.AppCompatActivity) {
             return (android.support.v7.app.AppCompatActivity) currentContext;
         } else {
@@ -106,13 +142,20 @@ public class NavigationControllerImpl implements NavigationController, UsesNavig
         }
     }
 
-    @Override
+    private Context getCurrentContext() {
+        if (currentContext != null && currentContext.get() != null) {
+            return currentContext.get();
+        } else {
+            throw new RacletteException("Using a dead Context, this should never happen.");
+        }
+    }
+
     public void setActiveNavigationSupport(NavigationSupport navigationSupport) {
         this.navigationSupport = navigationSupport;
     }
 
-    @Override
-    public void clearActiveNavigationSupport() {
-        this.navigationSupport = null;
+    public void setContext(Context context) {
+        this.currentContext = new WeakReference<Context>(context);
     }
+
 }

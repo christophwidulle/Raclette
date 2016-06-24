@@ -16,6 +16,7 @@
 
 package de.chefkoch.raclette.sample;
 
+import android.content.Intent;
 import de.chefkoch.raclette.Bind;
 import de.chefkoch.raclette.routing.Nav;
 import de.chefkoch.raclette.routing.NavRequest;
@@ -41,5 +42,10 @@ public class CharacterActivity extends RacletteRxAppCompatActivity<CharacterView
 
 
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

@@ -11,9 +11,11 @@ import java.util.Set;
 public class NavRequest {
 
     public static final String ROUTE_KEY = "##RACLETTE_ROUTE_KEY";
+    public static final String FOR_RESULT_CODE__KEY = "##RACLETTE_FOR_RESULT_KEY";
 
     private final String routePath;
-    private final Bundle params;
+    private Bundle params;
+    private int resultCode = -1;
 
     public NavRequest(String routePath, Bundle params) {
         this.routePath = routePath;
@@ -32,6 +34,9 @@ public class NavRequest {
     public Bundle toBundle() {
         Bundle bundle = new Bundle();
         bundle.putString(ROUTE_KEY, routePath);
+        if (resultCode > 0) {
+            bundle.putInt(FOR_RESULT_CODE__KEY, resultCode);
+        }
         if (params != null)
             ViewModel.Params.apply(params, bundle);
         return bundle;
@@ -40,11 +45,28 @@ public class NavRequest {
     public static NavRequest from(Bundle bundle) {
         if (bundle == null) return null;
         final String route = bundle.getString(ROUTE_KEY);
+        int resultCode = bundle.getInt(FOR_RESULT_CODE__KEY, -1);
         if (route != null) {
             final Bundle params = bundle.getBundle(ViewModel.Params.EXTRA_KEY);
-            return new NavRequest(route, params);
+            NavRequest navRequest = new NavRequest(route, params);
+            if (resultCode > 0) {
+                navRequest.setResultCode(resultCode);
+            }
+            return navRequest;
         } else
             return null;
+    }
+
+    void setResultCode(int resultCode) {
+        this.resultCode = resultCode;
+    }
+
+    public int getResultCode() {
+        return resultCode;
+    }
+
+    public boolean hasRequltCode() {
+        return resultCode > 0;
     }
 
     @Override

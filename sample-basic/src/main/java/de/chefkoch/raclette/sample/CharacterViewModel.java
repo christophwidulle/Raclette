@@ -48,12 +48,16 @@ public class CharacterViewModel extends RxViewModel {
     protected void onViewModelCreated(Bundle viewModelParams) {
         load(characterIndex);
 
-        navigate().to(Routes.character().with(CharacterParams.create().characterIndex("1")));
-
         testCommand.subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
                 System.out.println();
+
+                Bundle values = new Bundle();
+                values.putInt("a", 1);
+                navigate().returnResult(values);
+                navigate().back();
+
             }
         });
 
