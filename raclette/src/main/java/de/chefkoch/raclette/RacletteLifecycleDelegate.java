@@ -146,7 +146,7 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
     private void checkNavResultCode() {
         if (navRequest != null) {
             if (navRequest.hasRequltCode()) {
-                getNavigationControllerImpl().setCurrentResultCode(navRequest.getResultCode());
+                getNavigationControllerImpl().setCurrentRequestCode(navRequest.getResultCode());
             }
         }
     }
@@ -158,7 +158,7 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
     }
 
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         getNavigationControllerImpl().onActivityResult(requestCode, resultCode, data);
     }
 

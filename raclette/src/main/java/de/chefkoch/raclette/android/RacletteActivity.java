@@ -55,12 +55,14 @@ public class RacletteActivity<V extends ViewModel, B extends ViewDataBinding> ex
         super.onResume();
         racletteLifecycleDelegate.onResume();
     }
+
     @CallSuper
     @Override
     protected void onStart() {
         super.onStart();
         racletteLifecycleDelegate.onStart();
     }
+
     @CallSuper
     @Override
     protected void onStop() {
@@ -73,6 +75,11 @@ public class RacletteActivity<V extends ViewModel, B extends ViewDataBinding> ex
     protected void onSaveInstanceState(Bundle outState) {
         racletteLifecycleDelegate.onSaveInstanceState(outState);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        racletteLifecycleDelegate.onActivityResult(requestCode, resultCode, data);
     }
 
     @CallSuper

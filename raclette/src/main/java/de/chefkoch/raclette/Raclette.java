@@ -2,6 +2,7 @@ package de.chefkoch.raclette;
 
 import de.chefkoch.raclette.routing.NavigationController;
 import de.chefkoch.raclette.routing.NavigationControllerImpl;
+import de.chefkoch.raclette.routing.RequestForResultManager;
 
 /**
  * Created by christophwidulle on 12.04.16.
@@ -17,16 +18,19 @@ public class Raclette {
     private final ViewModelInjector viewModelInjector;
     private final ViewModelManager viewModelManager;
     private final ContextManager contextManager;
+    private final RequestForResultManager requestForResultManager;
 
     Raclette(int viewModelBindingId,
              ViewModelInjector viewModelInjector,
              ViewModelManager viewModelManager,
-             ContextManager contextManager) {
+             ContextManager contextManager,
+             RequestForResultManager requestForResultManager) {
 
         this.viewModelBindingId = viewModelBindingId;
         this.viewModelInjector = viewModelInjector;
         this.viewModelManager = viewModelManager;
         this.contextManager = contextManager;
+        this.requestForResultManager = requestForResultManager;
     }
 
     public static Builder builder() {
@@ -59,7 +63,7 @@ public class Raclette {
     }
 
     public NavigationController createNavigationController() {
-        return new NavigationControllerImpl();
+        return new NavigationControllerImpl(requestForResultManager);
     }
 
 
@@ -85,7 +89,8 @@ public class Raclette {
             return new Raclette(viewModelBindingId,
                     viewModelInjector,
                     new ViewModelManager(viewModelInjector),
-                    contextManager);
+                    contextManager,
+                    new RequestForResultManager());
         }
 
         public Raclette buildAsSingelton() {

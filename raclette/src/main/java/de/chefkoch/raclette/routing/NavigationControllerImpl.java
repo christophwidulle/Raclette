@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import de.chefkoch.raclette.ContextManager;
 import de.chefkoch.raclette.RacletteException;
 
 import java.lang.ref.WeakReference;
@@ -15,11 +14,13 @@ import java.lang.ref.WeakReference;
 public class NavigationControllerImpl implements NavigationController {
 
     private NavigationSupport navigationSupport;
-    private ForResultSupport forResultSupport = new ForResultSupport();
+    private final RequestForResultManager requestForResultManager;
     private WeakReference<Context> currentContext;
 
-    public NavigationControllerImpl() {
+    private Integer currentRequestCode;
 
+    public NavigationControllerImpl(RequestForResultManager requestForResultManager) {
+        this.requestForResultManager = requestForResultManager;
     }
 
     @Override
@@ -46,7 +47,7 @@ public class NavigationControllerImpl implements NavigationController {
 
     @Override
     public void toForResult(NavRequest navRequest, ResultCallback resultCallback) {
-        int resultCode = forResultSupport.register(resultCallback);
+        int resultCode = requestForResultManager.register(resultCallback);
         navRequest.setResultCode(resultCode);
         to(navRequest);
     }
@@ -59,7 +60,7 @@ public class NavigationControllerImpl implements NavigationController {
 
     @Override
     public void toForResult(Intent intent, ResultCallback resultCallback) {
-        int resultCode = forResultSupport.register(resultCallback);
+        int resultCode = requestForResultManager.register(resultCallback);
         Context currentContext = getCurrentContext();
         if (currentContext instanceof Activity) {
             ((Activity) currentContext).startActivityForResult(intent, resultCode);
@@ -75,19 +76,21 @@ public class NavigationControllerImpl implements NavigationController {
 
     @Override
     public void returnResult(Bundle values) {
-        this.forResultSupport.returnResult(values);
+        this.requestForResultManager.returnResult(currentRequestCode, values);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        this.forResultSupport.onActivityResult(requestCode, resultCode, data);
+        this.requestForResultManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void setCurrentResultCode(Integer currentResultCode) {
-        this.forResultSupport.setCurrentResultCode(currentResultCode);
+    public void setCurrentRequestCode(Integer currentRequestCode) {
+        this.currentRequestCode = currentRequestCode;
     }
 
     public void onDestroy() {
-        this.forResultSupport.onDestroy();
+        if (hasRequestCode()) {
+            this.requestForResultManager.onDestroy(currentRequestCode);
+        }
     }
 
     private boolean navigateToBySupport(NavRequest navRequest) {
@@ -96,6 +99,10 @@ public class NavigationControllerImpl implements NavigationController {
 
     private boolean navigateBackBySupport() {
         return navigationSupport != null && navigationSupport.onBack();
+    }
+
+    private boolean hasRequestCode() {
+        return currentRequestCode != null;
     }
 
     private Activity getCurrentActivity() {

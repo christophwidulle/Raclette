@@ -12,54 +12,42 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Created by christophwidulle on 24.06.16.
  */
-public class ForResultSupport {
+public class RequestForResultManager {
 
     private static final Map<Integer, WeakReference<ResultCallback>> openForResultRequests = new ConcurrentHashMap<>();
-    private static final AtomicInteger resultCode = new AtomicInteger();
-
-    private Integer currentResultCode;
+    private static final AtomicInteger RequestCodeCounter = new AtomicInteger();
 
 
     int register(final ResultCallback resultCallback) {
-        final int resultcode = getNextNextResultCode();
-        final WeakReference<ResultCallback> callback = wrap(resultcode, resultCallback);
-        openForResultRequests.put(resultcode, callback);
-        return resultcode;
+        final int requestCode = getNextNextResultCode();
+        final WeakReference<ResultCallback> callback = wrap(requestCode, resultCallback);
+        openForResultRequests.put(requestCode, callback);
+        return requestCode;
     }
 
-    public void onDestroy() {
-        if (hasResultCode()) {
-            ResultCallback callback = getCallback(currentResultCode);
-            if (callback != null) {
-                callback.onCancel();
-            }
+    public void onDestroy(Integer requestCode) {
+        ResultCallback callback = getCallback(requestCode);
+        if (callback != null) {
+            callback.onCancel();
         }
     }
 
-    void returnResult(Bundle values) {
-        if (hasResultCode()) {
-            ResultCallback callback = getCallback(currentResultCode);
-            if (callback != null) {
-                callback.onResult(values);
-            }
+    void returnResult(Integer requestCode, Bundle values) {
+        ResultCallback callback = getCallback(requestCode);
+        if (callback != null) {
+            callback.onResult(values);
         }
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (hasResultCode()) {
-            ResultCallback callback = getCallback(requestCode);
-            if (callback != null) {
-                if (resultCode == Activity.RESULT_CANCELED) {
-                    callback.onCancel();
-                } else if (resultCode == Activity.RESULT_OK) {
-                    callback.onResult(data.getExtras());
-                }
+        ResultCallback callback = getCallback(requestCode);
+        if (callback != null) {
+            if (resultCode == Activity.RESULT_CANCELED) {
+                callback.onCancel();
+            } else if (resultCode == Activity.RESULT_OK) {
+                callback.onResult(data.getExtras());
             }
         }
-    }
-
-    void setCurrentResultCode(Integer currentResultCode) {
-        this.currentResultCode = currentResultCode;
     }
 
     private WeakReference<ResultCallback> wrap(final int resultCode, final ResultCallback resultCallback) {
@@ -81,12 +69,9 @@ public class ForResultSupport {
     }
 
     private int getNextNextResultCode() {
-        return resultCode.addAndGet(1);
+        return RequestCodeCounter.addAndGet(1);
     }
 
-    private boolean hasResultCode() {
-        return currentResultCode != null;
-    }
 
     private ResultCallback getCallback(Integer resultCode) {
         if (resultCode == null) return null;

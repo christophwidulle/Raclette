@@ -1,5 +1,6 @@
 package de.chefkoch.raclette.android.support;
 
+import android.content.Intent;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
@@ -39,35 +40,45 @@ public class RacletteAppCompatActivity<V extends ViewModel, B extends ViewDataBi
         racletteLifecycleDelegate.onDestroy(this);
         super.onDestroy();
     }
+
     @CallSuper
     @Override
     protected void onPause() {
         racletteLifecycleDelegate.onPause();
         super.onPause();
     }
+
     @CallSuper
     @Override
     protected void onResume() {
         super.onResume();
         racletteLifecycleDelegate.onResume();
     }
+
     @CallSuper
     @Override
     protected void onStart() {
         super.onStart();
         racletteLifecycleDelegate.onStart();
     }
+
     @CallSuper
     @Override
     protected void onStop() {
         super.onStop();
         racletteLifecycleDelegate.onStop();
     }
+
     @CallSuper
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         racletteLifecycleDelegate.onSaveInstanceState(outState);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        racletteLifecycleDelegate.onActivityResult(requestCode, resultCode, data);
     }
 
     public V getViewModel() {

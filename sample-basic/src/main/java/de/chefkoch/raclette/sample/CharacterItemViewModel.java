@@ -1,5 +1,6 @@
 package de.chefkoch.raclette.sample;
 
+import android.content.Intent;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import de.chefkoch.raclette.RxUpdatableViewModel;
@@ -25,6 +26,27 @@ public class CharacterItemViewModel extends RxUpdatableViewModel<Character> {
     protected void onViewModelCreated(Bundle viewModelParams) {
         super.onViewModelCreated(viewModelParams);
 
+
+        clickCommand.subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                Intent cameraI = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+
+                navigate().toForResult(cameraI, new ResultCallback() {
+                    @Override
+                    public void onResult(Bundle values) {
+                        System.out.println();
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        super.onCancel();
+                    }
+                });
+            }
+        });
+
+/*
         clickCommand.subscribe(new Action1<Void>() {
             @Override
             public void call(Void character) {
@@ -41,6 +63,7 @@ public class CharacterItemViewModel extends RxUpdatableViewModel<Character> {
                 });
             }
         });
+        */
 
     }
 
