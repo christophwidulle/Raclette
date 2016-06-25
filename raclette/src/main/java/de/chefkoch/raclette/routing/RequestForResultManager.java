@@ -39,7 +39,7 @@ public class RequestForResultManager {
         }
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    void onActivityResult(int requestCode, int resultCode, Intent data) {
         ResultCallback callback = getCallback(requestCode);
         if (callback != null) {
             if (resultCode == Activity.RESULT_CANCELED) {

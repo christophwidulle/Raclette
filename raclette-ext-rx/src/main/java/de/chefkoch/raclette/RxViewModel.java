@@ -1,82 +1,81 @@
 package de.chefkoch.raclette;
 
 import android.os.Bundle;
-import android.support.annotation.CallSuper;
-import de.chefkoch.raclette.ViewModel;
-import de.chefkoch.raclette.rx.lifecycle.RxViewModelLifecycle;
-import de.chefkoch.raclette.ViewModelLifecycleState;
 import de.chefkoch.raclette.rx.lifecycle.ViewModelLifecycleProvider;
 import rx.Observable;
-import rx.subjects.BehaviorSubject;
 
 /**
  * Created by christophwidulle on 14.04.16.
  */
 public class RxViewModel extends ViewModel implements ViewModelLifecycleProvider {
 
-    private final BehaviorSubject<ViewModelLifecycleState> lifecycleSubject = BehaviorSubject.create();
+    private final ViewModelRxExtension rxExtension = new ViewModelRxExtension();
 
     @Override
     public final Observable<ViewModelLifecycleState> lifecycle() {
-        return lifecycleSubject.asObservable();
+        return rxExtension.lifecycle();
     }
 
     @Override
     public final <T> Observable.Transformer<T, T> bindUntilEvent(ViewModelLifecycleState event) {
-        return RxViewModelLifecycle.bindUntilEvent(lifecycleSubject, event);
+        return rxExtension.bindUntilEvent(event);
     }
 
     @Override
     public final <T> Observable.Transformer<T, T> bindToLifecycle() {
-        return RxViewModelLifecycle.bind(lifecycleSubject);
+        return rxExtension.bindToLifecycle();
+    }
+
+    public ViewModelRxExtension rx() {
+        return rxExtension;
     }
 
     @Override
     void viewModelCreate(Bundle bundle) {
         super.viewModelCreate(bundle);
-        lifecycleSubject.onNext(ViewModelLifecycleState.VIEWMODEL_CREATE);
+        rxExtension.viewModelCreate(bundle);
 
     }
 
     @Override
     void viewModelDestroy() {
         super.viewModelDestroy();
-        lifecycleSubject.onNext(ViewModelLifecycleState.VIEWMODEL_DESTROY);
+        rxExtension.viewModelDestroy();
     }
 
     @Override
     void create(Bundle params) {
         super.create(params);
-        lifecycleSubject.onNext(ViewModelLifecycleState.CREATE);
+        rxExtension.create(params);
     }
 
     @Override
     void start() {
         super.start();
-        lifecycleSubject.onNext(ViewModelLifecycleState.START);
+        rxExtension.start();
     }
 
     @Override
     void resume() {
         super.resume();
-        lifecycleSubject.onNext(ViewModelLifecycleState.RESUME);
+        rxExtension.resume();
     }
 
     @Override
     void pause() {
         super.pause();
-        lifecycleSubject.onNext(ViewModelLifecycleState.PAUSE);
+        rxExtension.pause();
     }
 
     @Override
     void stop() {
         super.stop();
-        lifecycleSubject.onNext(ViewModelLifecycleState.STOP);
+        rxExtension.stop();
     }
 
     @Override
     void destroy() {
         super.destroy();
-        lifecycleSubject.onNext(ViewModelLifecycleState.DESTROY);
+        rxExtension.destroy();
     }
 }

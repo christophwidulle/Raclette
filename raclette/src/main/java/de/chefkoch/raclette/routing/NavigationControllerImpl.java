@@ -13,8 +13,8 @@ import java.lang.ref.WeakReference;
  */
 public class NavigationControllerImpl implements NavigationController {
 
-    private NavigationSupport navigationSupport;
     private final RequestForResultManager requestForResultManager;
+    private NavigationSupport navigationSupport;
     private WeakReference<Context> currentContext;
 
     private Integer currentRequestCode;

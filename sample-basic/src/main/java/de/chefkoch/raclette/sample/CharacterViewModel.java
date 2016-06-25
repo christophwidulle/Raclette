@@ -23,11 +23,10 @@ public class CharacterViewModel extends RxViewModel {
 
     public final ObservableField<Character> characterField = new ObservableField<>();
 
-    public final Command<Void> testCommand = Command.create();
+    public final Command<Void> testCommand = Command.createAndBind(rx().lifecycle());
 
     @Nav.Param
     int id;
-
 
     @Nav.Param
     String characterIndex;
