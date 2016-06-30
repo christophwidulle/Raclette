@@ -30,7 +30,7 @@ public class ViewModelRxExtension implements ViewModelLifecycleProvider {
         return RxViewModelLifecycle.bind(lifecycleSubject);
     }
 
-    public RxNavigationControllerExt navigationController() {
+    public RxNavigationControllerExt navigate() {
         return extNavController;
     }
 
