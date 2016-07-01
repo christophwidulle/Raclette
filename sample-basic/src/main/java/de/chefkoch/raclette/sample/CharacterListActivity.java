@@ -42,7 +42,7 @@ public class CharacterListActivity extends RacletteRxAppCompatActivity<Character
 
         //todo fixme
 
-       final CompositionMultiBindingAdapter multiBindingAdapter = CompositionMultiBindingAdapter.builder()
+        final CompositionMultiBindingAdapter multiBindingAdapter = CompositionMultiBindingAdapter.builder()
                 .withElement(Character.class, new CompositionMultiBindingAdapter.UpdatableViewCompositionFactory<Character>() {
                     @Override
                     public UpdatableViewComposition<Character, ? extends UpdatableViewModel<Character>, ?> create() {

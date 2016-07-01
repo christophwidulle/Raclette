@@ -79,6 +79,20 @@ public class NavigationControllerImpl implements NavigationController {
         this.requestForResultManager.returnResult(currentRequestCode, values);
     }
 
+    @Override
+    public void cancelResult() {
+        this.requestForResultManager.cancel(currentRequestCode);
+    }
+
+    public void setActiveNavigationSupport(NavigationSupport navigationSupport) {
+        this.navigationSupport = navigationSupport;
+    }
+
+    public void setContext(Context context) {
+        this.currentContext = new WeakReference<Context>(context);
+    }
+
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         this.requestForResultManager.onActivityResult(requestCode, resultCode, data);
     }
@@ -157,12 +171,5 @@ public class NavigationControllerImpl implements NavigationController {
         }
     }
 
-    public void setActiveNavigationSupport(NavigationSupport navigationSupport) {
-        this.navigationSupport = navigationSupport;
-    }
-
-    public void setContext(Context context) {
-        this.currentContext = new WeakReference<Context>(context);
-    }
 
 }

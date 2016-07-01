@@ -32,6 +32,10 @@ public class RequestForResultManager {
         }
     }
 
+    void cancel(Integer requestCode) {
+        remove(requestCode);
+    }
+
     void returnResult(Integer requestCode, Bundle values) {
         ResultCallback callback = getCallback(requestCode);
         if (callback != null) {
@@ -50,18 +54,18 @@ public class RequestForResultManager {
         }
     }
 
-    private WeakReference<ResultCallback> wrap(final int resultCode, final ResultCallback resultCallback) {
+    private WeakReference<ResultCallback> wrap(final int requestCode, final ResultCallback resultCallback) {
 
         final ResultCallback innerResultCallback = new ResultCallback() {
             @Override
             public void onResult(Bundle values) {
-                remove(resultCode);
+                remove(requestCode);
                 resultCallback.onResult(values);
             }
 
             @Override
             public void onCancel() {
-                remove(resultCode);
+                remove(requestCode);
                 resultCallback.onCancel();
             }
         };
@@ -83,8 +87,8 @@ public class RequestForResultManager {
         }
     }
 
-    private void remove(int resultCode) {
-        openForResultRequests.remove(resultCode);
+    private void remove(int requestCode) {
+        openForResultRequests.remove(requestCode);
     }
 
 

@@ -2,10 +2,16 @@ package de.chefkoch.raclette.rx;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import de.chefkoch.raclette.routing.NavRequest;
 import de.chefkoch.raclette.routing.NavigationController;
+import de.chefkoch.raclette.routing.NavigationControllerImpl;
 import de.chefkoch.raclette.routing.ResultCallback;
 import rx.Observable;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.MainThreadSubscription;
+import rx.functions.Func1;
 
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -22,19 +28,76 @@ public class RxNavigationControllerExt {
     }
 
     public Observable<ForResultReturn> toForResult(NavRequest navRequest) {
-        final MyCallbackAdapter adapter = new MyCallbackAdapter();
-        navigationController.toForResult(navRequest, adapter);
-        return adapter.toObservable();
+        return Observable.create(OnSubscribe.create(navigationController, navRequest));
     }
 
 
     public Observable<ForResultReturn> toForResult(Intent intent) {
-        final MyCallbackAdapter adapter = new MyCallbackAdapter();
-        navigationController.toForResult(intent, adapter);
-        return adapter.toObservable();
+        return Observable.create(OnSubscribe.create(navigationController, intent));
     }
 
 
+    final static class OnSubscribe implements Observable.OnSubscribe<ForResultReturn> {
+
+        Intent intent;
+        NavRequest navRequest;
+        NavigationController navigationController;
+
+        OnSubscribe(NavRequest navRequest, NavigationController navigationController) {
+            this.navRequest = navRequest;
+            this.navigationController = navigationController;
+        }
+
+        OnSubscribe(Intent intent, NavigationController navigationController) {
+            this.intent = intent;
+            this.navigationController = navigationController;
+        }
+
+        public static OnSubscribe create(NavigationController navigationController, Intent intent) {
+            return new OnSubscribe(intent, navigationController);
+        }
+
+        public static OnSubscribe create(NavigationController navigationController, NavRequest navRequest) {
+            return new OnSubscribe(navRequest, navigationController);
+        }
+
+        @Override
+        public void call(final Subscriber<? super ForResultReturn> subscriber) {
+
+            final ResultCallback resultCallback = new ResultCallback() {
+                @Override
+                public void onResult(Bundle values) {
+                    if (!subscriber.isUnsubscribed()) {
+                        subscriber.onNext(ForResultReturn.from(values));
+                    }
+                }
+
+                @Override
+                public void onCancel() {
+                    if (!subscriber.isUnsubscribed()) {
+                        subscriber.onNext(ForResultReturn.canceled());
+                    }
+                }
+            };
+
+            if (intent != null) {
+                navigationController.toForResult(intent, resultCallback);
+            } else if (navRequest != null) {
+                navigationController.toForResult(navRequest, resultCallback);
+            }
+
+
+            subscriber.add(new MainThreadSubscription() {
+                @Override
+                protected void onUnsubscribe() {
+                    //view.setOnClickListener(null);
+                    navigationController.cancelResult();
+                }
+            });
+        }
+    }
+
+    /*
     private class MyCallbackAdapter extends ResultCallback {
 
         private final FutureAdapter futureAdapter = new FutureAdapter();
@@ -98,5 +161,6 @@ public class RxNavigationControllerExt {
                 return get();
             }
         }
-    }
+
+    }*/
 }

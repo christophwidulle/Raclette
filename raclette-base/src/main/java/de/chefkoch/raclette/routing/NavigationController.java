@@ -20,5 +20,6 @@ public interface NavigationController {
 
     void returnResult(Bundle values);
 
+    void cancelResult();
 
 }
