@@ -3,10 +3,7 @@ package de.chefkoch.raclette.compiler;
 import com.squareup.javapoet.JavaFile;
 import de.chefkoch.raclette.compiler.params.NavParamsCreator;
 import de.chefkoch.raclette.compiler.params.NavParamsDictCreator;
-import de.chefkoch.raclette.compiler.route.RouteContext;
-import de.chefkoch.raclette.compiler.route.RouteCreator;
-import de.chefkoch.raclette.compiler.route.RouteExtractor;
-import de.chefkoch.raclette.compiler.route.RoutesCreator;
+import de.chefkoch.raclette.compiler.route.*;
 import de.chefkoch.raclette.routing.Nav;
 
 import javax.annotation.processing.*;
@@ -66,6 +63,11 @@ public class RacletteGenerator extends AbstractProcessor {
                     routesCreated.addAll(route);
                 }
             }
+
+            for (RouteCreator.Result routeResult : routesCreated) {
+                createReturns(routeResult.routeContext);
+            }
+
             routeElements = env.getElementsAnnotatedWith(Nav.Dispatch.class);
             for (Element routeElement : routeElements) {
                 List<RouteCreator.Result> route = createRoutesDispatch(routeElement, asMap(paramsCreated));
@@ -81,6 +83,16 @@ public class RacletteGenerator extends AbstractProcessor {
             logError(e.getMessage());
         }
         return false;
+    }
+
+    private List<ReturnCreator.Result> createReturns(final RouteContext routeContext) {
+
+        List<ReturnCreator.Result> results = new ArrayList<>();
+        List<ReturnCreator.Result> extracted = new ReturnCreator().createAll(routeContext);
+        for (ReturnCreator.Result result : extracted) {
+            if (write(result)) results.add(result);
+        }
+        return results;
     }
 
     private List<RouteCreator.Result> createRoute(final Element element, Map<String, NavParamsCreator.Result> resultMap) {
@@ -109,6 +121,21 @@ public class RacletteGenerator extends AbstractProcessor {
 
         }
         return results;
+    }
+
+
+    private boolean write(ReturnCreator.Result result) {
+        try {
+            final JavaFileObject destSourceFile = processingEnv.getFiler().createSourceFile(
+                    result.getFullQulifiedName(),
+                    (Element) null);
+
+            write(destSourceFile, result.javaFile);
+            return true;
+        } catch (Exception e) {
+            logError(e.getMessage());
+        }
+        return false;
     }
 
     private boolean write(RouteCreator.Result result, Element element) {

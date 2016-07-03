@@ -9,6 +9,8 @@ import de.chefkoch.raclette.compiler.params.ParamField;
 import javax.lang.model.element.Modifier;
 import java.util.List;
 
+import static de.chefkoch.raclette.compiler.StringUtil.decapitalize;
+
 /**
  * Created by christophwidulle on 22.04.16.
  */
@@ -48,7 +50,5 @@ public class RoutesCreator {
         return JavaFile.builder(ClassNames.RoutingPackageName, typeBuilder.build()).build();
     }
 
-    private String decapitalize(final String line) {
-        return Character.toLowerCase(line.charAt(0)) + line.substring(1);
-    }
+
 }

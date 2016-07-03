@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static de.chefkoch.raclette.compiler.StringUtil.capitalize;
+
 /**
  * Created by christophwidulle on 22.04.16.
  */
@@ -94,10 +96,28 @@ public class RouteExtractor {
                     paramsClassName = ClassName.get(result.packageName, result.className);
                 }
 
-                return new RouteContext(packageName, routeName, path, targetClass, paramsClassName, targetType, paramsContext);
+                List<RouteContext.Return> r = findReturns(routeAnnotation);
+
+                return new RouteContext(packageName, routeName, path, targetClass, paramsClassName, targetType, paramsContext, r);
             }
         }
         return null;
+    }
+
+
+    private List<RouteContext.Return> findReturns(final Nav.Route routeAnnotation) {
+        List<RouteContext.Return> result = new ArrayList<>();
+
+        Nav.Result[] returns = routeAnnotation.returns();
+        if (returns.length > 0) {
+            for (Nav.Result aReturn : returns) {
+                String value = aReturn.value();
+                TypeMirror typeMirror = getReturnClass(aReturn);
+                RouteContext.Return r = new RouteContext.Return(value, typeMirror);
+                result.add(r);
+            }
+        }
+        return result;
     }
 
     private TypeMirror checkFindByAutodetect(TypeMirror paramsType, Element element) {
@@ -109,8 +129,6 @@ public class RouteExtractor {
         }
     }
 
-
-    //todo find better way
     private NavParamsCreator.Result find(Map<String, NavParamsCreator.Result> resultMap, String type) {
         if (type.contains("<any?>.")) {
             type = type.replace("<any?>.", "");
@@ -137,13 +155,19 @@ public class RouteExtractor {
         return name;
     }
 
-    private String capitalize(final String line) {
-        return Character.toUpperCase(line.charAt(0)) + line.substring(1);
-    }
 
     private TypeMirror getNavParamsFromClass(Nav.Route routeAnnotation) {
         try {
             Class<? extends ViewModel> aClass = routeAnnotation.navParamsFrom();
+        } catch (MirroredTypeException mte) {
+            return mte.getTypeMirror();
+        }
+        return null;
+    }
+
+    private TypeMirror getReturnClass(Nav.Result annotation) {
+        try {
+            Class aClass = annotation.type();
         } catch (MirroredTypeException mte) {
             return mte.getTypeMirror();
         }
