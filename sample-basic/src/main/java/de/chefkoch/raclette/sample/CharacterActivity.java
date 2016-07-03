@@ -25,7 +25,7 @@ import de.chefkoch.raclette.rx.android.support.RacletteRxAppCompatActivity;
 import de.chefkoch.raclette.sample.databinding.CharacterActivityBinding;
 
 
-@Nav.Route(value = "/character")
+@Nav.Route(value = "/character", returns = @Nav.Result(value = "selectedCharacterTest", type = String.class))
 
 /*
 @Nav.Dispatch({

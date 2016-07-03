@@ -21,8 +21,11 @@ public class Nav {
 
         Class<? extends ViewModel> navParamsFrom() default AutoDetect.class;
 
+        Result[] returns() default {};
+
         public static class AutoDetect extends ViewModel {
         }
+
     }
 
     @Retention(RetentionPolicy.CLASS)
@@ -38,6 +41,16 @@ public class Nav {
     public @interface Param {
 
         String value() default "";
+
+    }
+
+    @Retention(RetentionPolicy.CLASS)
+    @Target(ElementType.FIELD)
+    public @interface Result {
+
+        String value();
+
+        Class type();
 
     }
 
