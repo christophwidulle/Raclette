@@ -88,7 +88,7 @@ public class RacletteGenerator extends AbstractProcessor {
     private List<ReturnCreator.Result> createReturns(final RouteContext routeContext) {
 
         List<ReturnCreator.Result> results = new ArrayList<>();
-        List<ReturnCreator.Result> extracted = new ReturnCreator().createAll(routeContext);
+        List<ReturnCreator.Result> extracted = new ReturnCreator().createAll(routeContext, environment);
         for (ReturnCreator.Result result : extracted) {
             if (write(result)) results.add(result);
         }

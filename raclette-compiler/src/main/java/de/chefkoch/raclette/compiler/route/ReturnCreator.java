@@ -8,6 +8,7 @@ import de.chefkoch.raclette.compiler.StringUtil;
 import de.chefkoch.raclette.compiler.params.ParamField;
 import de.chefkoch.raclette.routing.Route;
 
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.type.TypeMirror;
 import java.util.ArrayList;
@@ -35,16 +36,16 @@ public class ReturnCreator {
     }
 
 
-    public List<Result> createAll(RouteContext routeContext) {
+    public List<Result> createAll(RouteContext routeContext, ProcessingEnvironment processingEnvironment) {
         List<Result> results = new ArrayList<>();
         for (RouteContext.Return aReturn : routeContext.getReturns()) {
-            Result result = create(aReturn, routeContext);
+            Result result = create(aReturn, routeContext, processingEnvironment);
             results.add(result);
         }
         return results;
     }
 
-    Result create(RouteContext.Return aReturn, RouteContext routeContext) {
+    Result create(RouteContext.Return aReturn, RouteContext routeContext, ProcessingEnvironment processingEnvironment) {
 
         String className = StringUtil.capitalize(aReturn.getName()) + "Result";
         TypeName returnType = TypeName.get(aReturn.getKlass());
@@ -56,9 +57,9 @@ public class ReturnCreator {
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 .superclass(superKlass)
                 .addMethod(createConstructor(returnType))
-                .addMethod(createWriteValue(returnTypeMirror))
+                .addMethod(createWriteValue(returnTypeMirror, processingEnvironment))
                 .addMethod(createAsBundle(returnTypeMirror, className))
-                .addMethod(createFrom(returnTypeMirror, className));
+                .addMethod(createFrom(returnTypeMirror, className, processingEnvironment));
 
         TypeSpec type = builder.build();
         JavaFile javaFile = JavaFile.builder(routeContext.getPackageName(), type)
@@ -67,15 +68,21 @@ public class ReturnCreator {
         return new Result(javaFile, routeContext, className);
     }
 
-    private MethodSpec createFrom(TypeMirror type, String className) {
+    private MethodSpec createFrom(TypeMirror type, String className, ProcessingEnvironment processingEnvironment) {
+
+
+        List<? extends TypeMirror> supertypes = processingEnvironment.getTypeUtils().directSupertypes(type);
+
+        ParamField paramField = ParamField.from("value", type, supertypes);
 
         MethodSpec.Builder builder = MethodSpec.methodBuilder("from")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .returns(ClassName.bestGuess(className))
                 .addParameter(ClassNames.Bundle, "bundle")
-                .addStatement("$T value = bundle.$N(\"value\")",
+                .addStatement("$T value = ($T) bundle.$N(\"value\")",
                         type,
-                        BundleHelper.findBundleMethod(BundleHelper.MethodType.Getter, ParamField.of("value", type))
+                        type,
+                        BundleHelper.findBundleMethod(BundleHelper.MethodType.Getter, paramField)
                 )
                 .addStatement("return new $N(value)", className);
 
@@ -83,6 +90,7 @@ public class ReturnCreator {
     }
 
     private MethodSpec createAsBundle(TypeMirror type, String className) {
+
 
         MethodSpec.Builder builder = MethodSpec.methodBuilder("asBundle")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
@@ -93,7 +101,11 @@ public class ReturnCreator {
         return builder.build();
     }
 
-    private MethodSpec createWriteValue(TypeMirror type) {
+    private MethodSpec createWriteValue(TypeMirror type, ProcessingEnvironment processingEnvironment) {
+
+        List<? extends TypeMirror> supertypes = processingEnvironment.getTypeUtils().directSupertypes(type);
+
+        ParamField paramField = ParamField.from("value", type, supertypes);
 
         MethodSpec.Builder builder = MethodSpec.methodBuilder("writeValue")
                 .addAnnotation(SpecUtil.override())
@@ -101,7 +113,7 @@ public class ReturnCreator {
                 .addParameter(TypeName.get(type), "value")
                 .addParameter(ClassNames.Bundle, "bundle")
                 .addStatement("bundle.$N(\"value\",value)",
-                        BundleHelper.findBundleMethod(BundleHelper.MethodType.Setter, ParamField.of("value", type)));
+                        BundleHelper.findBundleMethod(BundleHelper.MethodType.Setter, paramField));
 
         return builder.build();
     }

@@ -18,6 +18,7 @@ package de.chefkoch.raclette.sample;
 
 import android.content.Intent;
 import de.chefkoch.raclette.Bind;
+import de.chefkoch.raclette.TestParameter;
 import de.chefkoch.raclette.routing.Nav;
 import de.chefkoch.raclette.routing.NavRequest;
 import de.chefkoch.raclette.routing.NavRequestInterceptor;
@@ -25,7 +26,7 @@ import de.chefkoch.raclette.rx.android.support.RacletteRxAppCompatActivity;
 import de.chefkoch.raclette.sample.databinding.CharacterActivityBinding;
 
 
-@Nav.Route(value = "/character", returns = @Nav.Result(value = "selectedCharacterTest", type = String.class))
+@Nav.Route(value = "/character", returns = @Nav.Result(value = "selectedCharacterTest", type = TestParameter.class))
 
 /*
 @Nav.Dispatch({

@@ -37,15 +37,9 @@ public class ParamsExtractor {
                 if ("".equals(paramName)) {
                     paramName = field.getSimpleName().toString();
                 }
-                ParamField paramField = null;
-                boolean simpleType = BundleHelper.isSimpleType(fieldTypeMirror);
-                if (simpleType) {
-                    paramField = ParamField.of(paramName, fieldTypeMirror);
-                } else if (isParceble(supertypes)) {
-                    paramField = ParamField.asParceable(paramName, fieldTypeMirror);
-                } else if (isSerializable(supertypes)) {
-                    paramField = ParamField.asSerializable(paramName, fieldTypeMirror);
-                }
+
+                ParamField paramField = ParamField.from(paramName, fieldTypeMirror, supertypes);
+
                 if (paramField != null) {
                     params.add(paramField);
                 }
@@ -74,22 +68,5 @@ public class ParamsExtractor {
         throw new IllegalArgumentException(msg);
     }
 
-    private boolean isParceble(List<? extends TypeMirror> types) {
-        for (TypeMirror type : types) {
-            if ("android.os.Parcelable".equals(type.toString())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean isSerializable(List<? extends TypeMirror> types) {
-        for (TypeMirror type : types) {
-            if ("java.io.Serializable".equals(type.toString())) {
-                return true;
-            }
-        }
-        return false;
-    }
 
 }

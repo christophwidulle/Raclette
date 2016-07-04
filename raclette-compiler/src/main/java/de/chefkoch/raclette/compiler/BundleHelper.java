@@ -4,6 +4,7 @@ import de.chefkoch.raclette.compiler.params.ParamField;
 
 import javax.lang.model.type.TypeMirror;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,6 +28,8 @@ public class BundleHelper {
             method = typeMapping.bundleMethodName;
         } else if (paramField.isParcelable) {
             method = "Parcelable";
+        } else if (paramField.isSerializable) {
+            method = "Serializable";
         }
         return methodType == MethodType.Getter ? "get" + method : "put" + method;
     }
@@ -59,6 +62,24 @@ public class BundleHelper {
 
     public static boolean isSimpleType(TypeMirror typeMirror) {
         return types.containsKey(typeMirror.toString());
+    }
+
+    public static boolean isParceble(List<? extends TypeMirror> types) {
+        for (TypeMirror type : types) {
+            if ("android.os.Parcelable".equals(type.toString())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isSerializable(List<? extends TypeMirror> types) {
+        for (TypeMirror type : types) {
+            if ("java.io.Serializable".equals(type.toString())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     static void add(String typeName, String bundleMethodName) {
