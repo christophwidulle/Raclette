@@ -14,26 +14,29 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class RequestForResultManager {
 
-    private static final Map<Integer, WeakReference<ResultCallback>> openForResultRequests = new ConcurrentHashMap<>();
+    private static final Map<Integer, ResultCallback> openForResultRequests = new ConcurrentHashMap<>();
     private static final AtomicInteger RequestCodeCounter = new AtomicInteger();
 
 
     int register(final ResultCallback resultCallback) {
         final int requestCode = getNextNextResultCode();
-        final WeakReference<ResultCallback> callback = wrap(requestCode, resultCallback);
-        openForResultRequests.put(requestCode, callback);
+        openForResultRequests.put(requestCode, wrap(requestCode, resultCallback));
         return requestCode;
     }
 
     public void onDestroy(Integer requestCode) {
-        ResultCallback callback = getCallback(requestCode);
-        if (callback != null) {
-            callback.onCancel();
+        if (requestCode != null) {
+            ResultCallback callback = getCallback(requestCode);
+            if (callback != null) {
+                callback.onCancel();
+            }
         }
     }
 
     void cancel(Integer requestCode) {
-        remove(requestCode);
+        if (requestCode != null) {
+            remove(requestCode);
+        }
     }
 
     void returnResult(Integer requestCode, Bundle values) {
@@ -54,9 +57,9 @@ public class RequestForResultManager {
         }
     }
 
-    private WeakReference<ResultCallback> wrap(final int requestCode, final ResultCallback resultCallback) {
+    private ResultCallback wrap(final int requestCode, final ResultCallback resultCallback) {
 
-        final ResultCallback innerResultCallback = new ResultCallback() {
+        return new ResultCallback() {
             @Override
             public void onResult(Bundle values) {
                 remove(requestCode);
@@ -69,7 +72,6 @@ public class RequestForResultManager {
                 resultCallback.onCancel();
             }
         };
-        return new WeakReference<>(innerResultCallback);
     }
 
     private int getNextNextResultCode() {
@@ -78,12 +80,10 @@ public class RequestForResultManager {
 
 
     private ResultCallback getCallback(Integer resultCode) {
-        if (resultCode == null) return null;
-        final WeakReference<ResultCallback> callback = openForResultRequests.get(resultCode);
-        if (callback != null) {
-            return callback.get();
-        } else {
+        if (resultCode == null) {
             return null;
+        } else {
+            return openForResultRequests.get(resultCode);
         }
     }
 

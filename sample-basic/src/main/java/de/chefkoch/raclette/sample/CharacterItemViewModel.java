@@ -9,7 +9,9 @@ import de.chefkoch.raclette.ViewModel;
 import de.chefkoch.raclette.routing.ResultCallback;
 import de.chefkoch.raclette.routing.Routes;
 import de.chefkoch.raclette.rx.Command;
+import de.chefkoch.raclette.rx.ForResultReturn;
 import de.chefkoch.raclette.sample.rest.Character;
+import rx.Subscriber;
 import rx.functions.Action1;
 
 /**
@@ -32,6 +34,24 @@ public class CharacterItemViewModel extends RxUpdatableViewModel<Character> {
             public void call(Void aVoid) {
                 Intent cameraI = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 
+
+                rx().navigate().toForResult(cameraI).subscribe(new Subscriber<ForResultReturn>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(ForResultReturn forResultReturn) {
+                        System.out.println(forResultReturn);
+                    }
+                });
+/*
                 navigate().toForResult(cameraI, new ResultCallback() {
                     @Override
                     public void onResult(Bundle values) {
@@ -42,7 +62,7 @@ public class CharacterItemViewModel extends RxUpdatableViewModel<Character> {
                     public void onCancel() {
                         super.onCancel();
                     }
-                });
+                });*/
             }
         });
 

@@ -54,7 +54,7 @@ public class ViewModelRxExtension implements ViewModelLifecycleProvider {
         lifecycleSubject.onNext(ViewModelLifecycleState.START);
     }
 
-    public void resume() {
+    void resume() {
         lifecycleSubject.onNext(ViewModelLifecycleState.RESUME);
     }
 

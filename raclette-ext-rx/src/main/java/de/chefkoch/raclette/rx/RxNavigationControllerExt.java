@@ -37,7 +37,7 @@ public class RxNavigationControllerExt {
     }
 
 
-    final static class OnSubscribe implements Observable.OnSubscribe<ForResultReturn> {
+    private final static class OnSubscribe implements Observable.OnSubscribe<ForResultReturn> {
 
         Intent intent;
         NavRequest navRequest;
@@ -69,6 +69,7 @@ public class RxNavigationControllerExt {
                 public void onResult(Bundle values) {
                     if (!subscriber.isUnsubscribed()) {
                         subscriber.onNext(ForResultReturn.from(values));
+                        subscriber.onCompleted();
                     }
                 }
 
@@ -76,6 +77,7 @@ public class RxNavigationControllerExt {
                 public void onCancel() {
                     if (!subscriber.isUnsubscribed()) {
                         subscriber.onNext(ForResultReturn.canceled());
+                        subscriber.onCompleted();
                     }
                 }
             };
@@ -90,77 +92,9 @@ public class RxNavigationControllerExt {
             subscriber.add(new MainThreadSubscription() {
                 @Override
                 protected void onUnsubscribe() {
-                    //view.setOnClickListener(null);
                     navigationController.cancelResult();
                 }
             });
         }
     }
-
-    /*
-    private class MyCallbackAdapter extends ResultCallback {
-
-        private final FutureAdapter futureAdapter = new FutureAdapter();
-
-        @Override
-        public void onResult(Bundle values) {
-            futureAdapter.setValue(ForResultReturn.from(values));
-        }
-
-        @Override
-        public void onCancel() {
-            futureAdapter.setValue(ForResultReturn.canceled());
-        }
-
-        Observable<ForResultReturn> toObservable() {
-            return Observable.from(futureAdapter);
-        }
-
-
-        class FutureAdapter implements Future<ForResultReturn> {
-
-            private boolean isDone;
-            private ForResultReturn value;
-
-            void setValue(ForResultReturn value) {
-                synchronized (this) {
-                    this.value = value;
-                    this.isDone = true;
-                    this.notify();
-                }
-            }
-
-
-            @Override
-            public boolean cancel(boolean mayInterruptIfRunning) {
-                return false;
-            }
-
-            @Override
-            public boolean isCancelled() {
-                return false;
-            }
-
-            @Override
-            public boolean isDone() {
-                return isDone;
-            }
-
-            @Override
-            public ForResultReturn get() throws InterruptedException {
-                synchronized (this) {
-                    while (value == null) {
-                        this.wait();
-                    }
-                }
-                return value;
-            }
-
-            @Override
-            public ForResultReturn get(long t, TimeUnit u) throws InterruptedException {
-                return get();
-            }
-        }
-
-    }*/
 }

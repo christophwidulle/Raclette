@@ -1,6 +1,7 @@
 package de.chefkoch.raclette;
 
 import android.os.Bundle;
+import de.chefkoch.raclette.routing.NavigationController;
 import de.chefkoch.raclette.rx.lifecycle.RxViewModelLifecycle;
 import de.chefkoch.raclette.rx.lifecycle.ViewModelLifecycleProvider;
 import rx.Observable;
@@ -29,6 +30,12 @@ public abstract class RxUpdatableViewModel<T> extends UpdatableViewModel<T> impl
 
     public ViewModelRxExtension rx() {
         return rxExtension;
+    }
+
+    @Override
+    void setNavigationController(NavigationController navigationController) {
+        super.setNavigationController(navigationController);
+        rxExtension.setNavigationController(navigationController);
     }
 
     @Override

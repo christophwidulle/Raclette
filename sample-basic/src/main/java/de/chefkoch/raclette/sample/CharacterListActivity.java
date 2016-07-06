@@ -40,7 +40,6 @@ public class CharacterListActivity extends RacletteRxAppCompatActivity<Character
         super.onCreate(savedInstanceState);
 
 
-        //todo fixme
 
        final CompositionMultiBindingAdapter multiBindingAdapter = CompositionMultiBindingAdapter.builder()
                 .withElement(Character.class, new CompositionMultiBindingAdapter.UpdatableViewCompositionFactory<Character>() {

@@ -33,4 +33,8 @@ public class ForResultReturn {
         return bundle == null;
     }
 
+    public boolean hasResult() {
+        return bundle != null;
+    }
+
 }
