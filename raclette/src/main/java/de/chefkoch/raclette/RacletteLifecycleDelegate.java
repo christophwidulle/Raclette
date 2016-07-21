@@ -106,8 +106,6 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
             checkNavResultCode();
             viewModel.injectParams(params);
             viewModel.viewModelCreate(params);
-        } else {
-            viewModel.injectParams(params);
         }
         getNavigationControllerImpl().setContext(context);
         this.context = context;
