@@ -72,7 +72,7 @@ ext.deps = [
         rxjava             : 'io.reactivex:rxjava:1.1.6',
         rxAndroid          : 'io.reactivex:rxandroid:1.2.1',
         rxRelay            : 'com.jakewharton.rxrelay:rxrelay:1.1.0',
-        rxLifecycle        : 'com.trello:rxlifecycle:0.5.0',
+        rxLifecycle        : 'com.trello:rxlifecycle:0.6.1',
         rxBinding          : 'com.jakewharton.rxbinding:rxbinding:0.4.0',
         rxBindingSupport   : 'com.jakewharton.rxbinding:rxbinding-support-v4:0.4.0',
         rxBindingRecycler  : 'com.jakewharton.rxbinding:rxbinding-recyclerview-v7:0.4.0',

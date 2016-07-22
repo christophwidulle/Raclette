@@ -46,6 +46,7 @@ public class RxNavigationControllerExt {
         OnSubscribe(NavRequest navRequest, NavigationController navigationController) {
             this.navRequest = navRequest;
             this.navigationController = navigationController;
+
         }
 
         OnSubscribe(Intent intent, NavigationController navigationController) {
