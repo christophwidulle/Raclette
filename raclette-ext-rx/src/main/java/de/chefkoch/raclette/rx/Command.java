@@ -1,6 +1,7 @@
 package de.chefkoch.raclette.rx;
 
 import com.jakewharton.rxrelay.PublishRelay;
+
 import de.chefkoch.raclette.ViewModelLifecycleState;
 import de.chefkoch.raclette.rx.lifecycle.RxViewModelLifecycle;
 import rx.Observable;
@@ -41,9 +42,14 @@ public class Command<T> {
 
     public Observable<T> asObservable() {
         if (lifecycleSubject != null) {
-            return subject.asObservable().compose(RxViewModelLifecycle.<T>bind(lifecycleSubject));
+            return subject
+                    .asObservable()
+                    .onBackpressureBuffer()
+                    .compose(RxViewModelLifecycle.<T>bind(lifecycleSubject));
         } else {
-            return subject.asObservable();
+            return subject
+                    .asObservable()
+                    .onBackpressureBuffer();
         }
     }
 

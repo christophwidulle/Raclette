@@ -15,7 +15,6 @@ public class Value<T> extends ObservableField<T> {
 
     public final BehaviorRelay<T> subject = BehaviorRelay.create();
 
-
     public static <T> Value<T> create() {
         return new Value<>();
     }
