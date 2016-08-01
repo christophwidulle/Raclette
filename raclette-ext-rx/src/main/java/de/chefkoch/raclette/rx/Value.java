@@ -1,43 +1,73 @@
 package de.chefkoch.raclette.rx;
 
 import android.databinding.ObservableField;
+
 import com.jakewharton.rxrelay.BehaviorRelay;
-import de.chefkoch.raclette.ViewModelLifecycleState;
-import de.chefkoch.raclette.rx.lifecycle.RxViewModelLifecycle;
+import com.jakewharton.rxrelay.Relay;
+import com.jakewharton.rxrelay.ReplayRelay;
+
 import rx.Observable;
-import rx.Subscription;
 import rx.functions.Action1;
 
 /**
  * Created by christophwidulle
  */
-public class Value<T> extends ObservableField<T> {
+public abstract class Value<T> extends ObservableField<T> {
 
-    public final BehaviorRelay<T> subject = BehaviorRelay.create();
+
+    protected abstract Relay<T, T> subject();
+
 
     public static <T> Value<T> create() {
-        return new Value<>();
+        return new BehaviorValue<T>();
+    }
+
+    public static <T> Value<T> createReplay() {
+        return new ReplayValue<T>();
     }
 
     @Override
     public void set(T value) {
         super.set(value);
-        subject.call(value);
+        subject().call(value);
     }
-/*
-    public Observable<T> observeAndBind(Observable<ActivityEvent> lifecycle)
 
-    //todo  still a draft
+    @Override
+    public T get() {
+        return super.get();
+    }
+
     public Observable<T> asObservable() {
-        if (lifecycleSubject != null) {
-            return subject.asObservable().compose(RxViewModelLifecycle.<T>bind(lifecycleSubject));
-        } else {
-            return subject.asObservable();
+        return subject().asObservable();
+    }
+
+
+    public Action1<T> asSetAction() {
+        return new Action1<T>() {
+            @Override
+            public void call(T val) {
+                set(val);
+            }
+        };
+    }
+
+    public static class BehaviorValue<T> extends Value<T> {
+
+        private final BehaviorRelay<T> subject = BehaviorRelay.create();
+
+        @Override
+        protected Relay<T, T> subject() {
+            return subject;
         }
     }
 
-    public Subscription subscribe(Action1<T> action1) {
-        return asObservable().subscribe(action1);
+    public static class ReplayValue<T> extends Value<T> {
+
+        private final ReplayRelay<T> subject = ReplayRelay.create();
+
+        @Override
+        protected Relay<T, T> subject() {
+            return subject;
+        }
     }
-*/
 }
