@@ -18,7 +18,9 @@ package de.chefkoch.raclette.sample;
 
 import android.content.Intent;
 import de.chefkoch.raclette.Bind;
+import de.chefkoch.raclette.R;
 import de.chefkoch.raclette.TestParameter;
+import de.chefkoch.raclette.android.support.BindingAdapter;
 import de.chefkoch.raclette.routing.Nav;
 import de.chefkoch.raclette.routing.NavRequest;
 import de.chefkoch.raclette.routing.NavRequestInterceptor;
@@ -38,8 +40,14 @@ import de.chefkoch.raclette.sample.databinding.CharacterActivityBinding;
 public class CharacterActivity extends RacletteRxAppCompatActivity<CharacterViewModel, CharacterActivityBinding> implements NavRequestInterceptor {
 
 
+
+
+
     @Override
     public boolean onHandle(NavRequest navRequest) {
+
+
+
 
 
         return true;
