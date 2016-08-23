@@ -22,3 +22,27 @@ dependencies {
 }
 
 apply from: rootProject.file('gradle/gradle-maven-push.gradle')
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId GROUP
+            artifactId POM_ARTIFACT_ID
+            version VERSION_NAME
+
+            artifact jar
+        }
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            url "${artifactory_url}"
+            credentials {
+                username = "${artifactory_user}"
+                password = "${artifactory_password}"
+            }
+        }
+    }
+}
