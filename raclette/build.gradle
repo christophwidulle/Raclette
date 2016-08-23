@@ -51,7 +51,7 @@ publishing {
 publishing {
     repositories {
         maven {
-            url "http://artifactory.prod.chefkoch.de:30046/artifactory/libs-snapshot-local"
+            url "${artifactory_url}"
             credentials {
                 username = "${artifactory_user}"
                 password = "${artifactory_password}"
