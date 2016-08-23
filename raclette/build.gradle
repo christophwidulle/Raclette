@@ -43,7 +43,7 @@ publishing {
             artifactId POM_ARTIFACT_ID
             version VERSION_NAME
 
-            artifact sourceJar
+            artifact "${project.buildDir}/outputs/aar/${project.name}-release.aar"
         }
     }
 }

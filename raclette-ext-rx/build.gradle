@@ -29,10 +29,6 @@ dependencies {
 
 apply from: rootProject.file('gradle/gradle-maven-push.gradle')
 
-task sourceJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier "source"
-}
 
 publishing {
     publications {
@@ -41,7 +37,7 @@ publishing {
             artifactId POM_ARTIFACT_ID
             version VERSION_NAME
 
-            artifact sourceJar
+            artifact "${project.buildDir}/outputs/aar/${project.name}-release.aar"
         }
     }
 }

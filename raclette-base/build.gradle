@@ -23,6 +23,8 @@ dependencies {
 
 apply from: rootProject.file('gradle/gradle-maven-push.gradle')
 
+
+
 publishing {
     publications {
         maven(MavenPublication) {

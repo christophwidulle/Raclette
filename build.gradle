@@ -7,24 +7,10 @@ subprojects { project ->
         mavenLocal()
     }
 
-    apply plugin: 'checkstyle'
+   // apply plugin: 'checkstyle'
     apply plugin: 'maven-publish'
 
-    task checkstyle(type: Checkstyle) {
-        configFile rootProject.file('checkstyle.xml')
-        source 'src/main/java'
-        ignoreFailures false
-        showViolations true
-        include '**/*.java'
 
-        classpath = files()
-    }
-
-    afterEvaluate {
-        if (project.tasks.findByName('check')) {
-            check.dependsOn('checkstyle')
-        }
-    }
 
     buildscript {
         repositories {
@@ -44,6 +30,17 @@ subprojects { project ->
 }
 allprojects {
     tasks.withType(Javadoc).all { enabled = false }
+}
+
+if (!project.hasProperty("artifactory_url")) {
+    ext.artifactory_url = ""
+}
+if (!project.hasProperty("artifactory_user")) {
+    ext.artifactory_user = ""
+}
+
+if (!project.hasProperty("artifactory_password")) {
+    ext.artifactory_password = ""
 }
 
 ext {
