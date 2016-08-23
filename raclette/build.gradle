@@ -30,3 +30,32 @@ dependencies {
 }
 
 apply from: rootProject.file('gradle/gradle-maven-push.gradle')
+
+task sourceJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier "source"
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId GROUP
+            artifactId POM_ARTIFACT_ID
+            version VERSION_NAME
+
+            artifact sourceJar
+        }
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            url "http://artifactory.prod.chefkoch.de:30046/artifactory/libs-snapshot-local"
+            credentials {
+                username = "${artifactory_user}"
+                password = "${artifactory_password}"
+            }
+        }
+    }
+}
