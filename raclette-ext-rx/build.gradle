@@ -31,7 +31,6 @@ apply from: rootProject.file('gradle/gradle-maven-push.gradle')
 
 task sourceJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
-    classifier "source"
 }
 
 publishing {
@@ -42,6 +41,7 @@ publishing {
             version VERSION_NAME
 
             artifact sourceJar
+            artifact("${buildDir}/outputs/aar/${artifactId}-release.aar")
         }
     }
 }
