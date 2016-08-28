@@ -88,6 +88,16 @@ ext.deps = [
         autocommon         : 'com.google.auto:auto-common:0.4'
 ]
 
+if (!project.hasProperty("artifactory_url")) {
+    ext.artifactory_url = ""
+}
+if (!project.hasProperty("artifactory_user")) {
+    ext.artifactory_user = ""
+}
+
+if (!project.hasProperty("artifactory_password")) {
+    ext.artifactory_password = ""
+}
 
 
 
