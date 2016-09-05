@@ -22,8 +22,16 @@ public abstract class Value<T> extends ObservableField<T> {
         return new BehaviorValue<T>();
     }
 
+    public static <T> Value<T> create(T val) {
+        return new BehaviorValue<T>(val);
+    }
+
     public static <T> Value<T> createReplay() {
         return new ReplayValue<T>();
+    }
+
+    public static <T> Value<T> createReplay(T val) {
+        return new ReplayValue<T>(val);
     }
 
     @Override
@@ -55,6 +63,14 @@ public abstract class Value<T> extends ObservableField<T> {
 
         private final BehaviorRelay<T> subject = BehaviorRelay.create();
 
+        public BehaviorValue() {
+        }
+
+        public BehaviorValue(T val) {
+            set(val);
+        }
+
+
         @Override
         protected Relay<T, T> subject() {
             return subject;
@@ -64,6 +80,13 @@ public abstract class Value<T> extends ObservableField<T> {
     public static class ReplayValue<T> extends Value<T> {
 
         private final ReplayRelay<T> subject = ReplayRelay.create();
+
+        public ReplayValue() {
+        }
+
+        public ReplayValue(T val) {
+            set(val);
+        }
 
         @Override
         protected Relay<T, T> subject() {
