@@ -1,13 +1,15 @@
 package de.chefkoch.raclette.rx;
 
+
 import android.databinding.ObservableField;
 
-import com.jakewharton.rxrelay.BehaviorRelay;
-import com.jakewharton.rxrelay.Relay;
 import com.jakewharton.rxrelay.ReplayRelay;
 
 import rx.Observable;
+import rx.Subscriber;
+import rx.functions.Action0;
 import rx.functions.Action1;
+import rx.subscriptions.Subscriptions;
 
 /**
  * Created by christophwidulle
@@ -15,15 +17,20 @@ import rx.functions.Action1;
 public abstract class Value<T> extends ObservableField<T> {
 
 
-    protected abstract Relay<T, T> subject();
-
-
     public static <T> Value<T> create() {
-        return new BehaviorValue<T>();
+        return new DefaultValue<T>(true);
     }
 
     public static <T> Value<T> create(T val) {
-        return new BehaviorValue<T>(val);
+        return new DefaultValue<T>(val, true);
+    }
+
+    public static <T> Value<T> createPublish() {
+        return new DefaultValue<T>(false);
+    }
+
+    public static <T> Value<T> createPublish(T val) {
+        return new DefaultValue<T>(val, false);
     }
 
     public static <T> Value<T> createReplay() {
@@ -34,19 +41,12 @@ public abstract class Value<T> extends ObservableField<T> {
         return new ReplayValue<T>(val);
     }
 
-    @Override
-    public void set(T value) {
-        super.set(value);
-        subject().call(value);
+
+    Value() {
     }
 
-    @Override
-    public T get() {
-        return super.get();
-    }
-
-    public Observable<T> asObservable() {
-        return subject().asObservable();
+    Value(T value) {
+        super(value);
     }
 
 
@@ -59,38 +59,81 @@ public abstract class Value<T> extends ObservableField<T> {
         };
     }
 
-    public static class BehaviorValue<T> extends Value<T> {
+    public abstract Observable<T> asObservable();
 
-        private final BehaviorRelay<T> subject = BehaviorRelay.create();
 
-        public BehaviorValue() {
+    static class DefaultValue<T> extends Value<T> {
+
+        private final boolean emitCurrent;
+
+
+        public DefaultValue(boolean emitCurrent) {
+            this.emitCurrent = emitCurrent;
         }
 
-        public BehaviorValue(T val) {
-            set(val);
+        DefaultValue(T value, boolean emitCurrent) {
+            super(value);
+            this.emitCurrent = emitCurrent;
         }
 
-
-        @Override
-        protected Relay<T, T> subject() {
-            return subject;
+        public Observable<T> asObservable() {
+            return toObservable(this, emitCurrent);
         }
+
     }
 
-    public static class ReplayValue<T> extends Value<T> {
+    static class ReplayValue<T> extends Value<T> {
+
 
         private final ReplayRelay<T> subject = ReplayRelay.create();
 
-        public ReplayValue() {
-        }
-
-        public ReplayValue(T val) {
+        ReplayValue(T val) {
+            super(val);
             set(val);
         }
 
-        @Override
-        protected Relay<T, T> subject() {
-            return subject;
+        ReplayValue() {
         }
+
+
+        @Override
+        public void set(T value) {
+            super.set(value);
+            subject.call(value);
+        }
+
+        public Observable<T> asObservable() {
+            return subject.asObservable();
+        }
+
+    }
+
+
+    public static <T> Observable<T> toObservable(final ObservableField<T> observableField, final boolean emitCurrent) {
+        return Observable.create(new Observable.OnSubscribe<T>() {
+            @Override
+            public void call(final Subscriber<? super T> subscriber) {
+                if (emitCurrent) {
+                    subscriber.onNext(observableField.get());
+                }
+                final OnPropertyChangedCallback callback = new OnPropertyChangedCallback() {
+                    @Override
+                    public void onPropertyChanged(android.databinding.Observable dataBindingObservable, int propertyId) {
+                        if (dataBindingObservable == observableField) {
+                            subscriber.onNext(observableField.get());
+                        }
+                    }
+                };
+
+                observableField.addOnPropertyChangedCallback(callback);
+
+                subscriber.add(Subscriptions.create(new Action0() {
+                    @Override
+                    public void call() {
+                        observableField.removeOnPropertyChangedCallback(callback);
+                    }
+                }));
+            }
+        });
     }
 }

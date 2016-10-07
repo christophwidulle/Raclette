@@ -25,6 +25,8 @@ dependencies {
     provided project(':raclette')
 
     testCompile deps.junit
+    testCompile deps.robolectric
+    testCompile deps.robolectricDex
 }
 
 apply from: rootProject.file('gradle/gradle-maven-push.gradle')
