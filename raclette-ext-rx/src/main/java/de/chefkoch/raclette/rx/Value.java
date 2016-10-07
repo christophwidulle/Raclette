@@ -113,7 +113,7 @@ public abstract class Value<T> extends ObservableField<T> {
         return Observable.create(new Observable.OnSubscribe<T>() {
             @Override
             public void call(final Subscriber<? super T> subscriber) {
-                if (emitCurrent) {
+                if (emitCurrent && observableField.get() != null) {
                     subscriber.onNext(observableField.get());
                 }
                 final OnPropertyChangedCallback callback = new OnPropertyChangedCallback() {
