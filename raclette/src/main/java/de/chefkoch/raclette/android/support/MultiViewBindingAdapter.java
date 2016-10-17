@@ -113,20 +113,9 @@ public class MultiViewBindingAdapter<T, B extends ViewDataBinding> extends Recyc
         this.itemViewTypeMapping = itemViewTypeMapping;
     }
 
-    public static interface ItemViewTypeMapping<T> {
-        int getItemViewTypeFor(T item);
-    }
 
     private int viewType(T item) {
         return itemViewTypeMapping.getItemViewTypeFor(item);
-    }
-
-    static class DefaultItemViewTypeMapping<T> implements ItemViewTypeMapping<T> {
-
-        @Override
-        public int getItemViewTypeFor(T item) {
-            return item.getClass().hashCode();
-        }
     }
 
     static class BasicViewHolder<T> extends RecyclerView.ViewHolder {
