@@ -18,7 +18,7 @@ import de.chefkoch.raclette.android.UpdatableViewComposition;
 /**
  * Created by christophwidulle on 16.04.16.
  */
-public class CompositionMultiViewBindingAdapter<T> extends RecyclerView.Adapter<CompositionMultiViewBindingAdapter.BasicViewHolder<Object>> {
+public class CompositionMultiViewBindingAdapter<T> extends RecyclerView.Adapter<CompositionMultiViewBindingAdapter.BasicViewHolder<T>> {
 
     private final Map<Integer, UpdatableViewCompositionFactory> elements;
     private AdapterItemClickListener<T> itemClickListener;
@@ -69,7 +69,7 @@ public class CompositionMultiViewBindingAdapter<T> extends RecyclerView.Adapter<
 
     @Override
     @SuppressWarnings("unchecked assignement")
-    public BasicViewHolder<Object> onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BasicViewHolder<T> onCreateViewHolder(ViewGroup parent, int viewType) {
         UpdatableViewCompositionFactory factory = elements.get(viewType);
         if (factory != null) {
             UpdatableViewComposition updatableViewComposition = factory.create();
@@ -81,7 +81,7 @@ public class CompositionMultiViewBindingAdapter<T> extends RecyclerView.Adapter<
     }
 
     @Override
-    public void onBindViewHolder(BasicViewHolder<Object> holder, int position) {
+    public void onBindViewHolder(BasicViewHolder<T> holder, int position) {
         holder.bind(items.get(position));
     }
 
@@ -106,7 +106,7 @@ public class CompositionMultiViewBindingAdapter<T> extends RecyclerView.Adapter<
         private final UpdatableViewComposition<T, ? extends UpdatableViewModel<T>, ? extends ViewDataBinding> viewComposition;
         private T item;
 
-        BasicViewHolder(final AdapterItemClickListener<Object> itemClickListener,
+        BasicViewHolder(final AdapterItemClickListener<T> itemClickListener,
                         final UpdatableViewComposition<T, ? extends UpdatableViewModel<T>, ? extends ViewDataBinding> viewComposition) {
             super(viewComposition);
             this.viewComposition = viewComposition;
@@ -155,13 +155,13 @@ public class CompositionMultiViewBindingAdapter<T> extends RecyclerView.Adapter<
         }
 
         @Override
-        public <T> Builder withElement(Class<T> klass, UpdatableViewCompositionFactory<T> factory) {
+        public Builder withElement(Class<T> klass, UpdatableViewCompositionFactory<T> factory) {
             elements.put(klass.hashCode(), factory);
             return this;
         }
 
         @Override
-        public <T> Builder withElement(int itemViewType, UpdatableViewCompositionFactory<T> factory) {
+        public Builder withElement(int itemViewType, UpdatableViewCompositionFactory<T> factory) {
             elements.put(itemViewType, factory);
             return this;
         }
@@ -189,7 +189,7 @@ public class CompositionMultiViewBindingAdapter<T> extends RecyclerView.Adapter<
     }
 
     public interface ByClassBuilder<T> {
-        <T> Builder withElement(Class<T> klass, UpdatableViewCompositionFactory<T> factory);
+        Builder withElement(Class<T> klass, UpdatableViewCompositionFactory<T> factory);
 
         Builder withItemClickListener(AdapterItemClickListener<T> itemClickListener);
 
@@ -198,7 +198,7 @@ public class CompositionMultiViewBindingAdapter<T> extends RecyclerView.Adapter<
     }
 
     public interface ViewTypeBuilder<T> {
-        <T> Builder withElement(int itemViewType, UpdatableViewCompositionFactory<T> factory);
+        Builder withElement(int itemViewType, UpdatableViewCompositionFactory<T> factory);
 
         Builder withItemClickListener(AdapterItemClickListener<T> itemClickListener);
 

@@ -3,11 +3,9 @@ package de.chefkoch.raclette.android;
 import android.content.Context;
 import android.databinding.ViewDataBinding;
 import android.util.AttributeSet;
-import android.util.Log;
+
 import de.chefkoch.raclette.Updatable;
 import de.chefkoch.raclette.UpdatableViewModel;
-
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by christophwidulle on 22.05.16.
