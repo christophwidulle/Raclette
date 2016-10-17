@@ -133,11 +133,11 @@ public class CompositionMultiViewBindingAdapter<T> extends RecyclerView.Adapter<
     }
 
     public static <T> ByClassBuilder<T> builder() {
-        return new Builder<T>();
+        return new Builder<>();
     }
 
     public static <T> ViewTypeBuilder<T> builder(ItemViewTypeMapping<T> itemViewTypeMapping) {
-        return new Builder<T>();
+        return new Builder<>(itemViewTypeMapping);
     }
 
     public static class Builder<T> implements ByClassBuilder<T>, ViewTypeBuilder<T> {

@@ -4,6 +4,7 @@ import android.databinding.ViewDataBinding;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+
 import de.chefkoch.raclette.UpdatableViewModel;
 import de.chefkoch.raclette.android.AdapterItemClickListener;
 import de.chefkoch.raclette.android.BindingDecorator;
