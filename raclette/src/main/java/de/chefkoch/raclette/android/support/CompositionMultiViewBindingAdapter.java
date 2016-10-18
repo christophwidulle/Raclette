@@ -143,31 +143,31 @@ public class CompositionMultiViewBindingAdapter<T> extends RecyclerView.Adapter<
     public static class Builder<T> implements ByClassBuilder<T>, ViewTypeBuilder<T> {
 
         private ItemViewTypeMapping<T> itemViewTypeMapping;
-        Map<Integer, UpdatableViewCompositionFactory> elements = new HashMap<>();
-        AdapterItemClickListener<T> itemClickListener;
+        private Map<Integer, UpdatableViewCompositionFactory> elements = new HashMap<>();
+        private AdapterItemClickListener<T> itemClickListener;
 
 
-        public Builder(ItemViewTypeMapping<T> itemViewTypeMapping) {
+        Builder(ItemViewTypeMapping<T> itemViewTypeMapping) {
             this.itemViewTypeMapping = itemViewTypeMapping;
         }
 
-        public Builder() {
+        Builder() {
         }
 
         @Override
-        public Builder withElement(Class<T> klass, UpdatableViewCompositionFactory<T> factory) {
+        public Builder<T> withElement(Class<T> klass, UpdatableViewCompositionFactory<T> factory) {
             elements.put(klass.hashCode(), factory);
             return this;
         }
 
         @Override
-        public Builder withElement(int itemViewType, UpdatableViewCompositionFactory<T> factory) {
+        public Builder<T> withElement(int itemViewType, UpdatableViewCompositionFactory<T> factory) {
             elements.put(itemViewType, factory);
             return this;
         }
 
         @Override
-        public Builder withItemClickListener(AdapterItemClickListener<T> itemClickListener) {
+        public Builder<T> withItemClickListener(AdapterItemClickListener<T> itemClickListener) {
             this.itemClickListener = itemClickListener;
             return this;
         }
@@ -189,18 +189,18 @@ public class CompositionMultiViewBindingAdapter<T> extends RecyclerView.Adapter<
     }
 
     public interface ByClassBuilder<T> {
-        Builder withElement(Class<T> klass, UpdatableViewCompositionFactory<T> factory);
+        Builder<T> withElement(Class<T> klass, UpdatableViewCompositionFactory<T> factory);
 
-        Builder withItemClickListener(AdapterItemClickListener<T> itemClickListener);
+        Builder<T> withItemClickListener(AdapterItemClickListener<T> itemClickListener);
 
         CompositionMultiViewBindingAdapter<T> build();
 
     }
 
     public interface ViewTypeBuilder<T> {
-        Builder withElement(int itemViewType, UpdatableViewCompositionFactory<T> factory);
+        Builder<T> withElement(int itemViewType, UpdatableViewCompositionFactory<T> factory);
 
-        Builder withItemClickListener(AdapterItemClickListener<T> itemClickListener);
+        Builder<T> withItemClickListener(AdapterItemClickListener<T> itemClickListener);
 
         CompositionMultiViewBindingAdapter<T> build();
 
