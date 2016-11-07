@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.lang.ref.WeakReference;
 
+import de.chefkoch.raclette.BR;
 import de.chefkoch.raclette.UpdatableViewModel;
 import de.chefkoch.raclette.android.UpdatableViewComposition;
 
@@ -18,23 +19,12 @@ public class CompositionMultiViewBindingAdapterTest {
     public void testBuilder() throws Exception {
 
 
-        CompositionMultiViewBindingAdapter
-                .builder(new ItemViewTypeMapping<WeakReference<String>>() {
-                    @Override
-                    public int getItemViewTypeFor(WeakReference<String> item) {
-                        return 0;
-                    }
-                })
-                .withElement(1, new CompositionMultiViewBindingAdapter.UpdatableViewCompositionFactory<WeakReference<String>>() {
-                    @Override
-                    public UpdatableViewComposition<WeakReference<String>, ? extends UpdatableViewModel<WeakReference<String>>, ?> create() {
-                        return null;
-                    }
-                })
-        .build();
 
 
-        final CompositionMultiViewBindingAdapter<String > build = CompositionMultiViewBindingAdapter
+
+
+
+        final CompositionMultiViewBindingAdapter<String> build = CompositionMultiViewBindingAdapter
                 .builder(new ItemViewTypeMapping<String>() {
                     @Override
                     public int getItemViewTypeFor(String item) {

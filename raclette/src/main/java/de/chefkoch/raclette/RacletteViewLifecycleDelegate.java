@@ -28,11 +28,13 @@ public class RacletteViewLifecycleDelegate<V extends ViewModel, B extends ViewDa
     private final ViewModelBindingConfig<V> viewModelBindingConfig;
     private Bundle params;
     private Context context;
+    private final OnViewModelCreatedCallback callback;
 
-    public RacletteViewLifecycleDelegate(Raclette raclette, ViewModelBindingConfig<V> viewModelBindingConfig) {
+    public RacletteViewLifecycleDelegate(Raclette raclette, ViewModelBindingConfig<V> viewModelBindingConfig, OnViewModelCreatedCallback callback) {
         this.raclette = raclette;
         this.viewModelBindingConfig = viewModelBindingConfig;
         this.context = raclette.getContextManager().getCurrentContext();
+        this.callback = callback;
 
         checkAndSetNavigationSupport(context);
     }
@@ -52,6 +54,7 @@ public class RacletteViewLifecycleDelegate<V extends ViewModel, B extends ViewDa
             injectParams();
             binding.setVariable(raclette.getViewModelBindingId(), viewModel);
             viewModel.viewModelCreate(params);
+            callback.onCreated();
         }
     }
 
@@ -111,6 +114,11 @@ public class RacletteViewLifecycleDelegate<V extends ViewModel, B extends ViewDa
     private void checkViewBindung() {
         if (binding == null) throw new RacletteException("call onCreateViewBinding(...) before.");
     }
+
+    public static interface OnViewModelCreatedCallback{
+        void onCreated();
+    }
+
 
     public V viewModel() {
         return viewModel;

@@ -5,8 +5,8 @@ import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
+
 import de.chefkoch.raclette.*;
 
 /**
@@ -32,9 +32,17 @@ public class ViewComposition<V extends ViewModel, B extends ViewDataBinding> ext
     }
 
     protected void create() {
-        delegate = new RacletteViewLifecycleDelegate<>(getRaclette(), getViewModelBindingConfig());
+        delegate = new RacletteViewLifecycleDelegate<>(getRaclette(), getViewModelBindingConfig(), new RacletteViewLifecycleDelegate.OnViewModelCreatedCallback() {
+            @Override
+            public void onCreated() {
+                onViewModelCreated();
+            }
+        });
         delegate.onCreateViewBinding(LayoutInflater.from(getContext()), this, true);
-        delegate.create();
+
+    }
+
+    protected void onViewModelCreated() {
 
     }
 
