@@ -24,7 +24,7 @@ import rx.subjects.BehaviorSubject;
 public class RxViewComposition<V extends ViewModel, B extends ViewDataBinding> extends ViewComposition<V, B> {
 
 
-    private final BehaviorSubject<ViewCompositionLifecycleState> lifecycleSubject = BehaviorSubject.create();
+    private BehaviorSubject<ViewCompositionLifecycleState> lifecycleSubject;
 
 
     public RxViewComposition(Context context) {
@@ -41,6 +41,7 @@ public class RxViewComposition<V extends ViewModel, B extends ViewDataBinding> e
 
     @Override
     protected void create() {
+        lifecycleSubject = BehaviorSubject.create();
         lifecycleSubject.onNext(ViewCompositionLifecycleState.NEW);
         super.create();
     }
