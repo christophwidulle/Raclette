@@ -103,6 +103,10 @@ public class NavRequest {
             Object valueA = a.get(key);
             Object valueB = b.get(key);
 
+            if(valueA == null && valueB == null) {
+                return true;
+            }
+
             if (valueA instanceof Bundle && valueB instanceof Bundle) {
                 if (!equalsBundles((Bundle) valueA, (Bundle) valueB)) {
                     return false;
