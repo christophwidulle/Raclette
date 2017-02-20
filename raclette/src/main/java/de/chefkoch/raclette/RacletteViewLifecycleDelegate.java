@@ -1,6 +1,5 @@
 package de.chefkoch.raclette;
 
-import android.app.Activity;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
@@ -9,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import de.chefkoch.raclette.android.DefaultNavigationSupport;
 import de.chefkoch.raclette.routing.NavigationController;
 import de.chefkoch.raclette.routing.NavigationControllerImpl;
 import de.chefkoch.raclette.routing.NavigationSupport;
@@ -42,20 +40,6 @@ public class RacletteViewLifecycleDelegate<V extends ViewModel, B extends ViewDa
     public View onCreateViewBinding(LayoutInflater inflater, @Nullable ViewGroup parent, boolean attachToParent) {
         binding = DataBindingUtil.inflate(inflater, viewModelBindingConfig.getLayoutResource(), parent, attachToParent);
         return binding.getRoot();
-    }
-
-    public void create() {
-        checkViewBindung();
-        if (viewModel == null) {
-            viewModel = raclette.getViewModelManager().createViewModel(viewModelBindingConfig.getViewModelClass());
-            viewModel.setNavigationController(raclette.createNavigationController());
-            getNavigationControllerImpl().setContext(context);
-            setNavigationSupportIfNeeded();
-            injectParams();
-            binding.setVariable(raclette.getViewModelBindingId(), viewModel);
-            viewModel.viewModelCreate(params);
-            callback.onCreated();
-        }
     }
 
     private boolean checkAndSetNavigationSupport(Object target) {
@@ -92,7 +76,7 @@ public class RacletteViewLifecycleDelegate<V extends ViewModel, B extends ViewDa
     }
 
     public void onAttachedToWindow() {
-        create();
+        createViewModel();
         viewModel.create(params);
         viewModel.start();
         viewModel.resume();
@@ -105,6 +89,21 @@ public class RacletteViewLifecycleDelegate<V extends ViewModel, B extends ViewDa
         destroyViewModel();
     }
 
+
+    public void createViewModel() {
+        checkViewBindung();
+        if (viewModel == null) {
+            viewModel = raclette.getViewModelManager().createViewModel(viewModelBindingConfig.getViewModelClass());
+            viewModel.setNavigationController(raclette.createNavigationController());
+            getNavigationControllerImpl().setContext(context);
+            setNavigationSupportIfNeeded();
+            injectParams();
+            binding.setVariable(raclette.getViewModelBindingId(), viewModel);
+            viewModel.viewModelCreate(params);
+            callback.onCreated();
+        }
+    }
+
     private void destroyViewModel() {
         viewModel.viewModelDestroy();
         raclette.getViewModelManager().delete(viewModel.getId());
@@ -115,7 +114,7 @@ public class RacletteViewLifecycleDelegate<V extends ViewModel, B extends ViewDa
         if (binding == null) throw new RacletteException("call onCreateViewBinding(...) before.");
     }
 
-    public static interface OnViewModelCreatedCallback{
+    public static interface OnViewModelCreatedCallback {
         void onCreated();
     }
 

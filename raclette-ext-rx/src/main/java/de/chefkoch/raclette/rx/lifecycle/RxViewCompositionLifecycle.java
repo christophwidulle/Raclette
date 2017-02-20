@@ -103,7 +103,7 @@ public class RxViewCompositionLifecycle {
                         case ON_ATTACH:
                             return ViewCompositionLifecycleState.ON_DETACH;
                         case ON_DETACH:
-                            throw new OutsideLifecycleException("Cannot bind to ViewModel lifecycle when outside of it.");
+                            throw new OutsideLifecycleException("Cannot bind to ViewComposition lifecycle when outside of it.");
                         default:
                             throw new UnsupportedOperationException("Binding to " + lastEvent + " not yet implemented");
                     }
