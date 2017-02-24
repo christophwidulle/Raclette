@@ -55,6 +55,7 @@ public class RxUpdatableViewComposition<T, V extends UpdatableViewModel<T>, B ex
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         lifecycleSubject.onNext(ViewCompositionLifecycleState.ON_DETACH);
+        lifecycleSubject.onNext(ViewCompositionLifecycleState.NEW);
 
     }
 

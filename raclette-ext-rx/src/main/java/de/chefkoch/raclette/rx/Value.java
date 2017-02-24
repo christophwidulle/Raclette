@@ -59,6 +59,25 @@ public abstract class Value<T> extends ObservableField<T> {
         };
     }
 
+    public Subscriber<T> subscribe() {
+        return new Subscriber<T>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(T t) {
+                set(t);
+            }
+        };
+    }
+
     public abstract Observable<T> asObservable();
 
 
