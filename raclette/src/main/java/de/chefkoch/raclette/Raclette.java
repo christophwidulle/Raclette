@@ -70,9 +70,21 @@ public class Raclette {
     public static class Builder {
         int viewModelBindingId = NO_VIEWMODEL_BINDING_ID;
         ViewModelInjector viewModelInjector;
+        ViewModelFactory factory;
+        ViewModelIdGenerator viewModelIdGenerator = new ViewModelIdGenerator.Default();
+
+        public Builder viewModelIdGenerator(ViewModelIdGenerator viewModelIdGenerator) {
+            this.viewModelIdGenerator = viewModelIdGenerator;
+            return this;
+        }
 
         public Builder viewModelInjector(ViewModelInjector injector) {
             this.viewModelInjector = injector;
+            return this;
+        }
+
+        public Builder viewModelFactory(ViewModelFactory factory) {
+            this.factory = factory;
             return this;
         }
 
@@ -88,7 +100,7 @@ public class Raclette {
             ContextManager contextManager = new ContextManager();
             return new Raclette(viewModelBindingId,
                     viewModelInjector,
-                    new ViewModelManager(viewModelInjector),
+                    new ViewModelManager(viewModelInjector, factory, viewModelIdGenerator),
                     contextManager,
                     new RequestForResultManager());
         }

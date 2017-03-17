@@ -19,6 +19,9 @@ configurations {
 dependencies {
     provided deps.android
     provided deps.supportAnnotations
+
+    testCompile  deps.junit;
+    testCompile  deps.truth;
 }
 
 apply from: rootProject.file('gradle/gradle-maven-push.gradle')

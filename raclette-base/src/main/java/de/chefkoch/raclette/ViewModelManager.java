@@ -3,7 +3,6 @@ package de.chefkoch.raclette;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -12,18 +11,21 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ViewModelManager {
 
     private final ViewModelInjector injector;
+    private final ViewModelFactory factory;
+    private final ViewModelIdGenerator viewModelIdGenerator;
 
-    ViewModelManager(ViewModelInjector injector) {
+    ViewModelManager(ViewModelInjector injector, ViewModelFactory factory, ViewModelIdGenerator viewModelIdGenerator) {
         this.injector = injector;
+        this.factory = factory;
+        this.viewModelIdGenerator = viewModelIdGenerator;
     }
 
     private Map<String, ViewModel> registry = new ConcurrentHashMap<>();
 
     <V extends ViewModel> V createViewModel(Class<V> viewModelClass) {
-
-        String id = UUID.randomUUID().toString();
         try {
-            V viewModel = viewModelClass.newInstance();
+            V viewModel = newViewModel(viewModelClass);
+            String id = viewModelIdGenerator.createId();
             viewModel.setId(id);
             if (injector != null) {
                 injector.inject(viewModel);
@@ -31,6 +33,18 @@ public class ViewModelManager {
             registry.put(id, viewModel);
 
             return viewModel;
+        } catch (Exception e) {
+            throw new RacletteException(e);
+        }
+    }
+
+    private <V extends ViewModel> V newViewModel(Class<V> viewModelClass) {
+        try {
+            if (factory != null) {
+                return (V) factory.create(viewModelClass);
+            } else {
+                return viewModelClass.newInstance();
+            }
         } catch (Exception e) {
             throw new RacletteException(e);
         }
