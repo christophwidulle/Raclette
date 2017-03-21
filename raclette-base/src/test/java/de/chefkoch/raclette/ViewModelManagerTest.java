@@ -1,5 +1,7 @@
 package de.chefkoch.raclette;
 
+import org.junit.Test;
+
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -20,7 +22,7 @@ public class ViewModelManagerTest {
         }
     };
 
-    @org.junit.Test
+    @Test
     public void createViewModel() throws Exception {
 
         ViewModelManager viewModelManager = new ViewModelManager(null, null, idGenerator);
@@ -34,7 +36,7 @@ public class ViewModelManagerTest {
         assertTrue(viewModelManager.getViewModel("testid") == viewModel);
     }
 
-    @org.junit.Test
+    @Test
     public void getViewModel() throws Exception {
 
         ViewModelManager viewModelManager = new ViewModelManager(null, null, idGenerator);
@@ -49,7 +51,7 @@ public class ViewModelManagerTest {
     }
 
 
-    @org.junit.Test
+    @Test
     public void createViewModelWithInjector() throws Exception {
 
         ViewModelInjector viewModelInjector = new ViewModelInjector() {
@@ -67,7 +69,7 @@ public class ViewModelManagerTest {
         assertThat(viewModel.getTestValue(), equalTo("testval"));
     }
 
-    @org.junit.Test
+    @Test
     public void createViewModelWithFactory() throws Exception {
 
 
@@ -90,7 +92,7 @@ public class ViewModelManagerTest {
 
     }
 
-    @org.junit.Test
+    @Test
     public void createViewModelWithFactoryAndInjector() throws Exception {
 
 
@@ -120,7 +122,7 @@ public class ViewModelManagerTest {
 
     }
 
-    @org.junit.Test
+    @Test
     public void delete() throws Exception {
         ViewModelManager viewModelManager = new ViewModelManager(null, null, idGenerator);
         viewModelManager.delete("testid");
@@ -128,7 +130,7 @@ public class ViewModelManagerTest {
     }
 
 
-    @org.junit.Test
+    @Test
     public void getAll() throws Exception {
         ViewModelManager viewModelManager = new ViewModelManager(null, null, new ViewModelIdGenerator.Default());
         viewModelManager.createViewModel(TestViewModel.class);

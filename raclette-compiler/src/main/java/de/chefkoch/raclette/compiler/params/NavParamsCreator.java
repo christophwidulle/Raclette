@@ -139,7 +139,7 @@ public class NavParamsCreator {
         MethodSpec.Builder builder = MethodSpec.constructorBuilder()
                 .addModifiers(Modifier.PUBLIC);
 
-        MethodSpec.Builder factoryBuilder = MethodSpec.methodBuilder("createId")
+        MethodSpec.Builder factoryBuilder = MethodSpec.methodBuilder("create")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .returns(className)
                 .addStatement("return new $T()", className);
