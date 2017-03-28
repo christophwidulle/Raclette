@@ -91,6 +91,8 @@ public class CompositionMultiViewBindingAdapter<T> extends RecyclerView.Adapter<
         return viewType(item);
     }
 
+    
+
     @Override
     public int getItemCount() {
         return items.size();

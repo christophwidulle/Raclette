@@ -40,11 +40,14 @@ public class ViewModelManager {
 
     private <V extends ViewModel> V newViewModel(Class<V> viewModelClass) {
         try {
+            V instance = null;
             if (factory != null) {
-                return (V) factory.create(viewModelClass);
-            } else {
-                return viewModelClass.newInstance();
+                instance = (V) factory.create(viewModelClass);
             }
+            if (instance == null) {
+                instance = viewModelClass.newInstance();
+            }
+            return instance;
         } catch (Exception e) {
             throw new RacletteException(e);
         }
