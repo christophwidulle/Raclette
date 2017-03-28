@@ -1,7 +1,9 @@
 package de.chefkoch.raclette.rx;
 
+import com.jakewharton.rxrelay.BehaviorRelay;
 import com.jakewharton.rxrelay.PublishRelay;
 
+import com.jakewharton.rxrelay.Relay;
 import de.chefkoch.raclette.ViewModelLifecycleState;
 import de.chefkoch.raclette.rx.lifecycle.RxViewModelLifecycle;
 import rx.Observable;
@@ -13,23 +15,34 @@ import rx.functions.Action1;
  */
 public class Command<T> {
 
-    public final PublishRelay<T> subject = PublishRelay.create();
+    public Relay<T, T> subject;
 
     Observable<ViewModelLifecycleState> lifecycleSubject;
 
     public static <T> Command<T> createAndBind(Observable<ViewModelLifecycleState> lifecycleSubject) {
-        return new Command<>(lifecycleSubject);
+        return new Command<T>(PublishRelay.<T>create(), lifecycleSubject);
+    }
+
+
+    public static <T> Command<T> createBehaviorAndBind(Observable<ViewModelLifecycleState> lifecycleSubject) {
+        return new Command<T>(BehaviorRelay.<T>create(), lifecycleSubject);
     }
 
     public static <T> Command<T> create() {
-        return new Command<>();
+        return new Command<T>(PublishRelay.<T>create());
     }
 
-    Command(Observable<ViewModelLifecycleState> lifecycleSubject) {
+    public static <T> Command<T> createBehavior() {
+        return new Command<T>(BehaviorRelay.<T>create());
+    }
+
+    private Command(Relay<T, T> subject, Observable<ViewModelLifecycleState> lifecycleSubject) {
         this.lifecycleSubject = lifecycleSubject;
+        this.subject = subject;
     }
 
-    Command() {
+    private Command(Relay<T, T> subject) {
+        this.subject = subject;
     }
 
     public void call(T t) {

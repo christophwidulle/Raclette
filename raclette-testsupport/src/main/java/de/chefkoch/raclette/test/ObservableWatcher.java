@@ -20,7 +20,7 @@ public class ObservableWatcher {
         this.onPropertyChangedCallback = onPropertyChangedCallback;
     }
 
-    public static ObservableWatcher hasChanged(Observable observable) {
+    public static ObservableWatcher watch(Observable observable) {
         final CountDownLatch latch = new CountDownLatch(1);
         final Observable.OnPropertyChangedCallback onPropertyChangedCallback = new Observable.OnPropertyChangedCallback() {
             @Override
@@ -32,11 +32,11 @@ public class ObservableWatcher {
         return new ObservableWatcher(latch, observable, onPropertyChangedCallback);
     }
 
-    public boolean await() {
-        return await(1, TimeUnit.MINUTES);
+    public boolean awaitUntilChanged() {
+        return awaitUntilChanged(1, TimeUnit.MINUTES);
     }
 
-    public boolean await(long timeout, TimeUnit unit) {
+    public boolean awaitUntilChanged(long timeout, TimeUnit unit) {
         try {
             latch.await(timeout, unit);
             if (latch.getCount() == 0) return true;
