@@ -11,7 +11,7 @@ import de.chefkoch.raclette.rx.Command;
 public class RxViewCommandBindings {
 
 
-    @BindingAdapter({"bind:clickCommand"})
+    @BindingAdapter({"clickCommand"})
     public static void bindClickCommand(final View view, final Command<Void> command) {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -21,7 +21,7 @@ public class RxViewCommandBindings {
         });
     }
 
-    @BindingAdapter({"bind:clickCommand", "bind:commandParameter"})
+    @BindingAdapter({"clickCommand", "commandParameter"})
     public static void bindClickCommandWithParameter(final View view, final Command command, final Object parameter) {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
