@@ -2,33 +2,31 @@ package de.chefkoch.raclette.android.support;
 
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
+import android.databinding.adapters.ViewBindingAdapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import de.chefkoch.raclette.ViewModel;
 import de.chefkoch.raclette.android.AdapterItemClickListener;
 import de.chefkoch.raclette.android.BindingDecorator;
 
 
-public class MultiViewBindingAdapter<T, B extends ViewDataBinding> extends RecyclerView.Adapter<MultiViewBindingAdapter.BasicViewHolder<T>> {
+public class MultiViewBindingAdapter<T> extends RecyclerView.Adapter<MultiViewBindingAdapter.BasicViewHolder<T>> {
 
     private ItemViewTypeMapping<T> itemViewTypeMapping = new DefaultItemViewTypeMapping<>();
 
-    private HashMap<Integer, MultiBindingElement> bindingElements;
+    private Map<Integer, MultiBindingElement> bindingElements;
 
-    private BindingDecorator<B> bindingDecorator;
+    private BindingDecorator bindingDecorator;
     private AdapterItemClickListener<T> itemClickListener;
 
     private List<T> items = new ArrayList<>();
 
-    public MultiViewBindingAdapter(HashMap<Integer, MultiBindingElement> bindingElements) {
+    private MultiViewBindingAdapter(HashMap<Integer, MultiBindingElement> bindingElements) {
         this.bindingElements = bindingElements;
     }
 
@@ -63,11 +61,11 @@ public class MultiViewBindingAdapter<T, B extends ViewDataBinding> extends Recyc
         notifyDataSetChanged();
     }
 
-    protected void setItemClickListener(AdapterItemClickListener<T> itemClickListener) {
+    private void setItemClickListener(AdapterItemClickListener<T> itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
 
-    private void setBindingDecorator(BindingDecorator<B> bindingDecorator) {
+    private void setBindingDecorator(BindingDecorator bindingDecorator) {
         this.bindingDecorator = bindingDecorator;
     }
 
@@ -75,7 +73,7 @@ public class MultiViewBindingAdapter<T, B extends ViewDataBinding> extends Recyc
     @Override
     public BasicViewHolder<T> onCreateViewHolder(ViewGroup parent, int viewType) {
         MultiBindingElement multiBindingElement = bindingElements.get(viewType);
-        B binding = DataBindingUtil.inflate(
+        ViewDataBinding binding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.getContext()),
                 multiBindingElement.itemLayoutResource,
                 parent,
@@ -152,20 +150,20 @@ public class MultiViewBindingAdapter<T, B extends ViewDataBinding> extends Recyc
     }
 
 
-    public static <T, B extends ViewDataBinding> ByClassBuilder<T, B> builder() {
+    public static <T> ByClassBuilder<T> builder() {
         return new Builder<>();
     }
 
-    public static <T, B extends ViewDataBinding> ViewTypeBuilder<T, B> builder(ItemViewTypeMapping<T> itemViewTypeMapping) {
+    public static <T> ViewTypeBuilder<T> builder(ItemViewTypeMapping<T> itemViewTypeMapping) {
         return new Builder<>(itemViewTypeMapping);
     }
 
 
-    public static class Builder<T, B extends ViewDataBinding> implements ByClassBuilder<T, B>, ViewTypeBuilder<T, B> {
+    public static class Builder<T> implements ByClassBuilder<T>, ViewTypeBuilder<T> {
 
         private ItemViewTypeMapping<T> itemViewTypeMapping;
         private AdapterItemClickListener<T> itemClickListener;
-        private BindingDecorator<B> bindingDecorator;
+        private BindingDecorator bindingDecorator;
         private HashMap<Integer, MultiBindingElement> multiBindingElements = new HashMap<>();
 
         public Builder() {
@@ -176,7 +174,7 @@ public class MultiViewBindingAdapter<T, B extends ViewDataBinding> extends Recyc
         }
 
         @Override
-        public Builder<T, B> withItemBinding(Class klass, int itemBindingId, int itemLayoutResource) {
+        public Builder<T> withItemBinding(Class klass, int itemBindingId, int itemLayoutResource) {
 
             MultiBindingElement multiBindingElement = new MultiBindingElement(
                     itemBindingId,
@@ -187,7 +185,7 @@ public class MultiViewBindingAdapter<T, B extends ViewDataBinding> extends Recyc
         }
 
         @Override
-        public Builder<T, B> withItemBinding(Class klass, int itemBindingId, int itemLayoutResource, int viewModelBindingId, ViewModel viewModel) {
+        public Builder<T> withItemBinding(Class klass, int itemBindingId, int itemLayoutResource, int viewModelBindingId, ViewModel viewModel) {
 
             MultiBindingElement multiBindingElement = new MultiBindingElement(viewModelBindingId,
                     itemBindingId,
@@ -199,7 +197,7 @@ public class MultiViewBindingAdapter<T, B extends ViewDataBinding> extends Recyc
         }
 
         @Override
-        public Builder<T, B> withItemBinding(int itemViewType, int itemBindingId, int itemLayoutResource, int viewModelBindingId, ViewModel viewModel) {
+        public Builder<T> withItemBinding(int itemViewType, int itemBindingId, int itemLayoutResource, int viewModelBindingId, ViewModel viewModel) {
 
             MultiBindingElement multiBindingElement = new MultiBindingElement(viewModelBindingId,
                     itemBindingId,
@@ -211,7 +209,7 @@ public class MultiViewBindingAdapter<T, B extends ViewDataBinding> extends Recyc
         }
 
         @Override
-        public Builder<T, B> withItemBinding(int itemViewType, int itemBindingId, int itemLayoutResource) {
+        public Builder<T> withItemBinding(int itemViewType, int itemBindingId, int itemLayoutResource) {
 
             MultiBindingElement multiBindingElement = new MultiBindingElement(
                     itemBindingId,
@@ -222,21 +220,21 @@ public class MultiViewBindingAdapter<T, B extends ViewDataBinding> extends Recyc
         }
 
         @Override
-        public Builder<T, B> withItemClickListener(AdapterItemClickListener<T> itemClickListener) {
+        public Builder<T> withItemClickListener(AdapterItemClickListener<T> itemClickListener) {
             this.itemClickListener = itemClickListener;
             return this;
         }
 
         @Override
-        public Builder<T, B> withBindingDecorator(BindingDecorator<B> bindingDecorator) {
+        public Builder<T> withBindingDecorator(BindingDecorator bindingDecorator) {
             this.bindingDecorator = bindingDecorator;
             return this;
         }
 
         @Override
-        public MultiViewBindingAdapter<T, B> build() {
+        public MultiViewBindingAdapter<T> build() {
 
-            MultiViewBindingAdapter<T, B> bindingAdapter = new MultiViewBindingAdapter<>(multiBindingElements);
+            MultiViewBindingAdapter<T> bindingAdapter = new MultiViewBindingAdapter<>(multiBindingElements);
             if (itemClickListener != null) {
                 bindingAdapter.setItemClickListener(itemClickListener);
             }
@@ -249,28 +247,28 @@ public class MultiViewBindingAdapter<T, B extends ViewDataBinding> extends Recyc
 
     }
 
-    public interface ByClassBuilder<T, B extends ViewDataBinding> {
-        Builder<T, B> withItemBinding(Class klass, int itemBindingId, int itemLayoutResource, int viewModelBindingId, ViewModel viewModel);
+    public interface ByClassBuilder<T> {
+        Builder<T> withItemBinding(Class klass, int itemBindingId, int itemLayoutResource, int viewModelBindingId, ViewModel viewModel);
 
-        Builder<T, B> withItemBinding(Class klass, int itemBindingId, int itemLayoutResource);
+        Builder<T> withItemBinding(Class klass, int itemBindingId, int itemLayoutResource);
 
-        Builder<T, B> withItemClickListener(AdapterItemClickListener<T> itemClickListener);
+        Builder<T> withItemClickListener(AdapterItemClickListener<T> itemClickListener);
 
-        Builder<T, B> withBindingDecorator(BindingDecorator<B> bindingDecorator);
+        Builder<T> withBindingDecorator(BindingDecorator bindingDecorator);
 
-        MultiViewBindingAdapter<T, B> build();
+        MultiViewBindingAdapter<T> build();
     }
 
-    public interface ViewTypeBuilder<T, B extends ViewDataBinding> {
-        Builder<T, B> withItemBinding(int itemViewType, int itemBindingId, int itemLayoutResource, int viewModelBindingId, ViewModel viewModel);
+    public interface ViewTypeBuilder<T> {
+        Builder<T> withItemBinding(int itemViewType, int itemBindingId, int itemLayoutResource, int viewModelBindingId, ViewModel viewModel);
 
-        Builder<T, B> withItemBinding(int itemViewType, int itemBindingId, int itemLayoutResource);
+        Builder<T> withItemBinding(int itemViewType, int itemBindingId, int itemLayoutResource);
 
-        Builder<T, B> withItemClickListener(AdapterItemClickListener<T> itemClickListener);
+        Builder<T> withItemClickListener(AdapterItemClickListener<T> itemClickListener);
 
-        Builder<T, B> withBindingDecorator(BindingDecorator<B> bindingDecorator);
+        Builder<T> withBindingDecorator(BindingDecorator bindingDecorator);
 
-        MultiViewBindingAdapter<T, B> build();
+        MultiViewBindingAdapter<T> build();
     }
 
 

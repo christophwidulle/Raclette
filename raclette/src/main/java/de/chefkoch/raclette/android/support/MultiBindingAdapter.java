@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import de.chefkoch.raclette.ViewModel;
 import de.chefkoch.raclette.android.AdapterItemClickListener;
-import de.chefkoch.raclette.android.BindingDecorator;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,11 +15,16 @@ import java.util.HashMap;
 import java.util.List;
 
 
+/**
+ * Use {@link MultiViewBindingAdapter}
+ *
+ * @param <B>
+ */
+@Deprecated
 public class MultiBindingAdapter<B extends ViewDataBinding> extends RecyclerView.Adapter<MultiBindingAdapter.BasicViewHolder<Object>> {
 
     private HashMap<Integer, MultiBindingElement> bindingElements;
 
-    private BindingDecorator<B> bindingDecorator;
     private AdapterItemClickListener<Object> itemClickListener;
 
     private List<Object> items = new ArrayList<>();
@@ -64,9 +68,6 @@ public class MultiBindingAdapter<B extends ViewDataBinding> extends RecyclerView
         this.itemClickListener = itemClickListener;
     }
 
-    private void setBindingDecorator(BindingDecorator<B> bindingDecorator) {
-        this.bindingDecorator = bindingDecorator;
-    }
 
     @Override
     public BasicViewHolder<Object> onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -77,9 +78,6 @@ public class MultiBindingAdapter<B extends ViewDataBinding> extends RecyclerView
                 parent,
                 false);
 
-        if (bindingDecorator != null) {
-            bindingDecorator.decorate(binding);
-        }
         return new BasicViewHolder<>(binding,
                 multiBindingElement.itemBindingId,
                 multiBindingElement.viewModelBindingId,
@@ -143,7 +141,6 @@ public class MultiBindingAdapter<B extends ViewDataBinding> extends RecyclerView
 
     public static class Builder<B extends ViewDataBinding> {
         private AdapterItemClickListener<Object> itemClickListener;
-        private BindingDecorator<B> bindingDecorator;
         private HashMap<Integer, MultiBindingElement> multiBindingElements = new HashMap<>();
 
         public Builder<B> withItemBinding(Class klass, int vireModelBindingId, int itemBindingId, int itemLayoutResource, ViewModel viewModel) {
@@ -165,18 +162,12 @@ public class MultiBindingAdapter<B extends ViewDataBinding> extends RecyclerView
             return this;
         }
 
-        public Builder<B> withBindingDecorator(BindingDecorator<B> bindingDecorator) {
-            this.bindingDecorator = bindingDecorator;
-            return this;
-        }
-
         public MultiBindingAdapter<B> build() {
 
             MultiBindingAdapter<B> bindingAdapter = new MultiBindingAdapter<>(multiBindingElements);
             if (itemClickListener != null) {
                 bindingAdapter.setItemClickListener(itemClickListener);
             }
-            bindingAdapter.setBindingDecorator(bindingDecorator);
             return bindingAdapter;
         }
 

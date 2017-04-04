@@ -13,8 +13,11 @@ import de.chefkoch.raclette.android.UpdatableViewComposition;
 import java.util.*;
 
 /**
+ * Not Typesafe. Use {@link CompositionMultiViewBindingAdapter} instead.
+ * <p>
  * Created by christophwidulle on 16.04.16.
  */
+@Deprecated
 public class CompositionMultiBindingAdapter extends RecyclerView.Adapter<CompositionMultiBindingAdapter.BasicViewHolder<Object>> {
 
     private final Map<Integer, UpdatableViewCompositionFactory> elements;
