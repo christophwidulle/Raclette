@@ -7,13 +7,12 @@ import android.view.ViewGroup;
 
 import de.chefkoch.raclette.UpdatableViewModel;
 import de.chefkoch.raclette.android.AdapterItemClickListener;
-import de.chefkoch.raclette.android.BindingDecorator;
-import de.chefkoch.raclette.android.UpdatableViewComposition;
+import de.chefkoch.raclette.android.UpdatableCustomView;
 
 import java.util.*;
 
 /**
- * Not Typesafe. Use {@link CompositionMultiViewBindingAdapter} instead.
+ * Not Typesafe. Use {@link MultiCustomViewAdapter} instead.
  * <p>
  * Created by christophwidulle on 16.04.16.
  */
@@ -66,7 +65,7 @@ public class CompositionMultiBindingAdapter extends RecyclerView.Adapter<Composi
     public BasicViewHolder<Object> onCreateViewHolder(ViewGroup parent, int viewType) {
         UpdatableViewCompositionFactory factory = elements.get(viewType);
         if (factory != null) {
-            UpdatableViewComposition updatableViewComposition = factory.create();
+            UpdatableCustomView updatableViewComposition = factory.create();
             return new BasicViewHolder<>(itemClickListener, updatableViewComposition);
 
         } else {
@@ -92,11 +91,11 @@ public class CompositionMultiBindingAdapter extends RecyclerView.Adapter<Composi
 
 
     static class BasicViewHolder<T> extends RecyclerView.ViewHolder {
-        private final UpdatableViewComposition<T, ? extends UpdatableViewModel<T>, ? extends ViewDataBinding> viewComposition;
+        private final UpdatableCustomView<T, ? extends UpdatableViewModel<T>, ? extends ViewDataBinding> viewComposition;
         private Object item;
 
         BasicViewHolder(final AdapterItemClickListener<Object> itemClickListener,
-                        final UpdatableViewComposition<T, ? extends UpdatableViewModel<T>, ? extends ViewDataBinding> viewComposition) {
+                        final UpdatableCustomView<T, ? extends UpdatableViewModel<T>, ? extends ViewDataBinding> viewComposition) {
             super(viewComposition);
             this.viewComposition = viewComposition;
 
@@ -118,7 +117,7 @@ public class CompositionMultiBindingAdapter extends RecyclerView.Adapter<Composi
 
 
     public interface UpdatableViewCompositionFactory<T> {
-        UpdatableViewComposition<T, ? extends UpdatableViewModel<T>, ?> create();
+        UpdatableCustomView<T, ? extends UpdatableViewModel<T>, ?> create();
     }
 
     public static Builder builder() {

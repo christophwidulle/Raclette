@@ -10,22 +10,22 @@ import de.chefkoch.raclette.UpdatableViewModel;
 /**
  * Created by christophwidulle on 22.05.16.
  */
-public class UpdatableViewComposition<T, V extends UpdatableViewModel<T>, B extends ViewDataBinding>
-        extends ViewComposition<V, B>
+public class UpdatableCustomView<T, V extends UpdatableViewModel<T>, B extends ViewDataBinding>
+        extends CustomView<V, B>
         implements Updatable<T> {
 
-    T updatedItem;
-    boolean updateOnAttach = false;
+    private T updatedItem;
+    private boolean updateOnAttach = false;
 
-    public UpdatableViewComposition(Context context) {
+    public UpdatableCustomView(Context context) {
         super(context);
     }
 
-    public UpdatableViewComposition(Context context, AttributeSet attrs) {
+    public UpdatableCustomView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public UpdatableViewComposition(Context context, AttributeSet attrs, int defStyleAttr) {
+    public UpdatableCustomView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

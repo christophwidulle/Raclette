@@ -5,37 +5,35 @@ import android.databinding.ViewDataBinding;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
-import de.chefkoch.raclette.Updatable;
-import de.chefkoch.raclette.UpdatableViewModel;
-import de.chefkoch.raclette.android.UpdatableViewComposition;
-import de.chefkoch.raclette.android.ViewComposition;
+
+import de.chefkoch.raclette.ViewModel;
+import de.chefkoch.raclette.android.CustomView;
 import de.chefkoch.raclette.rx.lifecycle.RxViewCompositionLifecycle;
 import de.chefkoch.raclette.rx.lifecycle.ViewCompositionLifecycleState;
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
 
 /**
- * Created by christophwidulle on 22.05.16.
+ * Created by christophwidulle on 07.11.16.
  */
-public class RxUpdatableViewComposition<T, V extends UpdatableViewModel<T>, B extends ViewDataBinding>
-        extends UpdatableViewComposition<T, V, B> {
+
+public class RxCustomView<V extends ViewModel, B extends ViewDataBinding> extends CustomView<V, B> {
 
 
     private BehaviorSubject<ViewCompositionLifecycleState> lifecycleSubject;
 
 
-    public RxUpdatableViewComposition(Context context) {
+    public RxCustomView(Context context) {
         super(context);
     }
 
-    public RxUpdatableViewComposition(Context context, AttributeSet attrs) {
+    public RxCustomView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public RxUpdatableViewComposition(Context context, AttributeSet attrs, int defStyleAttr) {
+    public RxCustomView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
-
 
     @Override
     protected void create() {
@@ -48,7 +46,6 @@ public class RxUpdatableViewComposition<T, V extends UpdatableViewModel<T>, B ex
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         lifecycleSubject.onNext(ViewCompositionLifecycleState.ON_ATTACH);
-
     }
 
     @Override
@@ -56,6 +53,10 @@ public class RxUpdatableViewComposition<T, V extends UpdatableViewModel<T>, B ex
         super.onDetachedFromWindow();
         lifecycleSubject.onNext(ViewCompositionLifecycleState.ON_DETACH);
         lifecycleSubject.onNext(ViewCompositionLifecycleState.NEW);
+    }
+
+    @Override
+    protected void onViewModelCreated() {
 
     }
 
@@ -76,4 +77,6 @@ public class RxUpdatableViewComposition<T, V extends UpdatableViewModel<T>, B ex
     public final <T> Observable.Transformer<T, T> bindToLifecycle() {
         return RxViewCompositionLifecycle.bind(lifecycleSubject);
     }
+
+
 }

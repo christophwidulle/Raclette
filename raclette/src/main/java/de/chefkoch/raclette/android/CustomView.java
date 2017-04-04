@@ -12,21 +12,21 @@ import de.chefkoch.raclette.*;
 /**
  * Created by christophwidulle on 21.05.16.
  */
-public class ViewComposition<V extends ViewModel, B extends ViewDataBinding> extends FrameLayout {
+public class CustomView<V extends ViewModel, B extends ViewDataBinding> extends FrameLayout {
 
     RacletteViewLifecycleDelegate<V, B> delegate;
 
-    public ViewComposition(Context context) {
+    public CustomView(Context context) {
         super(context);
         create();
     }
 
-    public ViewComposition(Context context, AttributeSet attrs) {
+    public CustomView(Context context, AttributeSet attrs) {
         super(context, attrs);
         create();
     }
 
-    public ViewComposition(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CustomView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         create();
     }

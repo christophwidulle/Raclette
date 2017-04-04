@@ -59,7 +59,7 @@ public abstract class Value<T> extends ObservableField<T> {
         };
     }
 
-    public Subscriber<T> subscribe() {
+    public Subscriber<T> setSubscriber() {
         return new Subscriber<T>() {
             @Override
             public void onCompleted() {

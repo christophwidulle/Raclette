@@ -13,21 +13,21 @@ import java.util.Map;
 
 import de.chefkoch.raclette.UpdatableViewModel;
 import de.chefkoch.raclette.android.AdapterItemClickListener;
-import de.chefkoch.raclette.android.UpdatableViewComposition;
+import de.chefkoch.raclette.android.UpdatableCustomView;
 
 /**
  * Created by christophwidulle on 16.04.16.
  */
-public class CompositionMultiViewBindingAdapter<T> extends RecyclerView.Adapter<CompositionMultiViewBindingAdapter.BasicViewHolder<T>> {
+public class MultiCustomViewAdapter<T> extends RecyclerView.Adapter<MultiCustomViewAdapter.BasicViewHolder<T>> {
 
-    private final Map<Integer, UpdatableViewCompositionFactory> elements;
+    private final Map<Integer, UpdatableCustomViewFactory> elements;
     private AdapterItemClickListener<T> itemClickListener;
 
     private ItemViewTypeMapping<T> itemViewTypeMapping = new DefaultItemViewTypeMapping<>();
 
     private List<T> items = new ArrayList<>();
 
-    private CompositionMultiViewBindingAdapter(Map<Integer, UpdatableViewCompositionFactory> elements) {
+    private MultiCustomViewAdapter(Map<Integer, UpdatableCustomViewFactory> elements) {
         this.elements = elements;
     }
 
@@ -70,9 +70,9 @@ public class CompositionMultiViewBindingAdapter<T> extends RecyclerView.Adapter<
     @Override
     @SuppressWarnings("unchecked assignement")
     public BasicViewHolder<T> onCreateViewHolder(ViewGroup parent, int viewType) {
-        UpdatableViewCompositionFactory factory = elements.get(viewType);
+        UpdatableCustomViewFactory factory = elements.get(viewType);
         if (factory != null) {
-            UpdatableViewComposition updatableViewComposition = factory.create();
+            UpdatableCustomView updatableViewComposition = factory.create();
             return new BasicViewHolder<>(itemClickListener, updatableViewComposition);
 
         } else {
@@ -105,11 +105,11 @@ public class CompositionMultiViewBindingAdapter<T> extends RecyclerView.Adapter<
 
 
     static class BasicViewHolder<T> extends RecyclerView.ViewHolder {
-        private final UpdatableViewComposition<T, ? extends UpdatableViewModel<T>, ? extends ViewDataBinding> viewComposition;
+        private final UpdatableCustomView<T, ? extends UpdatableViewModel<T>, ? extends ViewDataBinding> viewComposition;
         private T item;
 
         BasicViewHolder(final AdapterItemClickListener<T> itemClickListener,
-                        final UpdatableViewComposition<T, ? extends UpdatableViewModel<T>, ? extends ViewDataBinding> viewComposition) {
+                        final UpdatableCustomView<T, ? extends UpdatableViewModel<T>, ? extends ViewDataBinding> viewComposition) {
             super(viewComposition);
             this.viewComposition = viewComposition;
 
@@ -130,8 +130,8 @@ public class CompositionMultiViewBindingAdapter<T> extends RecyclerView.Adapter<
     }
 
 
-    public interface UpdatableViewCompositionFactory<T> {
-        UpdatableViewComposition<T, ? extends UpdatableViewModel<T>, ?> create();
+    public interface UpdatableCustomViewFactory<T> {
+        UpdatableCustomView<T, ? extends UpdatableViewModel<T>, ?> create();
     }
 
     public static <T> ByClassBuilder<T> builder() {
@@ -145,7 +145,7 @@ public class CompositionMultiViewBindingAdapter<T> extends RecyclerView.Adapter<
     public static class Builder<T> implements ByClassBuilder<T>, ViewTypeBuilder<T> {
 
         private ItemViewTypeMapping<T> itemViewTypeMapping;
-        private Map<Integer, UpdatableViewCompositionFactory> elements = new HashMap<>();
+        private Map<Integer, UpdatableCustomViewFactory> elements = new HashMap<>();
         private AdapterItemClickListener<T> itemClickListener;
 
 
@@ -157,13 +157,13 @@ public class CompositionMultiViewBindingAdapter<T> extends RecyclerView.Adapter<
         }
 
         @Override
-        public Builder<T> withElement(Class<T> klass, UpdatableViewCompositionFactory<T> factory) {
+        public Builder<T> withElement(Class<T> klass, UpdatableCustomViewFactory<T> factory) {
             elements.put(klass.hashCode(), factory);
             return this;
         }
 
         @Override
-        public Builder<T> withElement(int itemViewType, UpdatableViewCompositionFactory<T> factory) {
+        public Builder<T> withElement(int itemViewType, UpdatableCustomViewFactory<T> factory) {
             elements.put(itemViewType, factory);
             return this;
         }
@@ -175,11 +175,11 @@ public class CompositionMultiViewBindingAdapter<T> extends RecyclerView.Adapter<
         }
 
         @Override
-        public CompositionMultiViewBindingAdapter<T> build() {
+        public MultiCustomViewAdapter<T> build() {
             if (elements.isEmpty()) {
                 throw new IllegalArgumentException("needs to support at least one element");
             }
-            CompositionMultiViewBindingAdapter<T> adapter = new CompositionMultiViewBindingAdapter<T>(elements);
+            MultiCustomViewAdapter<T> adapter = new MultiCustomViewAdapter<T>(elements);
             if (itemClickListener != null) {
                 adapter.setItemClickListener(itemClickListener);
             }
@@ -191,20 +191,20 @@ public class CompositionMultiViewBindingAdapter<T> extends RecyclerView.Adapter<
     }
 
     public interface ByClassBuilder<T> {
-        Builder<T> withElement(Class<T> klass, UpdatableViewCompositionFactory<T> factory);
+        Builder<T> withElement(Class<T> klass, UpdatableCustomViewFactory<T> factory);
 
         Builder<T> withItemClickListener(AdapterItemClickListener<T> itemClickListener);
 
-        CompositionMultiViewBindingAdapter<T> build();
+        MultiCustomViewAdapter<T> build();
 
     }
 
     public interface ViewTypeBuilder<T> {
-        Builder<T> withElement(int itemViewType, UpdatableViewCompositionFactory<T> factory);
+        Builder<T> withElement(int itemViewType, UpdatableCustomViewFactory<T> factory);
 
         Builder<T> withItemClickListener(AdapterItemClickListener<T> itemClickListener);
 
-        CompositionMultiViewBindingAdapter<T> build();
+        MultiCustomViewAdapter<T> build();
 
     }
 
