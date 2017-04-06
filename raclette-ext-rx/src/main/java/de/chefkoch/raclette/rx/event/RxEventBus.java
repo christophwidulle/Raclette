@@ -33,6 +33,7 @@ public class RxEventBus<T> {
         return new RxEventBus<>(PublishRelay.<T>create());
     }
 
+    //todo not sticky for each event
     public static <T> RxEventBus<T> createBehavior() {
         return new RxEventBus<>(BehaviorRelay.<T>create());
     }

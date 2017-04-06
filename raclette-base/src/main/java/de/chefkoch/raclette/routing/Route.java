@@ -41,11 +41,11 @@ public abstract class Route<T extends NavParams> {
         return targetClass;
     }
 
-    public NavRequest with(T params) {
+    public NavRequest requestWith(T params) {
         return new NavRequest(path, params.toBundle());
     }
 
-    public NavRequest request(){
+    public NavRequest request() {
         return new NavRequest(path);
     }
 
