@@ -100,10 +100,6 @@ public class CustomViewAdapter<T> extends RecyclerView.Adapter<CustomViewAdapter
         }
     }
 
-    public interface UpdatableCustomViewFactory<T> {
-        UpdatableCustomView<T, ? extends UpdatableViewModel<T>, ?> create();
-    }
-
     public static <T> CustomViewAdapter<T> create(final UpdatableCustomViewFactory<T> factory) {
         return new CustomViewAdapter<>(factory);
     }

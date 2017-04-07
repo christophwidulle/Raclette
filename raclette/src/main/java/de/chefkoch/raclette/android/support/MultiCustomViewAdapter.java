@@ -129,11 +129,6 @@ public class MultiCustomViewAdapter<T> extends RecyclerView.Adapter<MultiCustomV
         }
     }
 
-
-    public interface UpdatableCustomViewFactory<T> {
-        UpdatableCustomView<T, ? extends UpdatableViewModel<T>, ?> create();
-    }
-
     public static <T> ByClassBuilder<T> builder() {
         return new Builder<>();
     }
