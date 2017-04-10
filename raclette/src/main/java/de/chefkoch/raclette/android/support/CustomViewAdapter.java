@@ -60,8 +60,8 @@ public class CustomViewAdapter<T> extends RecyclerView.Adapter<CustomViewAdapter
 
     @Override
     public BasicViewHolder<T> onCreateViewHolder(ViewGroup parent, int viewType) {
-        UpdatableCustomView<T, ? extends UpdatableViewModel<T>, ? extends ViewDataBinding> viewComposition = factory.create();
-        return new BasicViewHolder<T>(itemClickListener, viewComposition);
+        UpdatableCustomView<T, ? extends UpdatableViewModel<T>, ? extends ViewDataBinding> customView = factory.create();
+        return new BasicViewHolder<T>(itemClickListener, customView);
     }
 
     @Override

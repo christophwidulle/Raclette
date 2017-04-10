@@ -1,6 +1,5 @@
 package de.chefkoch.raclette.android.support;
 
-import android.databinding.ViewDataBinding;
 import de.chefkoch.raclette.UpdatableViewModel;
 import de.chefkoch.raclette.android.UpdatableCustomView;
 
@@ -9,5 +8,5 @@ import de.chefkoch.raclette.android.UpdatableCustomView;
  */
 
 public interface UpdatableCustomViewFactory<T> {
-    UpdatableCustomView<T, ? extends UpdatableViewModel<T>, ?> create();
+    UpdatableCustomView<T, ? extends UpdatableViewModel<? extends T>, ?> create();
 }
