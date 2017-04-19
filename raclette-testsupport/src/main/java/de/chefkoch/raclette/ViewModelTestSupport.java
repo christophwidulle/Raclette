@@ -26,5 +26,11 @@ public class ViewModelTestSupport {
         viewModel.setNavigationController(navController);
     }
 
+    public static void init(ViewModel viewModel, NavigationController navigationController, Bundle params) {
+        params = params == null ? new Bundle() : params;
+        ViewModelTestSupport.setRandomId(viewModel);
+        ViewModelTestSupport.injectParams(viewModel, params);
+        ViewModelTestSupport.setNavController(viewModel, navigationController);
+    }
 
 }

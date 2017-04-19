@@ -26,7 +26,7 @@ public class BindingAdapter<T> extends RecyclerView.Adapter<BindingAdapter.Basic
 
     private List<T> items = new ArrayList<>();
 
-    private BindingAdapter(int itemLayoutResource) {
+    protected BindingAdapter(int itemLayoutResource) {
         this.itemLayoutResource = itemLayoutResource;
     }
 

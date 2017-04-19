@@ -21,17 +21,27 @@ public class MultiCustomViewAdapter<T> extends RecyclerView.Adapter<MultiCustomV
     private final Map<Integer, ElementConfig> elements;
     private AdapterItemClickListener<T> itemClickListener;
 
-    private ItemViewTypeMapping<T> itemViewTypeMapping = new DefaultItemViewTypeMapping<>();
+    private ItemViewTypeMapping<T> itemViewTypeMapping;
 
     private List<T> items = new ArrayList<>();
 
-    private MultiCustomViewAdapter(Map<Integer, ElementConfig> elements) {
-        this.elements = elements;
+    private MultiCustomViewAdapter(AdapterConfig<T> adapterConfig) {
+        this.elements = adapterConfig.getElements();
+        if (elements.isEmpty()) {
+            throw new IllegalArgumentException("needs to support at least one element");
+        }
+        this.itemClickListener = adapterConfig.getItemClickListener();
+        this.itemViewTypeMapping = adapterConfig.getItemViewTypeMapping();
     }
 
-    private void setItemViewTypeMapping(ItemViewTypeMapping<T> itemViewTypeMapping) {
-        this.itemViewTypeMapping = itemViewTypeMapping;
+    public static <T> Builder<T> builder(ItemViewTypeMapping<T> itemViewTypeMapping) {
+        return new Builder<>(itemViewTypeMapping);
     }
+
+    public static <T> MultiCustomViewAdapter<T> create(AdapterConfig<T> adapterConfig) {
+        return new MultiCustomViewAdapter<T>(adapterConfig);
+    }
+
 
     public void setAll(Collection<T> items) {
         if (items != null) {
@@ -61,9 +71,6 @@ public class MultiCustomViewAdapter<T> extends RecyclerView.Adapter<MultiCustomV
         notifyDataSetChanged();
     }
 
-    public void setItemClickListener(AdapterItemClickListener<T> itemClickListener) {
-        this.itemClickListener = itemClickListener;
-    }
 
     @Override
     @SuppressWarnings("unchecked assignement")
@@ -127,55 +134,80 @@ public class MultiCustomViewAdapter<T> extends RecyclerView.Adapter<MultiCustomV
     }
 
 
-    public static <T> ViewTypeBuilder<T> builder(ItemViewTypeMapping<T> itemViewTypeMapping) {
-        return new Builder<>(itemViewTypeMapping);
-    }
-
-    public static class Builder<T> implements ViewTypeBuilder<T> {
+    public static class AdapterConfig<T> {
 
         private ItemViewTypeMapping<T> itemViewTypeMapping;
         private Map<Integer, ElementConfig> elements = new HashMap<>();
         private AdapterItemClickListener<T> itemClickListener;
 
-        Builder(ItemViewTypeMapping<T> itemViewTypeMapping) {
+        public static <T> AdapterConfig<T> create(ItemViewTypeMapping<T> itemViewTypeMapping) {
+            return new AdapterConfig<T>(itemViewTypeMapping);
+        }
+
+        AdapterConfig(ItemViewTypeMapping<T> itemViewTypeMapping) {
             this.itemViewTypeMapping = itemViewTypeMapping;
+        }
+
+        public AdapterConfig<T> withItemClickListener(AdapterItemClickListener<T> itemClickListener) {
+            this.itemClickListener = itemClickListener;
+            return this;
+        }
+
+        public <K> AdapterConfig<T> withElement(int itemViewType, Transformer<T, K> transformer, UpdatableCustomViewFactory<? extends K> factory) {
+            elements.put(itemViewType, new ElementConfig(factory, transformer));
+            return this;
+        }
+
+        public AdapterConfig<T> withElement(int itemViewType, UpdatableCustomViewFactory<? extends T> factory) {
+            elements.put(itemViewType, new ElementConfig(factory));
+            return this;
+        }
+
+
+        private ItemViewTypeMapping<T> getItemViewTypeMapping() {
+            return itemViewTypeMapping;
+        }
+
+        private Map<Integer, ElementConfig> getElements() {
+            return elements;
+        }
+
+        private AdapterItemClickListener<T> getItemClickListener() {
+            return itemClickListener;
+        }
+    }
+
+    public static class Builder<T> {
+
+        AdapterConfig<T> adapterConfig;
+
+        Builder(ItemViewTypeMapping<T> itemViewTypeMapping) {
+            this.adapterConfig = new AdapterConfig<T>(itemViewTypeMapping);
         }
 
         Builder() {
         }
 
-
-        @Override
         public <K> Builder<T> withElement(int itemViewType, Transformer<T, K> transformer, UpdatableCustomViewFactory<? extends K> factory) {
-            elements.put(itemViewType, new ElementConfig(factory, transformer));
+            adapterConfig.withElement(itemViewType, transformer, factory);
             return this;
         }
 
-        @Override
         public Builder<T> withElement(int itemViewType, UpdatableCustomViewFactory<? extends T> factory) {
-            elements.put(itemViewType, new ElementConfig(factory));
+            adapterConfig.withElement(itemViewType, factory);
             return this;
         }
 
-        @Override
         public Builder<T> withItemClickListener(AdapterItemClickListener<T> itemClickListener) {
-            this.itemClickListener = itemClickListener;
+            adapterConfig.withItemClickListener(itemClickListener);
             return this;
         }
 
-        @Override
         public MultiCustomViewAdapter<T> build() {
-            if (elements.isEmpty()) {
-                throw new IllegalArgumentException("needs to support at least one element");
-            }
-            MultiCustomViewAdapter<T> adapter = new MultiCustomViewAdapter<T>(elements);
-            if (itemClickListener != null) {
-                adapter.setItemClickListener(itemClickListener);
-            }
-            if (itemViewTypeMapping != null) {
-                adapter.setItemViewTypeMapping(itemViewTypeMapping);
-            }
-            return adapter;
+
+            return new MultiCustomViewAdapter<T>(
+                    adapterConfig
+            );
         }
     }
 
@@ -183,12 +215,12 @@ public class MultiCustomViewAdapter<T> extends RecyclerView.Adapter<MultiCustomV
         private final UpdatableCustomViewFactory updatableCustomViewFactory;
         private final Transformer transformer;
 
-        ElementConfig(UpdatableCustomViewFactory updatableCustomViewFactory, Transformer transformer) {
+        public ElementConfig(UpdatableCustomViewFactory updatableCustomViewFactory, Transformer transformer) {
             this.updatableCustomViewFactory = updatableCustomViewFactory;
             this.transformer = transformer;
         }
 
-        ElementConfig(UpdatableCustomViewFactory updatableCustomViewFactory) {
+        public ElementConfig(UpdatableCustomViewFactory updatableCustomViewFactory) {
             this.updatableCustomViewFactory = updatableCustomViewFactory;
             this.transformer = NoTransform;
         }
@@ -212,19 +244,6 @@ public class MultiCustomViewAdapter<T> extends RecyclerView.Adapter<MultiCustomV
             return item;
         }
     };
-
-
-    public interface ViewTypeBuilder<T> {
-
-        <K> Builder<T> withElement(int itemViewType, Transformer<T, K> transformer, UpdatableCustomViewFactory<? extends K> factory);
-
-        Builder<T> withElement(int itemViewType, UpdatableCustomViewFactory<? extends T> factory);
-
-        Builder<T> withItemClickListener(AdapterItemClickListener<T> itemClickListener);
-
-        MultiCustomViewAdapter<T> build();
-
-    }
 
 
 }
