@@ -2,9 +2,7 @@ package de.chefkoch.raclette.rx;
 
 
 import android.databinding.ObservableField;
-
 import com.jakewharton.rxrelay.ReplayRelay;
-
 import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Action0;
@@ -78,6 +76,13 @@ public abstract class Value<T> extends ObservableField<T> {
         };
     }
 
+    /**
+     * Get the value as a stream.
+     */
+    public Observable<T> getAsStream() {
+        return Observable.just(get());
+    }
+
     public abstract Observable<T> asObservable();
 
 
@@ -124,8 +129,8 @@ public abstract class Value<T> extends ObservableField<T> {
         public Observable<T> asObservable() {
             return subject.asObservable();
         }
-
     }
+
 
 
     public static <T> Observable<T> toObservable(final ObservableField<T> observableField, final boolean emitCurrent) {
