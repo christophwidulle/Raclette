@@ -79,7 +79,7 @@ public abstract class Value<T> extends ObservableField<T> {
     /**
      * Get the value as a stream.
      */
-    public Observable<T> getAsStream() {
+    public Observable<T> just() {
         return Observable.just(get());
     }
 
