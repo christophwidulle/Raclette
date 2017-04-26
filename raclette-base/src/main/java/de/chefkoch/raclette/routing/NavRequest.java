@@ -19,12 +19,16 @@ public class NavRequest {
 
     public NavRequest(String routePath, Bundle params) {
         this.routePath = routePath;
-        this.params = params;
+        this.params = params == null ? new Bundle() : params;
     }
 
     public NavRequest(String routePath) {
         this.routePath = routePath;
-        this.params = null;
+        this.params = new Bundle();
+    }
+
+    public Bundle getParams() {
+        return params;
     }
 
     public String getRoutePath() {
@@ -103,7 +107,7 @@ public class NavRequest {
             Object valueA = a.get(key);
             Object valueB = b.get(key);
 
-            if(valueA == null && valueB == null) {
+            if (valueA == null && valueB == null) {
                 return true;
             }
 

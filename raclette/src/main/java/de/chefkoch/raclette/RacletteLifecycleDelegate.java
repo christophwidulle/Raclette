@@ -79,11 +79,11 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
 
     private void create(Object parentView, Context context, Bundle savedInstanceState, Bundle extras) {
         checkViewBindung();
-        Bundle params = null;
-        if (extras != null) {
-            params = ViewModel.Params.from(extras);
-        }
         if (checkNavRequest(parentView, extras)) {
+            Bundle params = null;
+            if (extras != null) {
+                params = ViewModel.Params.from(extras);
+            }
             init(context, savedInstanceState, params);
         }
     }

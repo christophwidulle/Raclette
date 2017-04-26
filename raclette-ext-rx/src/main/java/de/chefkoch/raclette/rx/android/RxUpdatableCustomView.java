@@ -36,10 +36,10 @@ public class RxUpdatableCustomView<T, V extends UpdatableViewModel<T>, B extends
 
 
     @Override
-    protected void create() {
+    protected void create(Context context) {
         lifecycleSubject = BehaviorSubject.create();
         lifecycleSubject.onNext(ViewCompositionLifecycleState.NEW);
-        super.create();
+        super.create(context);
     }
 
     @Override

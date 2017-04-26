@@ -36,10 +36,10 @@ public class RxCustomView<V extends ViewModel, B extends ViewDataBinding> extend
     }
 
     @Override
-    protected void create() {
+    protected void create(Context context) {
         lifecycleSubject = BehaviorSubject.create();
         lifecycleSubject.onNext(ViewCompositionLifecycleState.NEW);
-        super.create();
+        super.create(context);
     }
 
     @Override

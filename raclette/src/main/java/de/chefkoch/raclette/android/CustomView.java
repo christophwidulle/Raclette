@@ -18,21 +18,22 @@ public class CustomView<V extends ViewModel, B extends ViewDataBinding> extends 
 
     public CustomView(Context context) {
         super(context);
-        create();
+        create(context);
     }
 
     public CustomView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        create();
+        create(context);
     }
 
     public CustomView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        create();
+        create(context);
     }
 
-    protected void create() {
-        delegate = new RacletteViewLifecycleDelegate<>(getRaclette(), getViewModelBindingConfig(), new RacletteViewLifecycleDelegate.OnViewModelCreatedCallback() {
+
+    protected void create(Context context) {
+        delegate = new RacletteViewLifecycleDelegate<>(getRaclette(),context, getViewModelBindingConfig(), new RacletteViewLifecycleDelegate.OnViewModelCreatedCallback() {
             @Override
             public void onCreated() {
                 onViewModelCreated();
@@ -41,6 +42,8 @@ public class CustomView<V extends ViewModel, B extends ViewDataBinding> extends 
         delegate.onCreateViewBinding(LayoutInflater.from(getContext()), this, true);
 
     }
+
+
 
     protected void onViewModelCreated() {
 

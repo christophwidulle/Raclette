@@ -28,10 +28,10 @@ public class RacletteViewLifecycleDelegate<V extends ViewModel, B extends ViewDa
     private Context context;
     private final OnViewModelCreatedCallback callback;
 
-    public RacletteViewLifecycleDelegate(Raclette raclette, ViewModelBindingConfig<V> viewModelBindingConfig, OnViewModelCreatedCallback callback) {
+    public RacletteViewLifecycleDelegate(Raclette raclette, Context context, ViewModelBindingConfig<V> viewModelBindingConfig, OnViewModelCreatedCallback callback) {
         this.raclette = raclette;
         this.viewModelBindingConfig = viewModelBindingConfig;
-        this.context = raclette.getContextManager().getCurrentContext();
+        this.context = context;
         this.callback = callback;
 
         checkAndSetNavigationSupport(context);

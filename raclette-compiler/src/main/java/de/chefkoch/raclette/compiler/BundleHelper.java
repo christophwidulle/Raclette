@@ -34,7 +34,6 @@ public class BundleHelper {
         return methodType == MethodType.Getter ? "get" + method : "put" + method;
     }
 
-
     static {
         add("java.lang.String", "String");
 
@@ -74,6 +73,15 @@ public class BundleHelper {
     }
 
     public static boolean isSerializable(List<? extends TypeMirror> types) {
+        for (TypeMirror type : types) {
+            if ("java.io.Serializable".equals(type.toString())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isValue(List<? extends TypeMirror> types) {
         for (TypeMirror type : types) {
             if ("java.io.Serializable".equals(type.toString())) {
                 return true;
