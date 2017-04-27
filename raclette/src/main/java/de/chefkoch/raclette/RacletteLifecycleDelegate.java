@@ -77,9 +77,9 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
         create(activity, activity, savedInstanceState, activity.getIntent() != null ? activity.getIntent().getExtras() : null);
     }
 
-    private void create(Object parentView, Context context, Bundle savedInstanceState, Bundle extras) {
+    private void create(Object parent, Context context, Bundle savedInstanceState, Bundle extras) {
         checkViewBindung();
-        if (checkNavRequest(parentView, extras)) {
+        if (checkNavRequest(parent, extras)) {
             Bundle params = null;
             if (extras != null) {
                 params = ViewModel.Params.from(extras);

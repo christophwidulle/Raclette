@@ -1,5 +1,6 @@
 package de.chefkoch.raclette;
 
+import android.app.Activity;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
@@ -31,7 +32,7 @@ public class RacletteViewLifecycleDelegate<V extends ViewModel, B extends ViewDa
     public RacletteViewLifecycleDelegate(Raclette raclette, Context context, ViewModelBindingConfig<V> viewModelBindingConfig, OnViewModelCreatedCallback callback) {
         this.raclette = raclette;
         this.viewModelBindingConfig = viewModelBindingConfig;
-        this.context = context;
+        this.context = validateContext(context);
         this.callback = callback;
 
         checkAndSetNavigationSupport(context);
@@ -40,6 +41,13 @@ public class RacletteViewLifecycleDelegate<V extends ViewModel, B extends ViewDa
     public View onCreateViewBinding(LayoutInflater inflater, @Nullable ViewGroup parent, boolean attachToParent) {
         binding = DataBindingUtil.inflate(inflater, viewModelBindingConfig.getLayoutResource(), parent, attachToParent);
         return binding.getRoot();
+    }
+
+    private Context validateContext(Context context) {
+        if (!(context instanceof Activity)) {
+            throw new IllegalArgumentException("given context is not an Activity");
+        }
+        return context;
     }
 
     private boolean checkAndSetNavigationSupport(Object target) {

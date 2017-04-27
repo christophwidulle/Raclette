@@ -1,6 +1,8 @@
 package de.chefkoch.raclette.android;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.util.AttributeSet;
@@ -33,16 +35,27 @@ public class CustomView<V extends ViewModel, B extends ViewDataBinding> extends 
 
 
     protected void create(Context context) {
-        delegate = new RacletteViewLifecycleDelegate<>(getRaclette(),context, getViewModelBindingConfig(), new RacletteViewLifecycleDelegate.OnViewModelCreatedCallback() {
+        delegate = new RacletteViewLifecycleDelegate<>(getRaclette(), findActivity(), getViewModelBindingConfig(), new RacletteViewLifecycleDelegate.OnViewModelCreatedCallback() {
             @Override
             public void onCreated() {
                 onViewModelCreated();
             }
         });
+
         delegate.onCreateViewBinding(LayoutInflater.from(getContext()), this, true);
 
     }
 
+    public Activity findActivity() {
+        Context context = getContext();
+        while (context instanceof ContextWrapper) {
+            if (context instanceof Activity) {
+                return (Activity) context;
+            }
+            context = ((ContextWrapper) context).getBaseContext();
+        }
+        return null;
+    }
 
 
     protected void onViewModelCreated() {
