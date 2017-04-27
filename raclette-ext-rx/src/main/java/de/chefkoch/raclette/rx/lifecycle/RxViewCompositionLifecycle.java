@@ -1,6 +1,5 @@
 package de.chefkoch.raclette.rx.lifecycle;
 
-import de.chefkoch.raclette.rx.lifecycle.ViewCompositionLifecycleState;
 import rx.Observable;
 import rx.exceptions.Exceptions;
 import rx.functions.Func1;
@@ -13,7 +12,7 @@ import rx.functions.Func2;
  */
 public class RxViewCompositionLifecycle {
 
-    public static <T> Observable.Transformer<T, T> bindUntilEvent(final Observable<ViewCompositionLifecycleState> lifecycle, final ViewCompositionLifecycleState event) {
+    public static <T> Observable.Transformer<T, T> bindUntilEvent(final Observable<CustomViewLifecycleState> lifecycle, final CustomViewLifecycleState event) {
         return bind(lifecycle, event);
     }
 
@@ -39,7 +38,7 @@ public class RxViewCompositionLifecycle {
         };
     }
 
-    public static <T> Observable.Transformer<T, T> bind(Observable<ViewCompositionLifecycleState> lifecycle) {
+    public static <T> Observable.Transformer<T, T> bind(Observable<CustomViewLifecycleState> lifecycle) {
         return bind(lifecycle, VIEW_COMPOSITION_LIFECYCLE);
     }
 
@@ -93,15 +92,15 @@ public class RxViewCompositionLifecycle {
     };
 
     // Figures out which corresponding next lifecycle event in which to unsubscribe
-    private static final Func1<ViewCompositionLifecycleState, ViewCompositionLifecycleState> VIEW_COMPOSITION_LIFECYCLE =
-            new Func1<ViewCompositionLifecycleState, ViewCompositionLifecycleState>() {
+    private static final Func1<CustomViewLifecycleState, CustomViewLifecycleState> VIEW_COMPOSITION_LIFECYCLE =
+            new Func1<CustomViewLifecycleState, CustomViewLifecycleState>() {
                 @Override
-                public ViewCompositionLifecycleState call(ViewCompositionLifecycleState lastEvent) {
+                public CustomViewLifecycleState call(CustomViewLifecycleState lastEvent) {
                     switch (lastEvent) {
                         case NEW:
-                            return ViewCompositionLifecycleState.ON_DETACH;
+                            return CustomViewLifecycleState.ON_DETACH;
                         case ON_ATTACH:
-                            return ViewCompositionLifecycleState.ON_DETACH;
+                            return CustomViewLifecycleState.ON_DETACH;
                         case ON_DETACH:
                             throw new OutsideLifecycleException("Cannot bind to ViewComposition lifecycle when outside of it.");
                         default:

@@ -92,11 +92,11 @@ public class RacletteFragment<V extends ViewModel, B extends ViewDataBinding> ex
         super.onSaveInstanceState(outState);
     }
 
-    public V getViewModel() {
+    public V viewModel() {
         return racletteLifecycleDelegate.viewModel();
     }
 
-    public B getBinding() {
+    public B binding() {
         return racletteLifecycleDelegate.binding();
     }
 

@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 import de.chefkoch.raclette.UpdatableViewModel;
 import de.chefkoch.raclette.android.UpdatableCustomView;
 import de.chefkoch.raclette.rx.lifecycle.RxViewCompositionLifecycle;
-import de.chefkoch.raclette.rx.lifecycle.ViewCompositionLifecycleState;
+import de.chefkoch.raclette.rx.lifecycle.CustomViewLifecycleState;
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
 
@@ -19,7 +19,7 @@ public class RxUpdatableCustomView<T, V extends UpdatableViewModel<T>, B extends
         extends UpdatableCustomView<T, V, B> {
 
 
-    private BehaviorSubject<ViewCompositionLifecycleState> lifecycleSubject;
+    private BehaviorSubject<CustomViewLifecycleState> lifecycleSubject;
 
 
     public RxUpdatableCustomView(Context context) {
@@ -38,34 +38,34 @@ public class RxUpdatableCustomView<T, V extends UpdatableViewModel<T>, B extends
     @Override
     protected void create(Context context) {
         lifecycleSubject = BehaviorSubject.create();
-        lifecycleSubject.onNext(ViewCompositionLifecycleState.NEW);
+        lifecycleSubject.onNext(CustomViewLifecycleState.NEW);
         super.create(context);
     }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        lifecycleSubject.onNext(ViewCompositionLifecycleState.ON_ATTACH);
+        lifecycleSubject.onNext(CustomViewLifecycleState.ON_ATTACH);
 
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        lifecycleSubject.onNext(ViewCompositionLifecycleState.ON_DETACH);
-        lifecycleSubject.onNext(ViewCompositionLifecycleState.NEW);
+        lifecycleSubject.onNext(CustomViewLifecycleState.ON_DETACH);
+        lifecycleSubject.onNext(CustomViewLifecycleState.NEW);
 
     }
 
     @NonNull
     @CheckResult
-    public final Observable<ViewCompositionLifecycleState> lifecycle() {
+    public final Observable<CustomViewLifecycleState> lifecycle() {
         return lifecycleSubject.asObservable();
     }
 
     @NonNull
     @CheckResult
-    public final <T> Observable.Transformer<T, T> bindUntilEvent(@NonNull ViewCompositionLifecycleState event) {
+    public final <T> Observable.Transformer<T, T> bindUntilEvent(@NonNull CustomViewLifecycleState event) {
         return RxViewCompositionLifecycle.bindUntilEvent(lifecycleSubject, event);
     }
 

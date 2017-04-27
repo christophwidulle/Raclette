@@ -91,11 +91,11 @@ public class RacletteDialogFragment<V extends ViewModel, B extends ViewDataBindi
         super.onSaveInstanceState(outState);
     }
 
-    public V getViewModel() {
+    public V viewModel() {
         return racletteLifecycleDelegate.viewModel();
     }
 
-    public B getBinding() {
+    public B binding() {
         return racletteLifecycleDelegate.binding();
     }
 
