@@ -35,7 +35,7 @@ public class CustomView<V extends ViewModel, B extends ViewDataBinding> extends 
 
 
     protected void create(Context context) {
-        delegate = new RacletteViewLifecycleDelegate<>(getRaclette(), findActivity(), getViewModelBindingConfig(), new RacletteViewLifecycleDelegate.OnViewModelCreatedCallback() {
+        delegate = new RacletteViewLifecycleDelegate<>(getRaclette(), context, getViewModelBindingConfig(), new RacletteViewLifecycleDelegate.OnViewModelCreatedCallback() {
             @Override
             public void onCreated() {
                 onViewModelCreated();
@@ -44,17 +44,6 @@ public class CustomView<V extends ViewModel, B extends ViewDataBinding> extends 
 
         delegate.onCreateViewBinding(LayoutInflater.from(getContext()), this, true);
 
-    }
-
-    public Activity findActivity() {
-        Context context = getContext();
-        while (context instanceof ContextWrapper) {
-            if (context instanceof Activity) {
-                return (Activity) context;
-            }
-            context = ((ContextWrapper) context).getBaseContext();
-        }
-        return null;
     }
 
 
