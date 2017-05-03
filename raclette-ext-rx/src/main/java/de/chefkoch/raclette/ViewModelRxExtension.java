@@ -38,6 +38,11 @@ public class ViewModelRxExtension implements ViewModelLifecycleProvider {
         this.extNavController = new RxNavigationControllerExt(navigationController);
     }
 
+    //For UnitTests
+    void setExtNavigationController(RxNavigationControllerExt extNavController) {
+        this.extNavController = extNavController;
+    }
+
     void viewModelCreate(Bundle bundle) {
         lifecycleSubject.onNext(ViewModelLifecycleState.VIEWMODEL_CREATE);
     }

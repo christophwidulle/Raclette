@@ -76,6 +76,10 @@ public abstract class Value<T> extends ObservableField<T> {
         };
     }
 
+    public boolean exist() {
+        return get() != null;
+    }
+
     /**
      * Get the value as a stream.
      */
@@ -130,7 +134,6 @@ public abstract class Value<T> extends ObservableField<T> {
             return subject.asObservable();
         }
     }
-
 
 
     public static <T> Observable<T> toObservable(final ObservableField<T> observableField, final boolean emitCurrent) {
