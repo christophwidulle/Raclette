@@ -92,6 +92,14 @@ public class NavRequest {
         return result;
     }
 
+    @Override
+    public String toString() {
+        return "NavRequest{" +
+                "routePath='" + routePath + '\'' +
+                ", params=" + params +
+                ", resultCode=" + resultCode +
+                '}';
+    }
 
     public static boolean equalsBundles(Bundle a, Bundle b) {
         if (a == b) return true;
