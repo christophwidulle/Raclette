@@ -2,10 +2,12 @@ package de.chefkoch.raclette;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +46,12 @@ public class RacletteViewLifecycleDelegate<V extends ViewModel, B extends ViewDa
     }
 
     private Context validateContext(Context context) {
+        if (context instanceof Activity) {
+            return context;
+        }
+        if (context instanceof ContextWrapper) {
+            context = ((ContextWrapper) context).getBaseContext();
+        }
         if (!(context instanceof Activity)) {
             throw new IllegalArgumentException("given context is not an Activity");
         }

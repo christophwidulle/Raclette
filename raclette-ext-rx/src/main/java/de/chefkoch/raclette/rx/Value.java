@@ -94,7 +94,6 @@ public abstract class Value<T> extends ObservableField<T> {
 
         private final boolean emitCurrent;
 
-
         public DefaultValue(boolean emitCurrent) {
             this.emitCurrent = emitCurrent;
         }
@@ -112,7 +111,6 @@ public abstract class Value<T> extends ObservableField<T> {
 
     static class ReplayValue<T> extends Value<T> {
 
-
         private final ReplayRelay<T> subject = ReplayRelay.create();
 
         ReplayValue(T val) {
@@ -122,7 +120,6 @@ public abstract class Value<T> extends ObservableField<T> {
 
         ReplayValue() {
         }
-
 
         @Override
         public void set(T value) {
@@ -134,7 +131,6 @@ public abstract class Value<T> extends ObservableField<T> {
             return subject.asObservable();
         }
     }
-
 
     public static <T> Observable<T> toObservable(final ObservableField<T> observableField, final boolean emitCurrent) {
         return Observable.create(new Observable.OnSubscribe<T>() {
