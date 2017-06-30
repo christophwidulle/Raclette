@@ -17,8 +17,7 @@ import java.util.Set;
  */
 public abstract class Value<T> extends ObservableField<T> {
 
-
-    public static <T> Value<? extends T> create() {
+    public static <T> Value<T> create() {
         return new DefaultValue<T>(true);
     }
 
@@ -26,7 +25,7 @@ public abstract class Value<T> extends ObservableField<T> {
         return new DefaultValue<T>(val, true);
     }
 
-    public static <T, K extends T> Value<? extends T> createPublish() {
+    public static <T> Value<T> createPublish() {
         return new DefaultValue<T>(false);
     }
 
@@ -34,7 +33,7 @@ public abstract class Value<T> extends ObservableField<T> {
         return new DefaultValue<T>(val, false);
     }
 
-    public static <T, K extends T> Value<? extends T> createReplay() {
+    public static <T> Value<T> createReplay() {
         return new ReplayValue<T>();
     }
 
