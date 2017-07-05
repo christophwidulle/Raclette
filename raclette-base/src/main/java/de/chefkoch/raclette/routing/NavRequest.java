@@ -11,6 +11,7 @@ import java.util.Set;
 public class NavRequest {
 
     public static final String ROUTE_KEY = "##RACLETTE_ROUTE_KEY";
+    public static final String EXTERNAL_ROUTE_VALUE = "##RACLETTE_EXTERNAL_CALL";
     public static final String FOR_RESULT_CODE__KEY = "##RACLETTE_FOR_RESULT_KEY";
 
     private final String routePath;
@@ -47,7 +48,7 @@ public class NavRequest {
     }
 
     public static NavRequest from(Bundle bundle) {
-        if (bundle == null) return null;
+        if (bundle == null) return external();
         final String route = bundle.getString(ROUTE_KEY);
         int resultCode = bundle.getInt(FOR_RESULT_CODE__KEY, -1);
         if (route != null) {
@@ -59,6 +60,14 @@ public class NavRequest {
             return navRequest;
         } else
             return null;
+    }
+
+    public boolean isExternal() {
+        return EXTERNAL_ROUTE_VALUE.equals(routePath);
+    }
+
+    private static NavRequest external() {
+        return new NavRequest(EXTERNAL_ROUTE_VALUE, new Bundle());
     }
 
     void setResultCode(int resultCode) {
