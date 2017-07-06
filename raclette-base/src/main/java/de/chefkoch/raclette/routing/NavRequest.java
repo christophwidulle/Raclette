@@ -49,17 +49,17 @@ public class NavRequest {
 
     public static NavRequest from(Bundle bundle) {
         if (bundle == null) return external();
-        final String route = bundle.getString(ROUTE_KEY);
+        String route = bundle.getString(ROUTE_KEY);
+        if (route == null) {
+            route = EXTERNAL_ROUTE_VALUE;
+        }
         int resultCode = bundle.getInt(FOR_RESULT_CODE__KEY, -1);
-        if (route != null) {
-            final Bundle params = bundle.getBundle(ViewModel.Params.EXTRA_KEY);
-            NavRequest navRequest = new NavRequest(route, params);
-            if (resultCode > 0) {
-                navRequest.setResultCode(resultCode);
-            }
-            return navRequest;
-        } else
-            return null;
+        final Bundle params = bundle.getBundle(ViewModel.Params.EXTRA_KEY);
+        NavRequest navRequest = new NavRequest(route, params);
+        if (resultCode > 0) {
+            navRequest.setResultCode(resultCode);
+        }
+        return navRequest;
     }
 
     public boolean isExternal() {

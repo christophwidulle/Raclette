@@ -80,11 +80,7 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
     private void create(Object parent, Context context, Bundle savedInstanceState, Bundle extras) {
         checkViewBindung();
         if (checkNavRequest(parent, extras)) {
-            Bundle params = null;
-            if (extras != null) {
-                params = ViewModel.Params.from(extras);
-            }
-            init(context, savedInstanceState, params);
+            init(context, savedInstanceState, navRequest.getParams());
         }
     }
 
@@ -100,15 +96,18 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
             }
         }
         raclette.getContextManager().setCurrentContext(context);
+        this.context = context;
         if (viewModel == null) {
             viewModel = raclette.getViewModelManager().createViewModel(viewModelBindingConfig.getViewModelClass());
             viewModel.setNavigationController(raclette.createNavigationController());
+            getNavigationControllerImpl().setContext(context);
             checkNavResultCode();
             viewModel.injectParams(params);
             viewModel.viewModelCreate(params);
+        } else {
+            getNavigationControllerImpl().setContext(context);
         }
-        getNavigationControllerImpl().setContext(context);
-        this.context = context;
+
         setNavigationSupportIfNeeded();
         binding.setVariable(raclette.getViewModelBindingId(), viewModel);
         viewModel.create(params);
