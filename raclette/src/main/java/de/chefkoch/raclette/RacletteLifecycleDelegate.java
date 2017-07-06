@@ -132,10 +132,8 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
 
     private boolean checkNavRequest(Object parentView, Bundle extras) {
         navRequest = NavRequest.from(extras);
-        if (navRequest != null) {
-            if (parentView instanceof NavRequestInterceptor) {
-                return ((NavRequestInterceptor) parentView).onHandle(navRequest);
-            }
+        if (parentView instanceof NavRequestInterceptor) {
+            return ((NavRequestInterceptor) parentView).onHandle(navRequest);
         }
         return true;
     }

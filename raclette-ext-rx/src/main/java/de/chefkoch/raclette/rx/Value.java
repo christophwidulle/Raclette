@@ -9,17 +9,19 @@ import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.subscriptions.Subscriptions;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created by christophwidulle
  */
 public abstract class Value<T> extends ObservableField<T> {
 
-
     public static <T> Value<T> create() {
         return new DefaultValue<T>(true);
     }
 
-    public static <T> Value<T> create(T val) {
+    public static <T, K extends T> Value<T> create(K val) {
         return new DefaultValue<T>(val, true);
     }
 
@@ -27,7 +29,7 @@ public abstract class Value<T> extends ObservableField<T> {
         return new DefaultValue<T>(false);
     }
 
-    public static <T> Value<T> createPublish(T val) {
+    public static <T, K extends T> Value<? extends T> createPublish(K val) {
         return new DefaultValue<T>(val, false);
     }
 
@@ -35,10 +37,9 @@ public abstract class Value<T> extends ObservableField<T> {
         return new ReplayValue<T>();
     }
 
-    public static <T> Value<T> createReplay(T val) {
+    public static <T, K extends T> Value<? extends T> createReplay(K val) {
         return new ReplayValue<T>(val);
     }
-
 
     Value() {
     }
