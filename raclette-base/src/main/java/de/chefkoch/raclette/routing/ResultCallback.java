@@ -11,6 +11,4 @@ public abstract class ResultCallback {
 
     public void onCancel() {
     }
-
-
 }

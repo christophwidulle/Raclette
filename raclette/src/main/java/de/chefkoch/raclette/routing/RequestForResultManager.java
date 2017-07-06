@@ -52,7 +52,11 @@ public class RequestForResultManager {
             if (resultCode == Activity.RESULT_CANCELED) {
                 callback.onCancel();
             } else if (resultCode == Activity.RESULT_OK) {
-                callback.onResult(data.getExtras());
+                if(callback instanceof IntentResultCallback) {
+                    ((IntentResultCallback) callback).onResult(data);
+                } else {
+                    callback.onResult(data.getExtras());
+                }
             }
         }
     }
