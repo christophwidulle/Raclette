@@ -8,6 +8,7 @@ import de.chefkoch.raclette.ViewModelLifecycleState;
 import de.chefkoch.raclette.rx.lifecycle.RxViewModelLifecycle;
 import rx.Observable;
 import rx.Subscription;
+import rx.functions.Action0;
 import rx.functions.Action1;
 
 /**
@@ -51,6 +52,24 @@ public class Command<T> {
 
     public void call() {
         subject.call(null);
+    }
+
+    public Action0 callAction() {
+        return new Action0() {
+            @Override
+            public void call() {
+                Command.this.call();
+            }
+        };
+    }
+
+    public Action1<T> callAction(T t) {
+        return new Action1<T>() {
+            @Override
+            public void call(T o) {
+                Command.this.call(o);
+            }
+        };
     }
 
     public Observable<T> asObservable() {
