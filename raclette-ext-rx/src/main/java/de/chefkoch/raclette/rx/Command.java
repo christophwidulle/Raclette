@@ -54,16 +54,7 @@ public class Command<T> {
         subject.call(null);
     }
 
-    public Action0 callAction() {
-        return new Action0() {
-            @Override
-            public void call() {
-                Command.this.call();
-            }
-        };
-    }
-
-    public Action1<T> callAction(T t) {
+    public Action1<T> callAction() {
         return new Action1<T>() {
             @Override
             public void call(T o) {
