@@ -29,7 +29,7 @@ public abstract class Value<T> extends ObservableField<T> {
         return new DefaultValue<T>(false);
     }
 
-    public static <T, K extends T> Value<? extends T> createPublish(K val) {
+    public static <T, K extends T> Value<T> createPublish(K val) {
         return new DefaultValue<T>(val, false);
     }
 
@@ -37,7 +37,7 @@ public abstract class Value<T> extends ObservableField<T> {
         return new ReplayValue<T>();
     }
 
-    public static <T, K extends T> Value<? extends T> createReplay(K val) {
+    public static <T, K extends T> Value<T> createReplay(K val) {
         return new ReplayValue<T>(val);
     }
 

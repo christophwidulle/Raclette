@@ -16,7 +16,7 @@ import rx.functions.Action1;
  */
 public class Command<T> {
 
-    public Relay<T, T> subject;
+    private Relay<T, T> subject;
 
     Observable<ViewModelLifecycleState> lifecycleSubject;
 
