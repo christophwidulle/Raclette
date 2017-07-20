@@ -17,6 +17,15 @@ public class Result {
         this.data = data;
     }
 
+    public static Result of(Bundle extra) {
+        return new Result(extra, null);
+    }
+
+    public static Result of(Bundle extra, Uri data) {
+        return new Result(extra, data);
+    }
+
+
     public Bundle getExtra() {
         return extra;
     }
