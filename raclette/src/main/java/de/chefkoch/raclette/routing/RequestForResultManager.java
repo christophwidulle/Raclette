@@ -2,6 +2,7 @@ package de.chefkoch.raclette.routing;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import java.lang.ref.WeakReference;
@@ -39,10 +40,10 @@ public class RequestForResultManager {
         }
     }
 
-    void returnResult(Integer requestCode, Bundle values) {
+    void returnResult(Integer requestCode, Result result) {
         ResultCallback callback = getCallback(requestCode);
         if (callback != null) {
-            callback.onResult(values);
+            callback.onResult(result);
         }
     }
 
@@ -52,7 +53,7 @@ public class RequestForResultManager {
             if (resultCode == Activity.RESULT_CANCELED) {
                 callback.onCancel();
             } else if (resultCode == Activity.RESULT_OK) {
-                callback.onResult(data.getExtras());
+                callback.onResult(new Result(data.getExtras(),data.getData()));
             }
         }
     }
@@ -61,9 +62,9 @@ public class RequestForResultManager {
 
         return new ResultCallback() {
             @Override
-            public void onResult(Bundle values) {
+            public void onResult(Result result) {
                 remove(requestCode);
-                resultCallback.onResult(values);
+                resultCallback.onResult(result);
             }
 
             @Override

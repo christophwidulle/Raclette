@@ -1,40 +1,40 @@
 package de.chefkoch.raclette.rx;
 
-import android.os.Bundle;
+import de.chefkoch.raclette.routing.Result;
 
 /**
  * Created by christophwidulle on 25.06.16.
  */
 public class ForResultReturn {
 
-    Bundle bundle;
+    Result result;
 
-    private ForResultReturn(Bundle bundle) {
-        this.bundle = bundle;
+    private ForResultReturn(Result result) {
+        this.result = result;
     }
 
     private ForResultReturn() {
 
     }
 
-    public static ForResultReturn from(Bundle bundle) {
-        return new ForResultReturn(bundle);
+    public static ForResultReturn from(Result result) {
+        return new ForResultReturn(result);
     }
 
     public static ForResultReturn canceled() {
         return new ForResultReturn();
     }
 
-    public Bundle getBundle() {
-        return bundle;
+    public Result getResult() {
+        return result;
     }
 
     public boolean isCanceled() {
-        return bundle == null;
+        return result == null;
     }
 
     public boolean hasResult() {
-        return bundle != null;
+        return result != null;
     }
 
 }

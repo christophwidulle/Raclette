@@ -1,12 +1,10 @@
 package de.chefkoch.raclette.rx;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import de.chefkoch.raclette.routing.NavRequest;
-import de.chefkoch.raclette.routing.NavigationController;
-import de.chefkoch.raclette.routing.NavigationControllerImpl;
-import de.chefkoch.raclette.routing.ResultCallback;
+import de.chefkoch.raclette.routing.*;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
@@ -67,9 +65,9 @@ public class RxNavigationControllerExt {
 
             final ResultCallback resultCallback = new ResultCallback() {
                 @Override
-                public void onResult(Bundle values) {
+                public void onResult(Result result) {
                     if (!subscriber.isUnsubscribed()) {
-                        subscriber.onNext(ForResultReturn.from(values));
+                        subscriber.onNext(ForResultReturn.from(result));
                         subscriber.onCompleted();
                     }
                 }

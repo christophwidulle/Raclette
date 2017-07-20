@@ -75,8 +75,8 @@ public class NavigationControllerImpl implements NavigationController {
     }
 
     @Override
-    public void returnResult(Bundle values) {
-        this.requestForResultManager.returnResult(currentRequestCode, values);
+    public void returnResult(Result result) {
+        this.requestForResultManager.returnResult(currentRequestCode, result);
     }
 
     @Override

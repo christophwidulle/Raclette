@@ -18,7 +18,7 @@ public interface NavigationController {
 
     void back();
 
-    void returnResult(Bundle values);
+    void returnResult(Result result);
 
     void cancelResult();
 
