@@ -4,13 +4,10 @@ import de.chefkoch.raclette.ViewModelLifecycleState;
 import rx.Observable;
 
 /**
- * Thx to https://github.com/trello/RxLifecycle
- *
- * Created by christophwidulle on 14.04.16.
+ * Created by christophwidulle on 22.07.17.
  */
-public interface ViewModelLifecycleProvider extends HasBindToLifecycle{
+public interface HasBindToLifecycle {
 
-    Observable<ViewModelLifecycleState> lifecycle();
 
     <T> Observable.Transformer<T, T> bindUntilEvent(ViewModelLifecycleState event);
 

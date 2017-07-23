@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by christophwidulle on 16.04.16.
  */
-public class CustomViewAdapter<T> extends RecyclerView.Adapter<CustomViewAdapter.BasicViewHolder<T>> {
+public class CustomViewAdapter<T> extends RecyclerView.Adapter<CustomViewAdapter.BasicViewHolder<T>> implements AdapterUpdateable<T> {
 
     private AdapterItemClickListener<T> itemClickListener;
     private final UpdatableCustomViewFactory<T> factory;
@@ -26,6 +26,7 @@ public class CustomViewAdapter<T> extends RecyclerView.Adapter<CustomViewAdapter
         this.factory = factory;
     }
 
+    @Override
     public void setAll(Collection<T> items) {
         if (items != null) {
             this.items = new ArrayList<>(items);
@@ -35,6 +36,7 @@ public class CustomViewAdapter<T> extends RecyclerView.Adapter<CustomViewAdapter
         }
     }
 
+    @Override
     public void addAll(Collection<T> items) {
         if (items != null) {
             this.items.addAll(items);
@@ -42,6 +44,7 @@ public class CustomViewAdapter<T> extends RecyclerView.Adapter<CustomViewAdapter
         }
     }
 
+    @Override
     public void add(T item) {
         if (item != null) {
             this.items.add(item);

@@ -16,7 +16,7 @@ import de.chefkoch.raclette.android.UpdatableCustomView;
 /**
  * Created by christophwidulle on 16.04.16.
  */
-public class MultiCustomViewAdapter<T> extends RecyclerView.Adapter<MultiCustomViewAdapter.BasicViewHolder<T>> {
+public class MultiCustomViewAdapter<T> extends RecyclerView.Adapter<MultiCustomViewAdapter.BasicViewHolder<T>> implements AdapterUpdateable<T> {
 
     private final Map<Integer, ElementConfig> elements;
     private AdapterItemClickListener<T> itemClickListener;
@@ -34,6 +34,7 @@ public class MultiCustomViewAdapter<T> extends RecyclerView.Adapter<MultiCustomV
         this.itemViewTypeMapping = adapterConfig.getItemViewTypeMapping();
     }
 
+
     public static <T> Builder<T> builder(ItemViewTypeMapping<T> itemViewTypeMapping) {
         return new Builder<>(itemViewTypeMapping);
     }
@@ -42,7 +43,7 @@ public class MultiCustomViewAdapter<T> extends RecyclerView.Adapter<MultiCustomV
         return new MultiCustomViewAdapter<T>(adapterConfig);
     }
 
-
+    @Override
     public void setAll(Collection<T> items) {
         if (items != null) {
             this.items = new ArrayList<>(items);
@@ -52,6 +53,7 @@ public class MultiCustomViewAdapter<T> extends RecyclerView.Adapter<MultiCustomV
         }
     }
 
+    @Override
     public void addAll(Collection<T> items) {
         if (items != null) {
             this.items.addAll(items);
@@ -59,6 +61,7 @@ public class MultiCustomViewAdapter<T> extends RecyclerView.Adapter<MultiCustomV
         }
     }
 
+    @Override
     public void add(T item) {
         if (item != null) {
             this.items.add(item);

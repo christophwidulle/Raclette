@@ -15,7 +15,7 @@ import java.util.*;
 /**
  * Created by christophwidulle on 16.04.16.
  */
-public class BindingAdapter<T> extends RecyclerView.Adapter<BindingAdapter.BasicViewHolder<T>> {
+public class BindingAdapter<T> extends RecyclerView.Adapter<BindingAdapter.BasicViewHolder<T>> implements AdapterUpdateable<T> {
 
     final private int itemLayoutResource;
     private int itemModelBindingId = -1;
@@ -30,6 +30,7 @@ public class BindingAdapter<T> extends RecyclerView.Adapter<BindingAdapter.Basic
         this.itemLayoutResource = itemLayoutResource;
     }
 
+    @Override
     public void setAll(Collection<T> items) {
         if (items != null) {
             this.items = new ArrayList<>(items);
@@ -39,6 +40,7 @@ public class BindingAdapter<T> extends RecyclerView.Adapter<BindingAdapter.Basic
         }
     }
 
+    @Override
     public void addAll(Collection<T> items) {
         if (items != null) {
             this.items.addAll(items);
@@ -46,6 +48,7 @@ public class BindingAdapter<T> extends RecyclerView.Adapter<BindingAdapter.Basic
         }
     }
 
+    @Override
     public void add(T item) {
         if (item != null) {
             this.items.add(item);

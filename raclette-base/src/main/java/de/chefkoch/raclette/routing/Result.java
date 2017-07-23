@@ -25,6 +25,9 @@ public class Result {
         return new Result(extra, data);
     }
 
+    public static Result empty() {
+        return new Result(null, null);
+    }
 
     public Bundle getExtra() {
         return extra;
@@ -32,6 +35,10 @@ public class Result {
 
     public void setExtra(Bundle extra) {
         this.extra = extra;
+    }
+
+    public boolean isEmpty() {
+        return extra == null && data == null;
     }
 
     @Nullable

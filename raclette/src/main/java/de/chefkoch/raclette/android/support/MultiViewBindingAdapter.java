@@ -15,7 +15,7 @@ import de.chefkoch.raclette.android.AdapterItemClickListener;
 import de.chefkoch.raclette.android.BindingDecorator;
 
 
-public class MultiViewBindingAdapter<T> extends RecyclerView.Adapter<MultiViewBindingAdapter.BasicViewHolder<T>> {
+public class MultiViewBindingAdapter<T> extends RecyclerView.Adapter<MultiViewBindingAdapter.BasicViewHolder<T>> implements AdapterUpdateable<T> {
 
     private ItemViewTypeMapping<T> itemViewTypeMapping = new DefaultItemViewTypeMapping<>();
 
@@ -33,6 +33,7 @@ public class MultiViewBindingAdapter<T> extends RecyclerView.Adapter<MultiViewBi
     public MultiViewBindingAdapter() {
     }
 
+    @Override
     public void setAll(Collection<T> items) {
         if (items != null) {
             this.items = new ArrayList<T>(items);
@@ -42,6 +43,7 @@ public class MultiViewBindingAdapter<T> extends RecyclerView.Adapter<MultiViewBi
         }
     }
 
+    @Override
     public void addAll(Collection<T> items) {
         if (items != null) {
             this.items.addAll(items);
@@ -49,6 +51,7 @@ public class MultiViewBindingAdapter<T> extends RecyclerView.Adapter<MultiViewBi
         }
     }
 
+    @Override
     public void add(T item) {
         if (item != null) {
             this.items.add(item);
