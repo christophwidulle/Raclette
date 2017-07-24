@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import de.chefkoch.raclette.ViewModel;
 import de.chefkoch.raclette.android.RacletteActivity;
 import de.chefkoch.raclette.android.support.RacletteAppCompatActivity;
+import de.chefkoch.raclette.rx.lifecycle.HasBindToLifecycle;
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
 import com.trello.rxlifecycle.ActivityEvent;
@@ -17,7 +18,7 @@ import com.trello.rxlifecycle.ActivityLifecycleProvider;
 /**
  * Created by christophwidulle on 28.09.15.
  */
-public class RacletteRxAppCompatActivity<V extends ViewModel, B extends ViewDataBinding> extends RacletteAppCompatActivity<V,B> implements ActivityLifecycleProvider {
+public class RacletteRxAppCompatActivity<V extends ViewModel, B extends ViewDataBinding> extends RacletteAppCompatActivity<V,B> implements ActivityLifecycleProvider, HasBindToLifecycle {
 
     protected final BehaviorSubject<ActivityEvent> lifecycleSubject = BehaviorSubject.create();
 

@@ -7,7 +7,7 @@ import rx.Observable;
  *
  * Created by christophwidulle on 14.04.16.
  */
-public interface CustomViewLifecycleProvider {
+public interface CustomViewLifecycleProvider  extends HasBindToLifecycle{
 
     Observable<CustomViewLifecycleState> lifecycle();
 

@@ -11,6 +11,7 @@ import com.trello.rxlifecycle.FragmentLifecycleProvider;
 import com.trello.rxlifecycle.RxLifecycle;
 import de.chefkoch.raclette.ViewModel;
 import de.chefkoch.raclette.android.support.RacletteFragment;
+import de.chefkoch.raclette.rx.lifecycle.HasBindToLifecycle;
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
 import android.databinding.ViewDataBinding;
@@ -19,7 +20,7 @@ import android.databinding.ViewDataBinding;
 /**
  * Created by Christoph on 05.10.2015.
  */
-public class RacletteRxFragment<V extends ViewModel, B extends ViewDataBinding> extends RacletteFragment<V, B> implements FragmentLifecycleProvider {
+public class RacletteRxFragment<V extends ViewModel, B extends ViewDataBinding> extends RacletteFragment<V, B> implements FragmentLifecycleProvider, HasBindToLifecycle {
 
     protected final BehaviorSubject<FragmentEvent> lifecycleSubject = BehaviorSubject.create();
 

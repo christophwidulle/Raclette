@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import de.chefkoch.raclette.UpdatableViewModel;
 import de.chefkoch.raclette.android.UpdatableCustomView;
+import de.chefkoch.raclette.rx.lifecycle.HasBindToLifecycle;
 import de.chefkoch.raclette.rx.lifecycle.RxViewCompositionLifecycle;
 import de.chefkoch.raclette.rx.lifecycle.CustomViewLifecycleState;
 import rx.Observable;
@@ -16,7 +17,7 @@ import rx.subjects.BehaviorSubject;
  * Created by christophwidulle on 22.05.16.
  */
 public class RxUpdatableCustomView<T, V extends UpdatableViewModel<T>, B extends ViewDataBinding>
-        extends UpdatableCustomView<T, V, B> {
+        extends UpdatableCustomView<T, V, B> implements HasBindToLifecycle {
 
 
     private BehaviorSubject<CustomViewLifecycleState> lifecycleSubject;

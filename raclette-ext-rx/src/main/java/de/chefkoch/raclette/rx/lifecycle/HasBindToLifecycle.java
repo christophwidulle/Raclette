@@ -8,8 +8,5 @@ import rx.Observable;
  */
 public interface HasBindToLifecycle {
 
-
-    <T> Observable.Transformer<T, T> bindUntilEvent(ViewModelLifecycleState event);
-
     <T> Observable.Transformer<T, T> bindToLifecycle();
 }
