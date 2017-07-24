@@ -3,6 +3,9 @@ package de.chefkoch.raclette.routing;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import de.chefkoch.raclette.util.BundleEquals;
+
+import java.util.Objects;
 
 /**
  * A result für den Rückgabewert von forResult im {@link NavigationController}
@@ -49,5 +52,24 @@ public class Result {
     @Nullable
     public void setData(Uri data) {
         this.data = data;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Result result = (Result) o;
+        return BundleEquals.equalsBundles(extra, result.getExtra()) &&
+                Objects.equals(data, result.data);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(extra, data);
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
     }
 }

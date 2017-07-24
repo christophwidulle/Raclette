@@ -2,8 +2,7 @@ package de.chefkoch.raclette.routing;
 
 import android.os.Bundle;
 import de.chefkoch.raclette.ViewModel;
-
-import java.util.Set;
+import de.chefkoch.raclette.util.BundleEquals;
 
 /**
  * Created by christophwidulle on 07.12.15.
@@ -90,7 +89,7 @@ public class NavRequest {
         NavRequest that = (NavRequest) o;
 
         if (!routePath.equals(that.routePath)) return false;
-        return equalsBundles(this.params, ((NavRequest) o).params);
+        return BundleEquals.equalsBundles(this.params, ((NavRequest) o).params);
 
     }
 
@@ -110,34 +109,4 @@ public class NavRequest {
                 '}';
     }
 
-    public static boolean equalsBundles(Bundle a, Bundle b) {
-        if (a == b) return true;
-
-        Set<String> aks = a.keySet();
-        Set<String> bks = b.keySet();
-
-        if (!aks.containsAll(bks)) {
-            return false;
-        }
-
-        for (String key : aks) {
-            Object valueA = a.get(key);
-            Object valueB = b.get(key);
-
-            if (valueA == null && valueB == null) {
-                return true;
-            }
-
-            if (valueA instanceof Bundle && valueB instanceof Bundle) {
-                if (!equalsBundles((Bundle) valueA, (Bundle) valueB)) {
-                    return false;
-                }
-
-            } else if (!valueA.equals(valueB)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
 }
