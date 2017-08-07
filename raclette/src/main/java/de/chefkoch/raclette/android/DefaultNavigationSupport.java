@@ -37,7 +37,7 @@ public abstract class DefaultNavigationSupport implements NavigationSupport {
 
         @Override
         public boolean onBack() {
-            this.dialogFragment.dismiss();
+            this.dialogFragment.dismissAllowingStateLoss();
             return true;
         }
     }
@@ -52,7 +52,7 @@ public abstract class DefaultNavigationSupport implements NavigationSupport {
 
         @Override
         public boolean onBack() {
-            this.dialogFragment.dismiss();
+            this.dialogFragment.dismissAllowingStateLoss();
             return true;
         }
     }
