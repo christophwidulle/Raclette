@@ -27,6 +27,12 @@ public class ViewModel {
                 target.putBundle(EXTRA_KEY, params);
             }
         }
+
+        public static Bundle asBundle(Bundle params) {
+            Bundle target = new Bundle();
+            apply(params, target);
+            return target;
+        }
     }
 
     private ViewModelLifecycleState state = ViewModelLifecycleState.NEW;
