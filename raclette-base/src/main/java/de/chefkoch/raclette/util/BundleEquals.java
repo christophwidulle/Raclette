@@ -27,12 +27,16 @@ public class BundleEquals {
                 return true;
             }
 
+            if (valueA != null && valueB == null) {
+                return false;
+            }
+
             if (valueA instanceof Bundle && valueB instanceof Bundle) {
                 if (!equalsBundles((Bundle) valueA, (Bundle) valueB)) {
                     return false;
                 }
 
-            } else if (!valueA.equals(valueB)) {
+            } else if (valueA != null && !valueA.equals(valueB)) {
                 return false;
             }
         }
