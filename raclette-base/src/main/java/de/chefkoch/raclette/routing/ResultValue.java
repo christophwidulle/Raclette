@@ -8,26 +8,26 @@ import de.chefkoch.raclette.util.BundleEquals;
 /**
  * A result für den Rückgabewert von forResult im {@link NavigationController}
  */
-public class RoutingResult {
+public class ResultValue {
 
     private Bundle extra;
     private Uri data;
 
-    public RoutingResult(Bundle extra, Uri data) {
+    public ResultValue(Bundle extra, Uri data) {
         this.extra = extra;
         this.data = data;
     }
 
-    public static RoutingResult of(Bundle extra) {
-        return new RoutingResult(extra, null);
+    public static ResultValue of(Bundle extra) {
+        return new ResultValue(extra, null);
     }
 
-    public static RoutingResult of(Bundle extra, Uri data) {
-        return new RoutingResult(extra, data);
+    public static ResultValue of(Bundle extra, Uri data) {
+        return new ResultValue(extra, data);
     }
 
-    public static RoutingResult empty() {
-        return new RoutingResult(null, null);
+    public static ResultValue empty() {
+        return new ResultValue(null, null);
     }
 
     public Bundle getExtra() {
@@ -57,7 +57,7 @@ public class RoutingResult {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        RoutingResult result = (RoutingResult) o;
+        ResultValue result = (ResultValue) o;
 
         if (extra != null ? !BundleEquals.equalsBundles(extra, result.getExtra()) : result.extra != null) return false;
         return data != null ? data.equals(result.data) : result.data == null;

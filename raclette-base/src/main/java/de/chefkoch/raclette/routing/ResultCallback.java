@@ -5,7 +5,7 @@ package de.chefkoch.raclette.routing;
  */
 public abstract class ResultCallback {
 
-    public abstract void onResult(RoutingResult result);
+    public abstract void onResult(ResultValue result);
 
     public void onCancel() {
     }

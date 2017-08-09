@@ -57,7 +57,7 @@ public class RxNavigationControllerExt {
 
             final ResultCallback resultCallback = new ResultCallback() {
                 @Override
-                public void onResult(RoutingResult result) {
+                public void onResult(ResultValue result) {
                     if (!subscriber.isUnsubscribed()) {
                         subscriber.onNext(ForResultReturn.from(result));
                         subscriber.onCompleted();

@@ -17,7 +17,7 @@ public interface NavigationController {
 
     void back();
 
-    void returnResult(RoutingResult result);
+    void returnResult(ResultValue result);
 
     void cancelResult();
 

@@ -1,15 +1,15 @@
 package de.chefkoch.raclette.rx;
 
-import de.chefkoch.raclette.routing.RoutingResult;
+import de.chefkoch.raclette.routing.ResultValue;
 
 /**
  * Created by christophwidulle on 25.06.16.
  */
 public class ForResultReturn {
 
-    RoutingResult result;
+    ResultValue result;
 
-    private ForResultReturn(RoutingResult result) {
+    private ForResultReturn(ResultValue result) {
         this.result = result;
     }
 
@@ -17,7 +17,7 @@ public class ForResultReturn {
 
     }
 
-    public static ForResultReturn from(RoutingResult result) {
+    public static ForResultReturn from(ResultValue result) {
         return new ForResultReturn(result);
     }
 
@@ -25,7 +25,7 @@ public class ForResultReturn {
         return new ForResultReturn();
     }
 
-    public RoutingResult getResult() {
+    public ResultValue getResult() {
         return result;
     }
 
