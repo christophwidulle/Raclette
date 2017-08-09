@@ -1,18 +1,10 @@
 package de.chefkoch.raclette.rx;
 
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.view.View;
 import de.chefkoch.raclette.routing.*;
 import rx.Observable;
 import rx.Subscriber;
-import rx.Subscription;
 import rx.android.MainThreadSubscription;
-import rx.functions.Func1;
-
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by christophwidulle on 25.06.16.
@@ -65,7 +57,7 @@ public class RxNavigationControllerExt {
 
             final ResultCallback resultCallback = new ResultCallback() {
                 @Override
-                public void onResult(Result result) {
+                public void onResult(RoutingResult result) {
                     if (!subscriber.isUnsubscribed()) {
                         subscriber.onNext(ForResultReturn.from(result));
                         subscriber.onCompleted();

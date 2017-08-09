@@ -1,7 +1,6 @@
 package de.chefkoch.raclette.routing;
 
 import android.content.Intent;
-import android.os.Bundle;
 
 /**
  * Created by christophwidulle on 06.12.15.
@@ -18,7 +17,7 @@ public interface NavigationController {
 
     void back();
 
-    void returnResult(Result result);
+    void returnResult(RoutingResult result);
 
     void cancelResult();
 

@@ -5,31 +5,29 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import de.chefkoch.raclette.util.BundleEquals;
 
-import java.util.Objects;
-
 /**
  * A result für den Rückgabewert von forResult im {@link NavigationController}
  */
-public class Result {
+public class RoutingResult {
 
     private Bundle extra;
     private Uri data;
 
-    public Result(Bundle extra, Uri data) {
+    public RoutingResult(Bundle extra, Uri data) {
         this.extra = extra;
         this.data = data;
     }
 
-    public static Result of(Bundle extra) {
-        return new Result(extra, null);
+    public static RoutingResult of(Bundle extra) {
+        return new RoutingResult(extra, null);
     }
 
-    public static Result of(Bundle extra, Uri data) {
-        return new Result(extra, data);
+    public static RoutingResult of(Bundle extra, Uri data) {
+        return new RoutingResult(extra, data);
     }
 
-    public static Result empty() {
-        return new Result(null, null);
+    public static RoutingResult empty() {
+        return new RoutingResult(null, null);
     }
 
     public Bundle getExtra() {
@@ -58,14 +56,18 @@ public class Result {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Result result = (Result) o;
-        return BundleEquals.equalsBundles(extra, result.getExtra()) &&
-                Objects.equals(data, result.data);
+
+        RoutingResult result = (RoutingResult) o;
+
+        if (extra != null ? !BundleEquals.equalsBundles(extra, result.getExtra()) : result.extra != null) return false;
+        return data != null ? data.equals(result.data) : result.data == null;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(extra, data);
+        int result = extra != null ? extra.hashCode() : 0;
+        result = 31 * result + (data != null ? data.hashCode() : 0);
+        return result;
     }
 
     @Override

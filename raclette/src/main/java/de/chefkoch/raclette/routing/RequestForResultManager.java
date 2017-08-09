@@ -2,10 +2,7 @@ package de.chefkoch.raclette.routing;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
 
-import java.lang.ref.WeakReference;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -40,7 +37,7 @@ public class RequestForResultManager {
         }
     }
 
-    void returnResult(Integer requestCode, Result result) {
+    void returnResult(Integer requestCode, RoutingResult result) {
         ResultCallback callback = getCallback(requestCode);
         if (callback != null) {
             callback.onResult(result);
@@ -54,9 +51,9 @@ public class RequestForResultManager {
                 callback.onCancel();
             } else if (resultCode == Activity.RESULT_OK) {
                 if (data != null) {
-                    callback.onResult(new Result(data.getExtras(), data.getData()));
+                    callback.onResult(new RoutingResult(data.getExtras(), data.getData()));
                 } else {
-                    callback.onResult(new Result(null, null));
+                    callback.onResult(new RoutingResult(null, null));
                 }
             }
         }
@@ -66,7 +63,7 @@ public class RequestForResultManager {
 
         return new ResultCallback() {
             @Override
-            public void onResult(Result result) {
+            public void onResult(RoutingResult result) {
                 remove(requestCode);
                 resultCallback.onResult(result);
             }
