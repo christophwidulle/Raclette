@@ -6,8 +6,9 @@ import android.content.ContextWrapper;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import android.support.v7.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,9 @@ public class RacletteViewLifecycleDelegate<V extends ViewModel, B extends ViewDa
     private Bundle params;
     private Context context;
     private final OnViewModelCreatedCallback callback;
+
+    private String viewModelId;
+    private boolean stateSaved;
 
     public RacletteViewLifecycleDelegate(Raclette raclette, Context context, ViewModelBindingConfig<V> viewModelBindingConfig, OnViewModelCreatedCallback callback) {
         this.raclette = raclette;
@@ -102,22 +106,30 @@ public class RacletteViewLifecycleDelegate<V extends ViewModel, B extends ViewDa
         viewModel.pause();
         viewModel.stop();
         viewModel.destroy();
-        destroyViewModel();
+        if (!stateSaved) {
+            destroyViewModel();
+        }
     }
 
 
     public void createViewModel() {
         checkViewBindung();
+        if (viewModelId != null) {
+            V viewModel = raclette.getViewModelManager().getViewModel(viewModelId);
+            if (viewModel != null) {
+                this.viewModel = viewModel;
+            }
+        }
         if (viewModel == null) {
             viewModel = raclette.getViewModelManager().createViewModel(viewModelBindingConfig.getViewModelClass());
             viewModel.setNavigationController(raclette.createNavigationController());
             getNavigationControllerImpl().setContext(context);
-            setNavigationSupportIfNeeded();
             injectParams();
-            binding.setVariable(raclette.getViewModelBindingId(), viewModel);
             viewModel.viewModelCreate(params);
-            callback.onCreated();
         }
+        setNavigationSupportIfNeeded();
+        binding.setVariable(raclette.getViewModelBindingId(), viewModel);
+        callback.onCreated();
     }
 
     private void destroyViewModel() {
@@ -125,6 +137,7 @@ public class RacletteViewLifecycleDelegate<V extends ViewModel, B extends ViewDa
         raclette.getViewModelManager().delete(viewModel.getId());
         viewModel = null;
     }
+
 
     private void checkViewBindung() {
         if (binding == null) throw new RacletteException("call onCreateViewBinding(...) before.");
@@ -143,5 +156,49 @@ public class RacletteViewLifecycleDelegate<V extends ViewModel, B extends ViewDa
         return binding;
     }
 
+    private static class SavedState extends View.BaseSavedState {
+        // include own data members here
+        String viewModelId;
+
+        SavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        private SavedState(Parcel in) {
+            super(in);
+            viewModelId = in.readString();
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+            out.writeString(viewModelId);
+        }
+
+        public static final Parcelable.Creator<SavedState> CREATOR =
+                new Parcelable.Creator<SavedState>() {
+                    public SavedState createFromParcel(Parcel in) {
+                        return new SavedState(in);
+                    }
+
+                    public SavedState[] newArray(int size) {
+                        return new SavedState[size];
+                    }
+                };
+    }
+
+    public Parcelable onSaveInstanceState(Parcelable parcelable) {
+        SavedState state = new SavedState(parcelable);
+        // set data members here
+        state.viewModelId = viewModel().getId();
+        stateSaved = true;
+        return state;
+    }
+
+    public Parcelable onRestoreInstanceState(Parcelable parcelable) {
+        SavedState state = (SavedState) parcelable;
+        this.viewModelId = state.viewModelId;
+        return state.getSuperState();
+    }
 
 }

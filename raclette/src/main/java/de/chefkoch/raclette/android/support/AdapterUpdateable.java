@@ -12,4 +12,6 @@ public interface AdapterUpdateable<T> {
     void addAll(Collection<T> items);
 
     void add(T item);
+
+    void removeAll();
 }

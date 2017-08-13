@@ -77,8 +77,12 @@ public abstract class Value<T> extends ObservableField<T> {
         };
     }
 
-    public boolean exist() {
-        return get() != null;
+    public boolean isNotNull() {
+        return !isNull();
+    }
+
+    public boolean isNull() {
+        return get() == null;
     }
 
     /**

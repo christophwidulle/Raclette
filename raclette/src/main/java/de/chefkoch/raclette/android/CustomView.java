@@ -5,8 +5,11 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import de.chefkoch.raclette.*;
@@ -71,6 +74,19 @@ public class CustomView<V extends ViewModel, B extends ViewDataBinding> extends 
         super.onDetachedFromWindow();
     }
 
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        return delegate.onSaveInstanceState(super.onSaveInstanceState());
+
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        Parcelable restored = delegate.onRestoreInstanceState(state);
+        super.onRestoreInstanceState(restored);
+    }
+
+
     protected Raclette getRaclette() {
         return Raclette.get();
     }
@@ -82,5 +98,6 @@ public class CustomView<V extends ViewModel, B extends ViewDataBinding> extends 
     public B binding() {
         return delegate.binding();
     }
+
 
 }

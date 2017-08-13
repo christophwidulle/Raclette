@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import de.chefkoch.raclette.util.BundleEquals;
 
 /**
- * A result für den Rückgabewert von forResult im {@link NavigationController}
+ * Return value for forResult in {@link NavigationController}
  */
 public class ResultValue {
 

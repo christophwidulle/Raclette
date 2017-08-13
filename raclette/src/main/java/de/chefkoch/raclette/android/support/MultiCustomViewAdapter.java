@@ -69,6 +69,7 @@ public class MultiCustomViewAdapter<T> extends RecyclerView.Adapter<MultiCustomV
         }
     }
 
+    @Override
     public void removeAll() {
         items = new ArrayList<>();
         notifyDataSetChanged();

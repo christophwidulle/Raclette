@@ -56,6 +56,7 @@ public class BindingAdapter<T> extends RecyclerView.Adapter<BindingAdapter.Basic
         }
     }
 
+    @Override
     public void removeAll() {
         items = new ArrayList<T>();
         notifyDataSetChanged();

@@ -59,6 +59,7 @@ public class MultiViewBindingAdapter<T> extends RecyclerView.Adapter<MultiViewBi
         }
     }
 
+    @Override
     public void removeAll() {
         items = new ArrayList<>();
         notifyDataSetChanged();

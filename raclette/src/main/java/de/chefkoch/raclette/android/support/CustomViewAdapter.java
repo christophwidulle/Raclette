@@ -52,6 +52,7 @@ public class CustomViewAdapter<T> extends RecyclerView.Adapter<CustomViewAdapter
         }
     }
 
+    @Override
     public void removeAll() {
         items = new ArrayList<>();
         notifyDataSetChanged();
