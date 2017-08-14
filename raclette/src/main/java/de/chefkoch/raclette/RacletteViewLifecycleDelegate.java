@@ -188,11 +188,15 @@ public class RacletteViewLifecycleDelegate<V extends ViewModel, B extends ViewDa
     }
 
     public Parcelable onSaveInstanceState(Parcelable parcelable) {
-        SavedState state = new SavedState(parcelable);
-        // set data members here
-        state.viewModelId = viewModel().getId();
-        stateSaved = true;
-        return state;
+        if (viewModel() != null) {
+            SavedState state = new SavedState(parcelable);
+            // set data members here
+            state.viewModelId = viewModel().getId();
+            stateSaved = true;
+            return state;
+        } else {
+            return parcelable;
+        }
     }
 
     public Parcelable onRestoreInstanceState(Parcelable parcelable) {
