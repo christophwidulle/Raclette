@@ -70,18 +70,18 @@ ext.deps = [
         javapoet           : 'com.squareup:javapoet:1.6.1',
 
         // Other
-        rxjava             : 'io.reactivex:rxjava:1.1.6',
+        rxjava             : 'io.reactivex:rxjava:1.3.0',
         rxjava2            : 'io.reactivex.rxjava2:rxjava:2.0.5',
         rxAndroid          : 'io.reactivex:rxandroid:1.2.1',
         rxAndroid2         : 'io.reactivex.rxjava2:rxandroid:2.0.1',
-        rxRelay            : 'com.jakewharton.rxrelay:rxrelay:1.1.0',
+        rxRelay            : 'com.jakewharton.rxrelay:rxrelay:1.2.0',
         rxRelay2           : 'com.jakewharton.rxrelay2:rxrelay:2.0.0',
         rxLifecycle        : 'com.trello:rxlifecycle:0.5.0',
         rxLifecycle2       : 'com.trello.rxlifecycle2:rxlifecycle:2.0.1',
-        rxBinding          : 'com.jakewharton.rxbinding:rxbinding:1.0.0',
-        rxBindingSupport   : 'com.jakewharton.rxbinding:rxbinding-support-v4:1.0.0',
-        rxBindingRecycler  : 'com.jakewharton.rxbinding:rxbinding-recyclerview-v7:1.0.0',
-        rxBindingDesign    : 'com.jakewharton.rxbinding:rxbinding-design:1.0.0',
+        rxBinding          : 'com.jakewharton.rxbinding:rxbinding:1.0.1',
+        rxBindingSupport   : 'com.jakewharton.rxbinding:rxbinding-support-v4:1.0.1',
+        rxBindingRecycler  : 'com.jakewharton.rxbinding:rxbinding-recyclerview-v7:1.0.1',
+        rxBindingDesign    : 'com.jakewharton.rxbinding:rxbinding-design:1.0.1',
 
         // Test dependencies
         junit              : 'junit:junit:4.12',

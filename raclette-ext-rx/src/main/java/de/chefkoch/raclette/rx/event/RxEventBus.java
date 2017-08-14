@@ -21,12 +21,11 @@ public class RxEventBus<T> {
     }
 
     public Observable<? extends T> observe(Class<? extends T> eventType) {
-        return observe().ofType(eventType);
+        return bus.asObservable().ofType(eventType).onBackpressureBuffer();
     }
 
     public Observable<? extends T> observe() {
         return bus.asObservable().onBackpressureBuffer();
-
     }
 
     public static <T> RxEventBus<T> createPublish() {

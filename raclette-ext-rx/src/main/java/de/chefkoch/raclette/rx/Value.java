@@ -3,10 +3,12 @@ package de.chefkoch.raclette.rx;
 
 import android.databinding.ObservableField;
 import com.jakewharton.rxrelay.ReplayRelay;
+import rx.Emitter;
 import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Action0;
 import rx.functions.Action1;
+import rx.functions.Cancellable;
 import rx.subscriptions.Subscriptions;
 
 import java.util.HashSet;
@@ -137,7 +139,39 @@ public abstract class Value<T> extends ObservableField<T> {
         }
     }
 
+
     public static <T> Observable<T> toObservable(final ObservableField<T> observableField, final boolean emitCurrent) {
+
+        return Observable.create(new Action1<Emitter<T>>() {
+            @Override
+            public void call(final Emitter<T> emitter) {
+
+                if (emitCurrent && observableField.get() != null) {
+                    emitter.onNext(observableField.get());
+                }
+                final OnPropertyChangedCallback callback = new OnPropertyChangedCallback() {
+                    @Override
+                    public void onPropertyChanged(android.databinding.Observable dataBindingObservable, int propertyId) {
+                        if (dataBindingObservable == observableField) {
+                            emitter.onNext(observableField.get());
+                        }
+                    }
+                };
+
+                observableField.addOnPropertyChangedCallback(callback);
+
+                emitter.setCancellation(new Cancellable() {
+                    @Override
+                    public void cancel() throws Exception {
+                        observableField.removeOnPropertyChangedCallback(callback);
+                    }
+                });
+
+            }
+        }, Emitter.BackpressureMode.BUFFER);
+    }
+
+    public static <T> Observable<T> toObservable3(final ObservableField<T> observableField, final boolean emitCurrent) {
         return Observable.create(new Observable.OnSubscribe<T>() {
             @Override
             public void call(final Subscriber<? super T> subscriber) {

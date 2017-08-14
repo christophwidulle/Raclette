@@ -7,6 +7,7 @@ import com.jakewharton.rxrelay.Relay;
 import de.chefkoch.raclette.ViewModelLifecycleState;
 import de.chefkoch.raclette.rx.lifecycle.RxViewModelLifecycle;
 import rx.Observable;
+import rx.Subscriber;
 import rx.Subscription;
 import rx.functions.Action0;
 import rx.functions.Action1;
@@ -78,6 +79,10 @@ public class Command<T> {
 
     public Subscription subscribe(Action1<T> action1) {
         return asObservable().subscribe(action1);
+    }
+
+    public Subscription subscribe(Subscriber<T> subscriber) {
+        return asObservable().subscribe(subscriber);
     }
 
 }
