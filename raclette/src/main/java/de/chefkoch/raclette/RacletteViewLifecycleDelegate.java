@@ -200,9 +200,12 @@ public class RacletteViewLifecycleDelegate<V extends ViewModel, B extends ViewDa
     }
 
     public Parcelable onRestoreInstanceState(Parcelable parcelable) {
-        SavedState state = (SavedState) parcelable;
-        this.viewModelId = state.viewModelId;
-        return state.getSuperState();
+        if (parcelable instanceof SavedState) {
+            SavedState state = (SavedState) parcelable;
+            this.viewModelId = state.viewModelId;
+            return state.getSuperState();
+        } else
+            return parcelable;
     }
 
 }
