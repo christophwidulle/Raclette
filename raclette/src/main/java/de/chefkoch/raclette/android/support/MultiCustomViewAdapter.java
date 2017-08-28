@@ -94,8 +94,11 @@ public class MultiCustomViewAdapter<T> extends RecyclerView.Adapter<MultiCustomV
 
     @Override
     public int getItemViewType(int position) {
-        T item = items.get(position);
-        return viewType(item);
+        if (items.size() > position) {
+            T item = items.get(position);
+            return viewType(item);
+        } else
+            return 0;
     }
 
 

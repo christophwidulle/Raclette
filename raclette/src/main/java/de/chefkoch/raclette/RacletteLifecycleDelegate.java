@@ -206,13 +206,17 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
     }
 
     private void destroy() {
-        viewModel.destroy();
+        if (viewModel != null) {
+            viewModel.destroy();
+        }
     }
 
     private void viewModelDestroy() {
-        getNavigationControllerImpl().onDestroy();
-        raclette.getViewModelManager().delete(viewModel.getId());
-        viewModel.viewModelDestroy();
+        if (viewModel != null) {
+            getNavigationControllerImpl().onDestroy();
+            raclette.getViewModelManager().delete(viewModel.getId());
+            viewModel.viewModelDestroy();
+        }
     }
 
     private void checkViewBindung() {
