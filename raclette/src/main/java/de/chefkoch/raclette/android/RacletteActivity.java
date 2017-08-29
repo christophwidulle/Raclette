@@ -27,11 +27,16 @@ public class RacletteActivity<V extends ViewModel, B extends ViewDataBinding> ex
                 getRaclette(),
                 getViewModelBindingConfig());
         racletteLifecycleDelegate.onCreateViewBinding(this);
+        this.onBindingCreated();
         racletteLifecycleDelegate.create(this, savedInstanceState);
         this.onViewModelCreated();
     }
 
     protected void onViewModelCreated() {
+
+    }
+
+    protected void onBindingCreated() {
 
     }
 

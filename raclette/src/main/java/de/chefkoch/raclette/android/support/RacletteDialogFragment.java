@@ -30,7 +30,9 @@ public class RacletteDialogFragment<V extends ViewModel, B extends ViewDataBindi
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return racletteLifecycleDelegate.onCreateViewBinding(inflater, container, false);
+        View view = racletteLifecycleDelegate.onCreateViewBinding(inflater, container, false);
+        this.onBindingCreated();
+        return view;
     }
 
     @CallSuper
@@ -43,6 +45,10 @@ public class RacletteDialogFragment<V extends ViewModel, B extends ViewDataBindi
     }
 
     protected void onViewModelCreated() {
+
+    }
+
+    protected void onBindingCreated() {
 
     }
 
