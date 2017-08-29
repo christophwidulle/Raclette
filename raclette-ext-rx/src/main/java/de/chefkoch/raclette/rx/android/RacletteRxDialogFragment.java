@@ -47,6 +47,11 @@ public class RacletteRxDialogFragment<V extends ViewModel, B extends ViewDataBin
     }
 
     @Override
+    public <T> Observable.Transformer<T, T> bindUntilDestroy() {
+        return bindUntilEvent(FragmentEvent.DESTROY);
+    }
+
+    @Override
     @CallSuper
     public void onAttach(Context context) {
         super.onAttach(context);

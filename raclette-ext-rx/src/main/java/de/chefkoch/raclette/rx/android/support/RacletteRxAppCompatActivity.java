@@ -44,6 +44,11 @@ public class RacletteRxAppCompatActivity<V extends ViewModel, B extends ViewData
     }
 
     @Override
+    public <T> Observable.Transformer<T, T> bindUntilDestroy() {
+        return bindUntilEvent(ActivityEvent.DESTROY);
+    }
+
+    @Override
     @CallSuper
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

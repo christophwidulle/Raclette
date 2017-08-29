@@ -30,6 +30,11 @@ public class ViewModelRxExtension implements ViewModelLifecycleProvider {
         return RxViewModelLifecycle.bind(lifecycleSubject);
     }
 
+    @Override
+    public <T> Observable.Transformer<T, T> bindUntilDestroy() {
+        return bindUntilEvent(ViewModelLifecycleState.VIEWMODEL_DESTROY);
+    }
+
     public RxNavigationControllerExt navigate() {
         return extNavController;
     }

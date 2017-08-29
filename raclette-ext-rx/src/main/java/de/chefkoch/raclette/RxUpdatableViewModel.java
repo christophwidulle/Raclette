@@ -24,6 +24,11 @@ public abstract class RxUpdatableViewModel<T> extends UpdatableViewModel<T> impl
     }
 
     @Override
+    public <T> Observable.Transformer<T, T> bindUntilDestroy() {
+        return bindUntilEvent(ViewModelLifecycleState.VIEWMODEL_DESTROY);
+    }
+
+    @Override
     public final <T> Observable.Transformer<T, T> bindToLifecycle() {
         return rxExtension.bindToLifecycle();
     }

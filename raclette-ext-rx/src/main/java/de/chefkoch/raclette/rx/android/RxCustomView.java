@@ -82,5 +82,10 @@ public class RxCustomView<V extends ViewModel, B extends ViewDataBinding> extend
         return RxViewCompositionLifecycle.bind(lifecycleSubject);
     }
 
+    @Override
+    public <T> Observable.Transformer<T, T> bindUntilDestroy() {
+        return bindUntilEvent(CustomViewLifecycleState.ON_DETACH);
+    }
+
 
 }

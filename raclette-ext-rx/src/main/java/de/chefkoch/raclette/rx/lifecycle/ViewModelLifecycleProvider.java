@@ -15,4 +15,6 @@ public interface ViewModelLifecycleProvider extends HasBindToLifecycle{
     <T> Observable.Transformer<T, T> bindUntilEvent(ViewModelLifecycleState event);
 
     <T> Observable.Transformer<T, T> bindToLifecycle();
+
+    <T> Observable.Transformer<T, T> bindUntilDestroy();
 }

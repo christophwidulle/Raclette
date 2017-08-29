@@ -14,4 +14,6 @@ public interface CustomViewLifecycleProvider  extends HasBindToLifecycle{
     <T> Observable.Transformer<T, T> bindUntilEvent(CustomViewLifecycleState event);
 
     <T> Observable.Transformer<T, T> bindToLifecycle();
+
+    <T> Observable.Transformer<T, T> bindUntilDestroy();
 }

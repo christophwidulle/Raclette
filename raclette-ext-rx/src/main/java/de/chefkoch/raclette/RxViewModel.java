@@ -27,6 +27,11 @@ public class RxViewModel extends ViewModel implements ViewModelLifecycleProvider
         return rxExtension.bindToLifecycle();
     }
 
+    @Override
+    public <T> Observable.Transformer<T, T> bindUntilDestroy() {
+        return bindUntilEvent(ViewModelLifecycleState.VIEWMODEL_DESTROY);
+    }
+
     public ViewModelRxExtension rx() {
         return rxExtension;
     }

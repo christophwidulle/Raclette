@@ -16,8 +16,7 @@ import rx.subjects.BehaviorSubject;
 /**
  * Created by christophwidulle on 22.05.16.
  */
-public class RxUpdatableCustomView<T, V extends UpdatableViewModel<T>, B extends ViewDataBinding>
-        extends UpdatableCustomView<T, V, B> implements HasBindToLifecycle {
+public class RxUpdatableCustomView<T, V extends UpdatableViewModel<T>, B extends ViewDataBinding> extends UpdatableCustomView<T, V, B> implements HasBindToLifecycle {
 
 
     private BehaviorSubject<CustomViewLifecycleState> lifecycleSubject;
@@ -74,5 +73,10 @@ public class RxUpdatableCustomView<T, V extends UpdatableViewModel<T>, B extends
     @CheckResult
     public final <T> Observable.Transformer<T, T> bindToLifecycle() {
         return RxViewCompositionLifecycle.bind(lifecycleSubject);
+    }
+
+    @Override
+    public <T> Observable.Transformer<T, T> bindUntilDestroy() {
+        return bindUntilEvent(CustomViewLifecycleState.ON_DETACH);
     }
 }
