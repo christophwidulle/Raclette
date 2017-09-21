@@ -91,7 +91,7 @@ public class LifecycleTestSupport {
             viewModel.destroy();
             viewModel.viewModelDestroy();
         } else {
-            throw new IllegalStateException("ViewModel was expected in state STOP or PAUSE but was " + currentState);
+            throw new IllegalStateException("ViewModel was expected in state STOP or PAUSE or RESUME but was " + currentState);
         }
 
     }
