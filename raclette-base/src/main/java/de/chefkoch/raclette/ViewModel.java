@@ -35,7 +35,7 @@ public class ViewModel {
         }
     }
 
-    private ViewModelLifecycleState state = ViewModelLifecycleState.NEW;
+    ViewModelLifecycleState state = ViewModelLifecycleState.NEW;
     private String id;
     private NavigationController navigationController;
 
@@ -63,8 +63,12 @@ public class ViewModel {
         return state;
     }
 
+    protected void updateState(ViewModelLifecycleState viewModelLifecycleState) {
+        state = viewModelLifecycleState;
+    }
+
     void viewModelCreate(Bundle bundle) {
-        this.state = ViewModelLifecycleState.VIEWMODEL_CREATE;
+        updateState(ViewModelLifecycleState.VIEWMODEL_CREATE);
         this.onViewModelCreated(bundle);
     }
 
@@ -73,7 +77,7 @@ public class ViewModel {
     }
 
     void create(Bundle bundle) {
-        this.state = ViewModelLifecycleState.CREATE;
+        updateState(ViewModelLifecycleState.CREATE);
         this.onCreate(bundle);
     }
 
@@ -82,7 +86,7 @@ public class ViewModel {
     }
 
     void start() {
-        this.state = ViewModelLifecycleState.START;
+        updateState(ViewModelLifecycleState.START);
         this.onStart();
     }
 
@@ -91,7 +95,7 @@ public class ViewModel {
     }
 
     void resume() {
-        this.state = ViewModelLifecycleState.RESUME;
+        updateState(ViewModelLifecycleState.RESUME);
         this.onResume();
     }
 
@@ -100,7 +104,7 @@ public class ViewModel {
     }
 
     void pause() {
-        this.state = ViewModelLifecycleState.PAUSE;
+        updateState(ViewModelLifecycleState.PAUSE);
         this.onPause();
     }
 
@@ -109,7 +113,7 @@ public class ViewModel {
     }
 
     void stop() {
-        this.state = ViewModelLifecycleState.STOP;
+        updateState(ViewModelLifecycleState.STOP);
         this.onStop();
     }
 
@@ -118,7 +122,7 @@ public class ViewModel {
     }
 
     void destroy() {
-        this.state = ViewModelLifecycleState.DESTROY;
+        updateState(ViewModelLifecycleState.DESTROY);
         this.onDestroy();
     }
 
@@ -127,7 +131,7 @@ public class ViewModel {
     }
 
     void viewModelDestroy() {
-        this.state = ViewModelLifecycleState.VIEWMODEL_DESTROY;
+        updateState(ViewModelLifecycleState.VIEWMODEL_DESTROY);
         this.onViewModelDestroy();
     }
 

@@ -48,37 +48,7 @@ public class ViewModelRxExtension implements ViewModelLifecycleProvider {
         this.extNavController = extNavController;
     }
 
-    void viewModelCreate(Bundle bundle) {
-        lifecycleSubject.onNext(ViewModelLifecycleState.VIEWMODEL_CREATE);
+    void updateState(ViewModelLifecycleState viewModelLifecycleState) {
+        lifecycleSubject.onNext(viewModelLifecycleState);
     }
-
-    void viewModelDestroy() {
-        lifecycleSubject.onNext(ViewModelLifecycleState.VIEWMODEL_DESTROY);
-    }
-
-    void create(Bundle params) {
-        lifecycleSubject.onNext(ViewModelLifecycleState.CREATE);
-    }
-
-    void start() {
-        lifecycleSubject.onNext(ViewModelLifecycleState.START);
-    }
-
-    void resume() {
-        lifecycleSubject.onNext(ViewModelLifecycleState.RESUME);
-    }
-
-    void pause() {
-        lifecycleSubject.onNext(ViewModelLifecycleState.PAUSE);
-    }
-
-    void stop() {
-        lifecycleSubject.onNext(ViewModelLifecycleState.STOP);
-    }
-
-    void destroy() {
-        lifecycleSubject.onNext(ViewModelLifecycleState.DESTROY);
-    }
-
-
 }

@@ -1,11 +1,8 @@
 package de.chefkoch.raclette;
 
-import android.os.Bundle;
 import de.chefkoch.raclette.routing.NavigationController;
-import de.chefkoch.raclette.rx.lifecycle.RxViewModelLifecycle;
 import de.chefkoch.raclette.rx.lifecycle.ViewModelLifecycleProvider;
 import rx.Observable;
-import rx.subjects.BehaviorSubject;
 
 /**
  * Created by christophwidulle on 22.05.16.
@@ -44,51 +41,7 @@ public abstract class RxUpdatableViewModel<T> extends UpdatableViewModel<T> impl
     }
 
     @Override
-    void viewModelCreate(Bundle bundle) {
-        super.viewModelCreate(bundle);
-        rxExtension.viewModelCreate(bundle);
-
-    }
-
-    @Override
-    void viewModelDestroy() {
-        super.viewModelDestroy();
-        rxExtension.viewModelDestroy();
-    }
-
-    @Override
-    void create(Bundle params) {
-        super.create(params);
-        rxExtension.create(params);
-    }
-
-    @Override
-    void start() {
-        super.start();
-        rxExtension.start();
-    }
-
-    @Override
-    void resume() {
-        super.resume();
-        rxExtension.resume();
-    }
-
-    @Override
-    void pause() {
-        super.pause();
-        rxExtension.pause();
-    }
-
-    @Override
-    void stop() {
-        super.stop();
-        rxExtension.stop();
-    }
-
-    @Override
-    void destroy() {
-        super.destroy();
-        rxExtension.destroy();
+    protected void updateState(ViewModelLifecycleState viewModelLifecycleState) {
+        rxExtension.updateState(viewModelLifecycleState);
     }
 }
