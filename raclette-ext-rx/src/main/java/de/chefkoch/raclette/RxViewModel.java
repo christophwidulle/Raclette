@@ -43,6 +43,7 @@ public class RxViewModel extends ViewModel implements ViewModelLifecycleProvider
 
     @Override
     protected void updateState(ViewModelLifecycleState viewModelLifecycleState) {
+        super.updateState(viewModelLifecycleState);
         rxExtension.updateState(viewModelLifecycleState);
     }
 }

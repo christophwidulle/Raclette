@@ -42,6 +42,7 @@ public abstract class RxUpdatableViewModel<T> extends UpdatableViewModel<T> impl
 
     @Override
     protected void updateState(ViewModelLifecycleState viewModelLifecycleState) {
+        super.updateState(viewModelLifecycleState);
         rxExtension.updateState(viewModelLifecycleState);
     }
 }
