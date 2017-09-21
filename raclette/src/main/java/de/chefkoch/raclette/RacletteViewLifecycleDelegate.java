@@ -126,6 +126,8 @@ public class RacletteViewLifecycleDelegate<V extends ViewModel, B extends ViewDa
             getNavigationControllerImpl().setContext(context);
             injectParams();
             viewModel.viewModelCreate(params);
+        } else {
+            getNavigationControllerImpl().setContext(context);
         }
         setNavigationSupportIfNeeded();
         binding.setVariable(raclette.getViewModelBindingId(), viewModel);
