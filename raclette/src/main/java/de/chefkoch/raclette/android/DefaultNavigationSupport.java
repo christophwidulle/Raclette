@@ -1,7 +1,11 @@
 package de.chefkoch.raclette.android;
 
+import android.app.Activity;
+import android.support.v4.app.DialogFragment;
 import de.chefkoch.raclette.routing.NavRequest;
 import de.chefkoch.raclette.routing.NavigationSupport;
+
+import java.lang.ref.WeakReference;
 
 /**
  * Created by christophwidulle on 16.05.16.
@@ -29,45 +33,52 @@ public abstract class DefaultNavigationSupport implements NavigationSupport {
 
     static class ForSupportDialog extends DefaultNavigationSupport {
 
-        android.support.v4.app.DialogFragment dialogFragment;
+        private final WeakReference<android.support.v4.app.DialogFragment> dialogFragmentRef;
 
         ForSupportDialog(android.support.v4.app.DialogFragment dialogFragment) {
-            this.dialogFragment = dialogFragment;
+            this.dialogFragmentRef = new WeakReference<>(dialogFragment);
         }
 
         @Override
         public boolean onBack() {
-            this.dialogFragment.dismissAllowingStateLoss();
-            return true;
+            if (dialogFragmentRef.get() != null) {
+                dialogFragmentRef.get().dismissAllowingStateLoss();
+                return true;
+            }
+            return false;
         }
     }
 
     static class ForDialog extends DefaultNavigationSupport {
 
-        android.app.DialogFragment dialogFragment;
+        private final WeakReference<android.app.DialogFragment> dialogFragmentRef;
 
         ForDialog(android.app.DialogFragment dialogFragment) {
-            this.dialogFragment = dialogFragment;
+            this.dialogFragmentRef = new WeakReference<>(dialogFragment);
         }
 
         @Override
         public boolean onBack() {
-            this.dialogFragment.dismissAllowingStateLoss();
+            if (dialogFragmentRef.get() != null) {
+                dialogFragmentRef.get().dismissAllowingStateLoss();
+            }
             return true;
         }
     }
 
     static class ForActivity extends DefaultNavigationSupport {
 
-        android.app.Activity activity;
+        private final WeakReference<android.app.Activity> activityRef;
 
         public ForActivity(android.app.Activity activity) {
-            this.activity = activity;
+            this.activityRef = new WeakReference<Activity>(activity);
         }
 
         @Override
         public boolean onBack() {
-            activity.finish();
+            if (activityRef.get() != null) {
+                activityRef.get().finish();
+            }
             return true;
         }
     }
