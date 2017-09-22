@@ -61,8 +61,9 @@ public abstract class DefaultNavigationSupport implements NavigationSupport {
         public boolean onBack() {
             if (dialogFragmentRef.get() != null) {
                 dialogFragmentRef.get().dismissAllowingStateLoss();
+                return true;
             }
-            return true;
+            return false;
         }
     }
 
@@ -78,8 +79,9 @@ public abstract class DefaultNavigationSupport implements NavigationSupport {
         public boolean onBack() {
             if (activityRef.get() != null) {
                 activityRef.get().finish();
+                return true;
             }
-            return true;
+            return false;
         }
     }
 
