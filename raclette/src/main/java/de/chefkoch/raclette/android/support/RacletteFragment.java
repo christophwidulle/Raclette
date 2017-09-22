@@ -46,6 +46,8 @@ public class RacletteFragment<V extends ViewModel, B extends ViewDataBinding> ex
 
     }
 
+
+
     @CallSuper
     @Override
     public void onDestroy() {

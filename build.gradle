@@ -5,6 +5,10 @@ subprojects { project ->
     repositories {
         mavenCentral()
         mavenLocal()
+        maven {
+            url 'https://maven.google.com'
+            // Alternative URL is 'https://dl.google.com/dl/android/maven2/'
+        }
     }
 
 //    apply plugin: 'checkstyle'
@@ -48,9 +52,9 @@ allprojects {
 
 ext {
     minSdkVersion = 16
-    targetSdkVersion = 23
-    compileSdkVersion = 23
-    buildToolsVersion = '23.0.3'
+    targetSdkVersion = 25
+    compileSdkVersion = 25
+    buildToolsVersion = '25.0.2'
     sourceCompatibilityVersion = JavaVersion.VERSION_1_7
     targetCompatibilityVersion = JavaVersion.VERSION_1_7
 }
@@ -58,10 +62,10 @@ ext {
 ext.deps = [
         // Android
         android            : 'com.google.android:android:4.0.1.2',
-        supportv4          : 'com.android.support:support-v4:23.0.0',
-        supportAnnotations : 'com.android.support:support-annotations:23.3.0',
-        supportAppCompatv7 : 'com.android.support:appcompat-v7:23.3.0',
-        supportRecycler    : 'com.android.support:recyclerview-v7:23.3.0',
+        supportv4          : 'com.android.support:support-v4:25.3.1',
+        supportAnnotations : 'com.android.support:support-annotations:25.3.1',
+        supportAppCompatv7 : 'com.android.support:appcompat-v7:25.3.1',
+        supportRecycler    : 'com.android.support:recyclerview-v7:25.3.1',
 
         androidDatabinding : 'com.android.databinding:baseLibrary:2.0.0',
         androidDatabindingC: 'com.android.databinding:compilerCommon:2.0.0',

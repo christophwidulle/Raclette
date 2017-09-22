@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +52,16 @@ public class RacletteDialogFragment<V extends ViewModel, B extends ViewDataBindi
 
     protected void onBindingCreated() {
 
+    }
+
+    @Override
+    public void show(FragmentManager manager, String tag) {
+        super.show(manager, tag);
+    }
+
+    @Override
+    public int show(FragmentTransaction transaction, String tag) {
+        return super.show(transaction, tag);
     }
 
     @CallSuper

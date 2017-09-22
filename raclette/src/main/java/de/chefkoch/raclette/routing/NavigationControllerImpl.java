@@ -143,7 +143,11 @@ public class NavigationControllerImpl implements NavigationController {
 
             android.app.DialogFragment fragment = (android.app.DialogFragment) route.getTargetClass().newInstance();
             fragment.setArguments(navRequest.toBundle());
-            fragment.show(currentActivity.getFragmentManager(), null);
+
+            currentActivity.getFragmentManager().beginTransaction()
+                    .add(fragment, null)
+                    .commitAllowingStateLoss();
+
 
         } catch (Exception e) {
             throw new RacletteException(e);
@@ -156,7 +160,10 @@ public class NavigationControllerImpl implements NavigationController {
 
             android.support.v4.app.DialogFragment fragment = (android.support.v4.app.DialogFragment) route.getTargetClass().newInstance();
             fragment.setArguments(navRequest.toBundle());
-            fragment.show(currentActivity.getSupportFragmentManager(), null);
+
+            currentActivity.getSupportFragmentManager().beginTransaction()
+                    .add(fragment, null)
+                    .commitAllowingStateLoss();
 
         } catch (Exception e) {
             throw new RacletteException(e);
