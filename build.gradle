@@ -36,6 +36,11 @@ subprojects { project ->
             mavenLocal()
 
             maven {
+                url 'https://maven.google.com'
+                // Alternative URL is 'https://dl.google.com/dl/android/maven2/'
+            }
+
+            maven {
                 url "https://oss.sonatype.org/content/repositories/snapshots"
             }
             maven { url "https://jitpack.io" }
