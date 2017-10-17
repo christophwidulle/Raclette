@@ -38,15 +38,16 @@ public class CustomView<V extends ViewModel, B extends ViewDataBinding> extends 
 
 
     protected void create(Context context) {
-        delegate = new RacletteViewLifecycleDelegate<>(getRaclette(), context, getViewModelBindingConfig(), new RacletteViewLifecycleDelegate.OnViewModelCreatedCallback() {
-            @Override
-            public void onCreated() {
-                onViewModelCreated();
-            }
-        });
+        if (!isInEditMode()) {
+            delegate = new RacletteViewLifecycleDelegate<>(getRaclette(), context, getViewModelBindingConfig(), isInEditMode(), new RacletteViewLifecycleDelegate.OnViewModelCreatedCallback() {
+                @Override
+                public void onCreated() {
+                    onViewModelCreated();
+                }
+            });
 
-        delegate.onCreateViewBinding(LayoutInflater.from(getContext()), this, true);
-
+            delegate.onCreateViewBinding(LayoutInflater.from(getContext()), this, true);
+        }
     }
 
 
@@ -65,12 +66,16 @@ public class CustomView<V extends ViewModel, B extends ViewDataBinding> extends 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        delegate.onAttachedToWindow();
+        if (!isInEditMode()) {
+            delegate.onAttachedToWindow();
+        }
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        delegate.onDetachedFromWindow();
+        if (!isInEditMode()) {
+            delegate.onDetachedFromWindow();
+        }
         super.onDetachedFromWindow();
     }
 

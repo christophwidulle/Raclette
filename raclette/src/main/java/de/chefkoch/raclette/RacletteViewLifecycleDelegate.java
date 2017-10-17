@@ -35,10 +35,10 @@ public class RacletteViewLifecycleDelegate<V extends ViewModel, B extends ViewDa
     private String viewModelId;
     private boolean stateSaved;
 
-    public RacletteViewLifecycleDelegate(Raclette raclette, Context context, ViewModelBindingConfig<V> viewModelBindingConfig, OnViewModelCreatedCallback callback) {
+    public RacletteViewLifecycleDelegate(Raclette raclette, Context context, ViewModelBindingConfig<V> viewModelBindingConfig, boolean isInEditorMode, OnViewModelCreatedCallback callback) {
         this.raclette = raclette;
         this.viewModelBindingConfig = viewModelBindingConfig;
-        this.context = validateContext(context);
+        this.context = validateContext(context, isInEditorMode);
         this.callback = callback;
 
         checkAndSetNavigationSupport(context);
@@ -49,16 +49,22 @@ public class RacletteViewLifecycleDelegate<V extends ViewModel, B extends ViewDa
         return binding.getRoot();
     }
 
-    private Context validateContext(Context context) {
+    private Context validateContext(Context context, boolean isInEditorMode) {
+
+        if (isInEditorMode) return context;
+
         if (context instanceof Activity) {
             return context;
         }
         if (context instanceof ContextWrapper) {
             context = ((ContextWrapper) context).getBaseContext();
         }
+
         if (!(context instanceof Activity)) {
-            throw new IllegalArgumentException("given context is not an Activity");
+            throw new IllegalArgumentException("given context (" + context + ") is not an Activity.");
         }
+
+
         return context;
     }
 

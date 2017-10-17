@@ -170,32 +170,4 @@ public abstract class Value<T> extends ObservableField<T> {
             }
         }, Emitter.BackpressureMode.BUFFER);
     }
-
-    public static <T> Observable<T> toObservable3(final ObservableField<T> observableField, final boolean emitCurrent) {
-        return Observable.create(new Observable.OnSubscribe<T>() {
-            @Override
-            public void call(final Subscriber<? super T> subscriber) {
-                if (emitCurrent && observableField.get() != null) {
-                    subscriber.onNext(observableField.get());
-                }
-                final OnPropertyChangedCallback callback = new OnPropertyChangedCallback() {
-                    @Override
-                    public void onPropertyChanged(android.databinding.Observable dataBindingObservable, int propertyId) {
-                        if (dataBindingObservable == observableField) {
-                            subscriber.onNext(observableField.get());
-                        }
-                    }
-                };
-
-                observableField.addOnPropertyChangedCallback(callback);
-
-                subscriber.add(Subscriptions.create(new Action0() {
-                    @Override
-                    public void call() {
-                        observableField.removeOnPropertyChangedCallback(callback);
-                    }
-                }));
-            }
-        });
-    }
 }
