@@ -46,10 +46,10 @@ publishing {
 publishing {
     repositories {
         maven {
-            url "${artifactory_url}"
+            url artifactory_url
             credentials {
-                username = "${artifactory_user}"
-                password = "${artifactory_password}"
+                username = artifactory_user
+                password = artifactory_password
             }
         }
     }
