@@ -1,20 +1,11 @@
 #!/usr/bin/env bash
-# Requires $1 argument realOriginRepoUrl
+# Requires 3 arguments:
 #   Example from bamboo:
-#     release-tag.sh ${bamboo.planRepository.repositoryUrl}
+#       build_and_push_to_artifactory.sh ${bamboo.artifactory.url} ${bamboo.artifactory.username} ${bamboo.artifactory.password}
 set -x
 
-if [ -z "$1" ]; then
-    echo "No \$1 argument(=realOriginRepoUrl) supplied"
-    exit 1
-fi
-realOriginRepoUrl=$1
+artifactoryUrl=$1
+artifactoryUsername=$2
+artifactoryPassword=$3
 
-docker pull dr.chefkoch.net/android-build/base
-tagname=$(docker run --rm -v "$(pwd)":/builddir -w /builddir dr.chefkoch.net/android-build/base ./gradlew --quiet app:printTagName)
-
-# https://stackoverflow.com/questions/27371629/how-to-tag-a-git-repo-in-a-bamboo-build/27441732#27441732
-git remote add realOrigin "$realOriginRepoUrl"
-git tag "$tagname"
-git push realOrigin "$tagname"
-git ls-remote --exit-code --tags realOrigin "$tagname"
+docker run --rm -v $(pwd):/builddir -w /builddir dr.chefkoch.net/android-build/base "mkdir /opt/android-sdk-linux/licenses/; echo -e \n8933bad161af4178b1185d1a37fbf41ea5269c55 > /opt/android-sdk-linux/licenses/android-sdk-license; ./gradlew clean build && ./gradlew publish -Partifactory_url=$(artifactoryUrl) -Partifactory_user=$(artifactoryUsername) -Partifactory_password=$(artifactoryPassword)"
