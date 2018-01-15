@@ -16,8 +16,12 @@ import java.io.Writer;
 import java.util.*;
 
 /**
+ *
+ * HowTo Debug:
+ *
  * ./gradlew --no-daemon -Dorg.gradle.debug=true clean compileDebugJavaWithJavac
  * <p>
+ *
  * Created by christophwidulle on 22.04.16.
  */
 @SupportedAnnotationTypes({

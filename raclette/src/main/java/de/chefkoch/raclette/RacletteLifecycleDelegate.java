@@ -184,6 +184,12 @@ public class RacletteLifecycleDelegate<V extends ViewModel, B extends ViewDataBi
         }
     }
 
+    public void onNewIntent(Object parent, Intent intent) {
+        if (intent.getExtras() != null) {
+            checkNavRequest(parent, intent.getExtras());
+        }
+    }
+
     public void onStart() {
         raclette.getContextManager().setCurrentContext(context);
         viewModel.start();

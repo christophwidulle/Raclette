@@ -91,6 +91,7 @@ public class RacletteActivity<V extends ViewModel, B extends ViewDataBinding> ex
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        racletteLifecycleDelegate.onNewIntent(this, intent);
     }
 
     public V viewModel() {

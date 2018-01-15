@@ -81,6 +81,13 @@ public class RacletteAppCompatActivity<V extends ViewModel, B extends ViewDataBi
         super.onSaveInstanceState(outState);
     }
 
+    @CallSuper
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        racletteLifecycleDelegate.onNewIntent(this, intent);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         racletteLifecycleDelegate.onActivityResult(requestCode, resultCode, data);
