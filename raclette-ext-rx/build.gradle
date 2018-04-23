@@ -2,7 +2,6 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
@@ -13,20 +12,21 @@ android {
     lintOptions {
         abortOnError false
     }
+    buildToolsVersion '27.0.3'
 }
 
 dependencies {
 
-    compile deps.rxjava
-    compile deps.rxAndroid
-    compile deps.rxRelay
-    compile deps.rxLifecycle
+    implementation deps.rxjava
+    implementation deps.rxAndroid
+    implementation deps.rxRelay
+    implementation deps.rxLifecycle
 
-    provided project(':raclette')
+    compileOnly project(':raclette')
 
-    testCompile deps.junit
-    testCompile deps.robolectric
-    testCompile deps.robolectricDex
+    testImplementation deps.junit
+    testImplementation deps.robolectric
+    testImplementation deps.robolectricDex
 }
 
 apply from: rootProject.file('gradle/gradle-maven-push.gradle')

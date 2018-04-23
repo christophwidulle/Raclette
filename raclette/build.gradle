@@ -2,7 +2,6 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
@@ -13,21 +12,22 @@ android {
     lintOptions {
         abortOnError false
     }
+    buildToolsVersion '27.0.3'
 }
 
 dependencies {
 
-    compile project(":raclette-base")
+    api project(":raclette-base")
 
-    compile deps.supportv4
-    compile deps.supportAppCompatv7
-    compile deps.supportRecycler
-    compile deps.supportAnnotations
-    compile deps.javapoet
+    implementation deps.supportv4
+    api deps.supportAppCompatv7
+    implementation deps.supportRecycler
+    implementation deps.supportAnnotations
+    implementation deps.javapoet
 
-    testCompile deps.junit
-    testCompile deps.truth
-    testCompile deps.robolectric
+    testImplementation deps.junit
+    testImplementation deps.truth
+    testImplementation deps.robolectric
 }
 
 apply from: rootProject.file('gradle/gradle-maven-push.gradle')

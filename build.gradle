@@ -6,6 +6,7 @@ subprojects { project ->
         mavenCentral()
         mavenLocal()
         google()
+        jcenter()
     }
 
 //    apply plugin: 'checkstyle'
@@ -38,7 +39,7 @@ subprojects { project ->
             maven { url "https://jitpack.io" }
         }
         dependencies {
-            classpath 'com.android.tools.build:gradle:3.0.1'
+            classpath 'com.android.tools.build:gradle:3.1.1'
             classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         }
     }
