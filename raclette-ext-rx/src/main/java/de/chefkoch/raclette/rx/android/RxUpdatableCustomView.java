@@ -51,9 +51,9 @@ public class RxUpdatableCustomView<T, V extends UpdatableViewModel<T>, B extends
 
     @Override
     protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
         lifecycleSubject.onNext(CustomViewLifecycleState.ON_DETACH);
         lifecycleSubject.onNext(CustomViewLifecycleState.NEW);
+        super.onDetachedFromWindow();
 
     }
 

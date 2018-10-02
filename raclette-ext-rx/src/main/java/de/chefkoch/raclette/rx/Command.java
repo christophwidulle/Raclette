@@ -46,7 +46,7 @@ public class Command<T> {
     private Command(Relay<T, T> subject) {
         this.subject = subject;
     }
-
+    
     public void call(T t) {
         subject.call(t);
     }

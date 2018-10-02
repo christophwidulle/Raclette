@@ -1,7 +1,7 @@
 package de.chefkoch.raclette;
 
-import android.os.Bundle;
-import de.chefkoch.raclette.ViewModelLifecycleState;
+import com.jakewharton.rxrelay.BehaviorRelay;
+
 import de.chefkoch.raclette.routing.NavigationController;
 import de.chefkoch.raclette.rx.RxNavigationControllerExt;
 import de.chefkoch.raclette.rx.lifecycle.RxViewModelLifecycle;
@@ -16,7 +16,7 @@ public class ViewModelRxExtension implements ViewModelLifecycleProvider {
 
     private RxNavigationControllerExt extNavController;
 
-    private final BehaviorSubject<ViewModelLifecycleState> lifecycleSubject = BehaviorSubject.create();
+    private final BehaviorRelay<ViewModelLifecycleState> lifecycleSubject = BehaviorRelay.create();
 
     public final Observable<ViewModelLifecycleState> lifecycle() {
         return lifecycleSubject.asObservable();
@@ -49,6 +49,6 @@ public class ViewModelRxExtension implements ViewModelLifecycleProvider {
     }
 
     void updateState(ViewModelLifecycleState viewModelLifecycleState) {
-        lifecycleSubject.onNext(viewModelLifecycleState);
+        lifecycleSubject.call(viewModelLifecycleState);
     }
 }
