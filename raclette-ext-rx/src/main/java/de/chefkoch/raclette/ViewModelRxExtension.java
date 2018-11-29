@@ -7,7 +7,6 @@ import de.chefkoch.raclette.rx.RxNavigationControllerExt;
 import de.chefkoch.raclette.rx.lifecycle.RxViewModelLifecycle;
 import de.chefkoch.raclette.rx.lifecycle.ViewModelLifecycleProvider;
 import rx.Observable;
-import rx.subjects.BehaviorSubject;
 
 /**
  * Created by christophwidulle on 25.06.16.
