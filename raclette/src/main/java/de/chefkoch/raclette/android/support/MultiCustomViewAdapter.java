@@ -46,6 +46,7 @@ public class MultiCustomViewAdapter<T> extends RecyclerView.Adapter<MultiCustomV
     @Override
     public void setAll(Collection<T> items) {
         if (items != null) {
+            //TODO: Anpassen
             this.items = new ArrayList<>(items);
             notifyDataSetChanged();
         } else {
