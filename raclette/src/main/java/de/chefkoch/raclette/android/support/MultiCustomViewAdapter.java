@@ -75,6 +75,12 @@ public class MultiCustomViewAdapter<T> extends RecyclerView.Adapter<MultiCustomV
         notifyDataSetChanged();
     }
 
+    public void remove(int position) {
+        if (items != null) {
+            items.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
 
     @Override
     @SuppressWarnings("unchecked assignement")
