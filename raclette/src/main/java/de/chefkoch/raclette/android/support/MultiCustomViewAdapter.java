@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -45,9 +46,26 @@ public class MultiCustomViewAdapter<T> extends RecyclerView.Adapter<MultiCustomV
 
     @Override
     public void setAll(Collection<T> items) {
+
         if (items != null) {
+            ArrayDiffChecker.AdapterDiff diff = new ArrayDiffChecker().getDiff(this.items, Arrays.asList(items.toArray()));
             this.items = new ArrayList<>(items);
-            notifyDataSetChanged();
+
+            if (diff != null) {
+                switch (diff.getDiffCount()) {
+                    case -1:
+                        notifyItemRemoved(diff.getDiffPosition());
+                        break;
+                    case 1:
+                        notifyItemInserted(diff.getDiffPosition());
+                        break;
+                    default:
+                        // Do nothing because this.items = items.
+                        break;
+                }
+            } else {
+                notifyDataSetChanged();
+            }
         } else {
             removeAll();
         }
@@ -73,13 +91,6 @@ public class MultiCustomViewAdapter<T> extends RecyclerView.Adapter<MultiCustomV
     public void removeAll() {
         items = new ArrayList<>();
         notifyDataSetChanged();
-    }
-
-    public void remove(int position) {
-        if (items != null) {
-            items.remove(position);
-            notifyItemRemoved(position);
-        }
     }
 
     @Override
