@@ -56,7 +56,8 @@ public class MultiCustomViewAdapter<T> extends RecyclerView.Adapter<MultiCustomV
                 notifyDataSetChanged();
             } else {
                 AdapterDiff<T> diffCalback = new AdapterDiff<>(itemViewTypeMapping, this.items, new ArrayList<T>(items));
-                DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCalback);
+                this.items = new ArrayList<>(items);
+                DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCalback,false);
                 diffResult.dispatchUpdatesTo(this);
             }
 
