@@ -64,6 +64,7 @@ ext.deps = [
         supportAnnotations : 'com.android.support:support-annotations:26.1.0',
         supportAppCompatv7 : 'com.android.support:appcompat-v7:26.1.0',
         supportRecycler    : 'com.android.support:recyclerview-v7:26.1.0',
+        design             : 'com.android.support:design:26.1.0',
 
         androidDatabinding : 'com.android.databinding:baseLibrary:2.0.0',
         androidDatabindingC: 'com.android.databinding:compilerCommon:2.0.0',

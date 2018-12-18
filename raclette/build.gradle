@@ -24,6 +24,7 @@ dependencies {
     implementation deps.supportRecycler
     implementation deps.supportAnnotations
     implementation deps.javapoet
+    api deps.design
 
     testImplementation deps.junit
     testImplementation deps.truth
