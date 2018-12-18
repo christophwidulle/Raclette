@@ -1,6 +1,8 @@
 package de.chefkoch.raclette.android.support;
 
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -20,9 +22,9 @@ import de.chefkoch.raclette.android.UpdatableCustomView;
 public class MultiCustomViewAdapter<T> extends RecyclerView.Adapter<MultiCustomViewAdapter.BasicViewHolder<T>> implements AdapterUpdateable<T> {
 
     private final Map<Integer, ElementConfig> elements;
-    private AdapterItemClickListener<T> itemClickListener;
-
-    private ItemViewTypeMapping<T> itemViewTypeMapping;
+    private final AdapterItemClickListener<T> itemClickListener;
+    private final boolean diffUpdates;
+    private final ItemViewTypeMapping<T> itemViewTypeMapping;
 
     private List<T> items = new ArrayList<>();
 
@@ -31,6 +33,7 @@ public class MultiCustomViewAdapter<T> extends RecyclerView.Adapter<MultiCustomV
         if (elements.isEmpty()) {
             throw new IllegalArgumentException("needs to support at least one element");
         }
+        this.diffUpdates = adapterConfig.isDiffUpdates();
         this.itemClickListener = adapterConfig.getItemClickListener();
         this.itemViewTypeMapping = adapterConfig.getItemViewTypeMapping();
     }
@@ -47,25 +50,16 @@ public class MultiCustomViewAdapter<T> extends RecyclerView.Adapter<MultiCustomV
     @Override
     public void setAll(Collection<T> items) {
 
-        if (items != null) {
-            ArrayDiffChecker.AdapterDiff diff = new ArrayDiffChecker().getDiff(this.items, Arrays.asList(items.toArray()));
-            this.items = new ArrayList<>(items);
-
-            if (diff != null) {
-                switch (diff.getDiffCount()) {
-                    case -1:
-                        notifyItemRemoved(diff.getDiffPosition());
-                        break;
-                    case 1:
-                        notifyItemInserted(diff.getDiffPosition());
-                        break;
-                    default:
-                        // Do nothing because this.items = items.
-                        break;
-                }
-            } else {
+        if (items != null && !items.isEmpty()) {
+            if (this.items.isEmpty() || !diffUpdates) {
+                this.items = new ArrayList<>(items);
                 notifyDataSetChanged();
+            } else {
+                AdapterDiff<T> diffCalback = new AdapterDiff<>(itemViewTypeMapping, this.items, new ArrayList<T>(items));
+                DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCalback);
+                diffResult.dispatchUpdatesTo(this);
             }
+
         } else {
             removeAll();
         }
@@ -163,6 +157,7 @@ public class MultiCustomViewAdapter<T> extends RecyclerView.Adapter<MultiCustomV
         private ItemViewTypeMapping<T> itemViewTypeMapping;
         private Map<Integer, ElementConfig> elements = new HashMap<>();
         private AdapterItemClickListener<T> itemClickListener;
+        private boolean diffUpdates;
 
         public static <T> AdapterConfig<T> create(ItemViewTypeMapping<T> itemViewTypeMapping) {
             return new AdapterConfig<T>(itemViewTypeMapping);
@@ -187,6 +182,15 @@ public class MultiCustomViewAdapter<T> extends RecyclerView.Adapter<MultiCustomV
             return this;
         }
 
+
+        public AdapterConfig<T> withDiffUpdates(boolean diffUpdates) {
+            this.diffUpdates = diffUpdates;
+            return this;
+        }
+
+        public boolean isDiffUpdates() {
+            return diffUpdates;
+        }
 
         private ItemViewTypeMapping<T> getItemViewTypeMapping() {
             return itemViewTypeMapping;
@@ -224,6 +228,11 @@ public class MultiCustomViewAdapter<T> extends RecyclerView.Adapter<MultiCustomV
 
         public Builder<T> withItemClickListener(AdapterItemClickListener<T> itemClickListener) {
             adapterConfig.withItemClickListener(itemClickListener);
+            return this;
+        }
+
+        public Builder<T> withDiffUpdates(boolean diffUpdates) {
+            adapterConfig.withDiffUpdates(diffUpdates);
             return this;
         }
 
