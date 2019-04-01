@@ -4,11 +4,13 @@ import com.jakewharton.rxrelay.BehaviorRelay;
 import com.jakewharton.rxrelay.PublishRelay;
 
 import com.jakewharton.rxrelay.Relay;
+
 import de.chefkoch.raclette.ViewModelLifecycleState;
 import de.chefkoch.raclette.rx.lifecycle.RxViewModelLifecycle;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
+import rx.functions.Action;
 import rx.functions.Action0;
 import rx.functions.Action1;
 
@@ -65,7 +67,11 @@ public class Command<T> {
     }
 
     public Observable<T> asObservable() {
-        if (lifecycleSubject != null) {
+        return asObservable(true);
+    }
+
+    public Observable<T> asObservable(boolean autobind) {
+        if (lifecycleSubject != null && autobind) {
             return subject
                     .asObservable()
                     .onBackpressureBuffer()
@@ -74,6 +80,17 @@ public class Command<T> {
             return subject
                     .asObservable()
                     .onBackpressureBuffer();
+        }
+    }
+
+    public Subscription subscribeFirst(Subscriber<T> subscriber) {
+        if (lifecycleSubject != null) {
+            return asObservable(false)
+                    .first()
+                    .compose(RxViewModelLifecycle.<T>bind(lifecycleSubject))
+                    .subscribe(subscriber);
+        } else {
+            return asObservable().first().subscribe(subscriber);
         }
     }
 
