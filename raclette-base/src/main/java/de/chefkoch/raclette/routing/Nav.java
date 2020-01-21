@@ -19,11 +19,11 @@ public class Nav {
 
         String value();
 
-        Class<? extends ViewModel> navParamsFrom() default AutoDetect.class;
+        Class<?> navParamsFrom() default AutoDetect.class;
 
         Result[] returns() default {};
 
-        public static class AutoDetect extends ViewModel {
+        class AutoDetect extends ViewModel {
         }
 
     }

@@ -158,7 +158,7 @@ public class RouteExtractor {
 
     private TypeMirror getNavParamsFromClass(Nav.Route routeAnnotation) {
         try {
-            Class<? extends ViewModel> aClass = routeAnnotation.navParamsFrom();
+            Class<?> aClass = routeAnnotation.navParamsFrom();
         } catch (MirroredTypeException mte) {
             return mte.getTypeMirror();
         }
