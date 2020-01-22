@@ -52,17 +52,17 @@ public abstract class NavParams {
 
     public static class InjectorFactory {
 
-        private final Map<Class<? extends ViewModel>, Class<? extends Injector<?>>> injectorMap = new HashMap<>();
+        private final Map<Class<?>, Class<? extends Injector<?>>> injectorMap = new HashMap<>();
 
         InjectorFactory() {
         }
 
-        public <T extends ViewModel> void register(Class<T> klass, Class<? extends Injector<T>> navParamsInjector) {
+        public <T> void register(Class<T> klass, Class<? extends Injector<T>> navParamsInjector) {
             injectorMap.put(klass, navParamsInjector);
         }
 
         @SuppressWarnings("unchecked")
-        <T extends ViewModel> Injector<T> createInjector(Class<T> klass, Bundle params) {
+        <T> Injector<T> createInjector(Class<T> klass, Bundle params) {
             Class<? extends Injector> injectorClass = injectorMap.get(klass);
             if (injectorClass != null) {
                 try {
@@ -77,7 +77,7 @@ public abstract class NavParams {
         }
 
         @SuppressWarnings("unchecked")
-        public void inject(ViewModel viewModel, Bundle params) {
+        public void inject(Object viewModel, Bundle params) {
             Injector injector = createInjector(viewModel.getClass(), params);
             if (injector != null) {
                 injector.inject(viewModel);
