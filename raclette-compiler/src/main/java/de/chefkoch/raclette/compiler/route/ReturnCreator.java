@@ -1,6 +1,7 @@
 package de.chefkoch.raclette.compiler.route;
 
 import com.squareup.javapoet.*;
+
 import de.chefkoch.raclette.compiler.BundleHelper;
 import de.chefkoch.raclette.compiler.ClassNames;
 import de.chefkoch.raclette.compiler.SpecUtil;
@@ -11,6 +12,7 @@ import de.chefkoch.raclette.routing.Route;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.type.TypeMirror;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,7 +75,7 @@ public class ReturnCreator {
 
         List<? extends TypeMirror> supertypes = processingEnvironment.getTypeUtils().directSupertypes(type);
 
-        ParamField paramField = ParamField.from("value", type, supertypes);
+        ParamField paramField = ParamField.from("value", type, supertypes, true);
 
         MethodSpec.Builder builder = MethodSpec.methodBuilder("from")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
@@ -105,7 +107,7 @@ public class ReturnCreator {
 
         List<? extends TypeMirror> supertypes = processingEnvironment.getTypeUtils().directSupertypes(type);
 
-        ParamField paramField = ParamField.from("value", type, supertypes);
+        ParamField paramField = ParamField.from("value", type, supertypes, true);
 
         MethodSpec.Builder builder = MethodSpec.methodBuilder("writeValue")
                 .addAnnotation(SpecUtil.override())

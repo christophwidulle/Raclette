@@ -1,6 +1,7 @@
 package de.chefkoch.raclette.compiler.params;
 
 import com.squareup.javapoet.*;
+
 import de.chefkoch.raclette.compiler.BundleHelper;
 import de.chefkoch.raclette.compiler.ClassNames;
 import de.chefkoch.raclette.compiler.SpecUtil;
@@ -9,6 +10,7 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.type.TypeMirror;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -111,7 +113,7 @@ public class NavParamsCreator {
         if (viewModelIndex > -1) {
             simpleName = simpleName.substring(0, viewModelIndex);
         }
-        return simpleName + "Params";
+        return simpleName.endsWith("ParamsDef") ? simpleName.replace("ParamsDef", "Params") : simpleName + "Params";
     }
 
     private List<MethodSpec> createBundleConstructor(ParamsContext paramsContext, ClassName className) {
@@ -215,7 +217,8 @@ public class NavParamsCreator {
                         "viewModel", Modifier.FINAL);
 
         for (ParamField paramField : paramsContext.getFields()) {
-            builder = builder.addStatement("viewModel.$N = this.$N", paramField.name, paramField.name);
+            if (paramField.isReachable)
+                builder = builder.addStatement("viewModel.$N = this.$N", paramField.name, paramField.name);
         }
         return builder.build();
     }
