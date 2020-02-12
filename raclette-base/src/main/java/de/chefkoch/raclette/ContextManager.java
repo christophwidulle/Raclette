@@ -16,7 +16,7 @@ public class ContextManager implements ContextProvider {
         return currentContext != null ? currentContext.get() : null;
     }
 
-    void setCurrentContext(Context currentContext) {
+    public void setCurrentContext(Context currentContext) {
         final Context previousContext = getCurrentContext();
         if (previousContext != null && previousContext == currentContext) return;
 
