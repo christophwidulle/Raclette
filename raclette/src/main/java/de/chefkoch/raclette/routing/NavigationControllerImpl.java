@@ -169,8 +169,8 @@ public class NavigationControllerImpl implements NavigationController {
             throw new RacletteException(e);
         }
     }
-
-    private Context getCurrentContext() {
+    //temp hack
+    public Context getCurrentContext() {
         if (currentContext != null && currentContext.get() != null) {
             return currentContext.get();
         } else {
